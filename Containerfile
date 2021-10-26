@@ -10,3 +10,5 @@ RUN cd /workspace/site \
 FROM quay.io/polyglotsystems/ubi8-nginx
 
 COPY --from=builder /workspace/site/public /var/www/html
+
+EXPOSE 8080
