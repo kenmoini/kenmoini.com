@@ -1,0 +1,19 @@
+module:
+  imports:
+  - path: github.com/forestryio/hugo-theme-novela
+
+paginate: 8
+
+social:
+  twitter: "https://twitter.com/kenmoini"
+  github: "https://github.com/kenmoini"
+  linkedin: "https://www.linkedin.com/in/kenmoini"
+  youtube: "https://www.youtube.com/channel/UCVP0QIDEIZTmxW04-p9QduQ"
+
+taxonomies:
+  author: authors
+
+baseURL: "https://dev.kenmoini.com"
+languageCode: "en-us"
+title: "Ken Moini"
+pygmentsstyle: 'monokai'

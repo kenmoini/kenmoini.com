@@ -1,0 +1,18 @@
+<div class="bio-container">
+  {{ range site.Taxonomies.authors }}
+      {{ with .Page }}
+          {{ if .Params.featured }}
+              {{ with .Params.avatar }}
+                  <div class="bio-avatar">
+                      <div class="bio-avatar-inner">
+                          <img class="author-avatar" src="{{ . }}" />
+                      </div>
+                  </div>
+              {{ end }}
+              {{ with .Params.bio }}
+                  <p class="bio-text">{{ . }}</p>
+              {{ end }}
+          {{ end }}
+      {{ end }}
+  {{ end }}
+</div>
