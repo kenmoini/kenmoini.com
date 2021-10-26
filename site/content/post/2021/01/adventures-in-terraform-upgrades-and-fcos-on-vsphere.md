@@ -3,7 +3,7 @@ title: "Adventures in Terraform Upgrades and Deploying Fedora CoreOS to oVirt an
 date: 2021-01-02T16:20:47-05:00
 draft: false
 toc: false
-hero: /images/posts/heroes/terraform.jpeg
+hero: /images/posts/heroes/terraform-mars.png
 excerpt:
 tags:
   - 100 days of code

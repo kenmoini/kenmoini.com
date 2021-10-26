@@ -43,3 +43,18 @@ center img {
   max-width:944px;
   margin: 1em auto 3em;
 }
+figure img {
+  max-width:944px;
+  margin: 1em auto 0;
+  border:6px solid #292c34;
+}
+figure figcaption p {
+  background: #292c34;
+  font-size: 0.8em;
+  padding:6px;
+  max-width:944px;
+  color:#fafaf8;
+}
+.pagination .page-item .page-link {
+  text-align:center;
+}
