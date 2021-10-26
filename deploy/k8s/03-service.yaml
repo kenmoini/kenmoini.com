@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kenmoini-com-svc
+  namespace: kenmoini-com
+  labels:
+    app: kenmoini-com
+    app.kubernetes.io/name: kenmoini-com
+    app.kubernetes.io/part-of: kenmoini-com
+spec:
+  ports:
+    - port: 8080
+      name: web
+  selector:
+    app: kenmoini-com

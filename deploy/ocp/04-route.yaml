@@ -1,0 +1,21 @@
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: kenmoini-com
+  labels:
+    app: kenmoini-com
+    app.kubernetes.io/name: kenmoini-com
+    app.kubernetes.io/part-of: kenmoini-com
+    component: kenmoini-com-route
+spec:
+  to:
+    kind: Service
+    name: kenmoini-com-svc
+    weight: 100
+  port:
+    targetPort: web
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None

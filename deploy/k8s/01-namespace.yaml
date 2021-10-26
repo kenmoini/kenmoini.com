@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kenmoini-com
+  labels:
+    app: kenmoini-com
+    app.kubernetes.io/name: kenmoini-com
+    app.kubernetes.io/part-of: kenmoini-com
