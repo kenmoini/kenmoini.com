@@ -13,7 +13,7 @@ social:
 taxonomies:
   author: authors
 
-baseURL: "https://dev.kenmoini.com"
+baseURL: "https://kenmoini.com"
 languageCode: "en-us"
 title: "Ken Moini"
 pygmentsstyle: 'monokai'
