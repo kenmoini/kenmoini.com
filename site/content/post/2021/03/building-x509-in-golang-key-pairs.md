@@ -3,7 +3,7 @@ title: "Building x509 PKI in Golang - Key Pairs - 8 / 100 DoC"
 date: 2021-03-15T08:42:47-05:00
 draft: false
 toc: false
-listed: true
+publiclisting: true
 aliases:
     - /blog/building-x509-in-golang-key-pairs/
 hero: /images/posts/heroes/resized/resized-go-pki-key-pairs.png

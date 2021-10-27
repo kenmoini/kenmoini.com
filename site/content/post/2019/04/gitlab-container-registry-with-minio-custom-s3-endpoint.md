@@ -2,7 +2,7 @@
 title: "GitLab Container Registry with Minio Custom S3 Endpoint"
 date: 2019-04-07T22:31:48-05:00
 draft: false
-listed: true
+publiclisting: true
 aliases:
     - /blog/gitlab-container-registry-with-minio-custom-s3-endpoint/
 hero: /images/posts/heroes/resized/resized-gitlab-registry-minio-s3.png

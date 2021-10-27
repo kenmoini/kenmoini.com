@@ -2,7 +2,7 @@
 title: "PWA-Haaat"
 date: 2019-01-03T22:31:48-05:00
 draft: false
-listed: true
+publiclisting: true
 aliases:
     - /blog/pwa-haaat/
 hero: /images/posts/heroes/resized/resized-pwhaaat.png

@@ -2,7 +2,7 @@
 title: "Kubernetes on Linode – A Quick Start of Sorts"
 date: 2019-07-08T22:31:48-05:00
 draft: false
-listed: true
+publiclisting: true
 aliases:
     - /blog/kubernetes-on-linode-a-quick-start-of-sorts/
 hero: /images/posts/heroes/resized/resized-kubernetes-on-linode.png

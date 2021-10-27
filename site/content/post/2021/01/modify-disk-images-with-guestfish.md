@@ -3,7 +3,7 @@ title: "Modify Disk Images with guestfish - 3 / 100 DoC"
 date: 2021-01-05T21:02:47-05:00
 draft: false
 toc: false
-listed: true
+publiclisting: true
 aliases:
     - /blog/modify_disk_images_with_guestfish/
     - /blog/modify-disk-images-with-guestfish/

@@ -3,7 +3,7 @@ title: "Getting started with Atlassian BitBucket, Bamboo, and Red Hat OpenShift"
 date: 2021-07-20T07:42:47-05:00
 draft: false
 toc: false
-listed: true
+publiclisting: true
 aliases:
     - /blog/bamboo-bitbucket-and-openshift/
 hero: /images/posts/heroes/resized/resized-bamboo-openshift.png

@@ -1,0 +1,29 @@
+{{/*
+  GetArticles
+  Retrieve article or posts
+
+  @author @regisphilibert
+
+  @context Page (.)
+
+  @access public
+
+  @return Collection
+          - Page (.)
+
+  @example - Go Template
+    {{ $articles := partialCached "func/GetArticles" . "articles" }}
+*/}}
+{{ $articles := slice }}
+{{ $publicArticles := slice }}
+{{ with where site.RegularPages "Type" "post" }}
+  {{ $articles = . }}
+{{ end }}
+{{ range $index, $article := $articles }}
+  {{ $listed := $article.Params.publiclisting }}
+  {{ if not $listed }}
+  {{ else }}
+  {{ $publicArticles = $publicArticles | append ($article) }}
+  {{ end }}
+{{ end }}
+{{ return $publicArticles }}

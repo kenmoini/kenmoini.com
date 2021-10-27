@@ -2,7 +2,7 @@
 title: "How-to: Passing the Amazon Web Services Solution Architect Exam"
 date: 2019-07-21T17:41:38-05:00
 toc: false
-listed: true
+publiclisting: true
 aliases:
     - /blog/how-to-passing-the-amazon-web-services-solution-architect-exam/
 hero: /images/posts/heroes/resized/resized-passing-aws-sap.png
