@@ -63,4 +63,4 @@ jobs:
       run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|:latest|:'${TAG}'|' $GITHUB_WORKSPACE/deploy/k8s/02-deployment.yaml
 
     - name: Deploy to DigitalOcean Kubernetes
-      run: kubectl apply -f $GITHUB_WORKSPACE/k8s/
+      run: kubectl apply -f $GITHUB_WORKSPACE/deploy/k8s/

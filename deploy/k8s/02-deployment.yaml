@@ -17,9 +17,11 @@ spec:
   template:
     metadata:
       labels:
-        app: kenmoini-com # has to match .spec.selector.matchLabels
+        app: kenmoini-com
     spec:
       terminationGracePeriodSeconds: 30
+      imagePullSecrets:
+      - name: ghcr-pull-secret
       containers:
         - name: kenmoini-com
           imagePullPolicy: Always

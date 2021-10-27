@@ -2,6 +2,8 @@
 title: "Fun with Servers and GPUs"
 date: 2021-03-20T07:42:47-05:00
 draft: false
+aliases:
+    - /blog/fun-with-servers-and-gpus/
 toc: false
 hero: /images/posts/heroes/fun-with-gpus.png
 tags:
