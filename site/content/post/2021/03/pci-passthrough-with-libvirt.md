@@ -3,6 +3,7 @@ title: "PCI Passthrough with Libvirt on RHEL 8"
 date: 2021-03-14T10:21:47-05:00
 draft: false
 toc: false
+listed: true
 aliases:
     - /blog/pci-passthrough-with-libvirt/
 hero: /images/posts/heroes/resized/resized-libvirt-passthrough.png

@@ -2,6 +2,7 @@
 title: "Fun with Servers and GPUs"
 date: 2021-03-20T07:42:47-05:00
 draft: false
+listed: true
 aliases:
     - /blog/fun-with-servers-and-gpus/
 toc: false

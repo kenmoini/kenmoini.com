@@ -3,6 +3,7 @@ title: "New Year, New Fedora WSL Distro - 1 / 100 DoC"
 date: 2021-01-01T21:02:47-05:00
 draft: false
 toc: false
+listed: true
 aliases:
     - /blog/new-year-new-wsl/
 hero: /images/posts/heroes/resized/resized-new-fedora-wsl.png

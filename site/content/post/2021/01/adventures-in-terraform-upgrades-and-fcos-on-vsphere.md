@@ -3,6 +3,7 @@ title: "Adventures in Terraform Upgrades and Deploying Fedora CoreOS to oVirt an
 date: 2021-01-02T16:20:47-05:00
 draft: false
 toc: false
+listed: true
 aliases:
     - /blog/adventures-in-terraform-upgrades-and-fcos-on-vsphere/
 hero: /images/posts/heroes/resized/resized-terraform-mars.png

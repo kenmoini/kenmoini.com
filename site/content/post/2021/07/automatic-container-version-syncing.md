@@ -3,6 +3,7 @@ title: "Automating Container Builds and Releases Synced with Upstream Project Ve
 date: 2021-07-20T07:42:47-05:00
 draft: false
 toc: false
+listed: true
 aliases:
     - /blog/automatic-container-version-syncing/
 hero: /images/posts/heroes/resized/resized-automated-container-syncs.png

@@ -3,6 +3,7 @@ title: "Disabling Nouveau Drivers in RHEL 8"
 date: 2021-03-13T21:02:47-05:00
 draft: false
 toc: false
+listed: true
 aliases:
     - /blog/disabling-nouveau-drivers-rhel-8/
 hero: /images/posts/heroes/resized/resized-disable-nouveau-drivers-rhel8.png

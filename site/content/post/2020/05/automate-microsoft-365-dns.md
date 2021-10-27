@@ -3,6 +3,7 @@ title: "Automate Microsoft 365 DNS in DigitalOcean"
 date: 2020-05-21T21:02:47-05:00
 draft: false
 toc: false
+listed: true
 aliases:
     - /blog/automate-microsoft-365-dns/
 hero: /images/posts/heroes/resized/resized-do-dns-m365.png

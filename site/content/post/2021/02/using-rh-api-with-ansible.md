@@ -3,6 +3,7 @@ title: "Using the Red Hat API with Ansible - 4 / 100 DoC"
 date: 2021-02-15T21:02:47-05:00
 draft: false
 toc: false
+listed: true
 aliases:
     - /blog/using-rh-api-with-ansible/
     - /blog/using_rh_api_with_ansible/

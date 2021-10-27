@@ -2,6 +2,7 @@
 title: "Wrangling Bluetooth in RHEL & CentOS 7"
 date: 2018-05-15T22:31:48-05:00
 draft: false
+listed: true
 aliases:
     - /blog/wrangling-bluetooth-on-rhel-and-centos/
 hero: /images/posts/heroes/resized/resized-bluetooth-rhel.png

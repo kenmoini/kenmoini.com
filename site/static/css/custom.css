@@ -58,3 +58,6 @@ figure figcaption p {
 .pagination .page-item .page-link {
   text-align:center;
 }
+.author-avatar {
+  height: inherit;
+}

@@ -2,6 +2,7 @@
 title: "Rolling up Let’s Encrypt on Ansible Tower’s UI"
 date: 2018-07-14T22:31:48-05:00
 draft: false
+listed: true
 aliases:
     - /blog/rolling-up-lets-encrypt-on-ansible-towers-ui/
 hero: /images/posts/heroes/resized/resized-ansible-tower-letsencrypt.png
