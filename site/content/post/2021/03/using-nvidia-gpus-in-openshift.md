@@ -3,6 +3,8 @@ title: "Using NVidia GPUs in OpenShift"
 date: 2021-03-14T12:02:47-05:00
 draft: false
 toc: false
+aliases:
+    - /blog/using-nvidia-gpus-in-openshift/
 hero: /images/posts/heroes/nvidia-gpus-openshift.png
 tags:
   - openshift

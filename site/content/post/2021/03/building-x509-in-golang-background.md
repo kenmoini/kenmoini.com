@@ -3,6 +3,8 @@ title: "Building x509 PKI in Golang - Background - 5 / 100 DoC"
 date: 2021-03-15T04:20:47-05:00
 draft: false
 toc: false
+aliases:
+    - /blog/building-x509-in-golang-background/
 hero: /images/posts/heroes/go-pki-background.png
 tags:
   - ssl

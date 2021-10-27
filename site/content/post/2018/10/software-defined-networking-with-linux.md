@@ -2,6 +2,8 @@
 title: "Software Defined Networking with Linux"
 date: 2018-10-01T22:31:48-05:00
 draft: false
+aliases:
+    - /blog/software-defined-networking-with-linux/
 hero: /images/posts/heroes/sdn-linux.png
 tags: 
   - administration 

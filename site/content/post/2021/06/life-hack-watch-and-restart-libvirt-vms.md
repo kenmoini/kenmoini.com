@@ -3,6 +3,8 @@ title: "Life Hack: Watch and Restart Libvirt VMs - 9 / 100 DoC"
 date: 2021-06-27T07:44:47-05:00
 draft: false
 toc: false
+aliases:
+    - /blog/life-hack-watch-and-restart-libvirt-vms/
 hero: /images/posts/heroes/lifehack-restart-libvirt-vms.png
 tags:
   - homelab

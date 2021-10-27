@@ -2,20 +2,22 @@
 title: "Wrangling Bluetooth in RHEL & CentOS 7"
 date: 2018-05-15T22:31:48-05:00
 draft: false
+aliases:
+    - /blog/wrangling-bluetooth-on-rhel-and-centos/
 hero: /images/posts/heroes/bluetooth-rhel.png
 tags: 
-  - audio 
-  - bluetooth 
-  - bluez 
-  - bt 
-  - centos 
-  - galago pro 
-  - headphones 
-  - headset 
-  - linux 
-  - pulseaudio 
-  - red hat 
-  - rhel 
+  - audio
+  - bluetooth
+  - bluez
+  - bt
+  - centos
+  - galago pro
+  - headphones
+  - headset
+  - linux
+  - pulseaudio
+  - red hat
+  - rhel
   - system76
 authors:
   - Ken Moini

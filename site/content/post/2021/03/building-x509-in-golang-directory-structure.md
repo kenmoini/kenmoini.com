@@ -3,6 +3,8 @@ title: "Building x509 PKI in Golang - Directory Structure - 6 / 100 DoC"
 date: 2021-03-15T06:20:47-05:00
 draft: false
 toc: false
+aliases:
+    - /blog/building-x509-in-golang-directory-structure/
 hero: /images/posts/heroes/go-pki-directory-structure.png
 tags:
   - ssl

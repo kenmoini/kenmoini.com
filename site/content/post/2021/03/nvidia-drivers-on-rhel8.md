@@ -3,6 +3,8 @@ title: "Installing NVidia Drivers in RHEL 8"
 date: 2021-03-13T22:02:47-05:00
 draft: false
 toc: false
+aliases:
+    - /blog/nvidia-drivers-on-rhel8/
 hero: /images/posts/heroes/nvidia-drivers-rhel8.png
 tags:
   - rhel

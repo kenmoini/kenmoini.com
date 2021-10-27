@@ -2,6 +2,8 @@
 title: "Quick n’ Dirty – Adding disks to Proxmox with LVM"
 date: 2018-10-08T22:31:48-05:00
 draft: false
+aliases:
+    - /blog/quick-n-dirty-adding-disks-to-proxmox/
 hero: /images/posts/heroes/add-disks-to-proxmox-lvm.png
 tags: 
   - administration

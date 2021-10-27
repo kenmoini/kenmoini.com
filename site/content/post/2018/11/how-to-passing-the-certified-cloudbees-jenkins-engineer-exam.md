@@ -2,6 +2,8 @@
 title: "How-to: Passing the Certified Cloudbees Jenkins Engineer exam"
 date: 2018-11-01T22:31:48-05:00
 draft: false
+aliases:
+    - /blog/how-to-passing-the-certified-cloudbess-jenkins-engineer-exam/
 hero: /images/posts/heroes/how-to-ccje-exam.png
 tags: 
   - ccje

@@ -3,6 +3,8 @@ title: "Secure Homelab Ingress with HAProxy and Let's Encrypt"
 date: 2021-10-09T04:20:47-05:00
 draft: false
 toc: false
+aliases:
+    - /blog/homelab-haproxy-ingress-with-letsencrypt/
 hero: /images/posts/heroes/homelab-ingress.png
 tags:
   - homelab
