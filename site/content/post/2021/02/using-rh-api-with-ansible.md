@@ -6,7 +6,7 @@ toc: false
 aliases:
     - /blog/using-rh-api-with-ansible/
     - /blog/using_rh_api_with_ansible/
-hero: /images/posts/heroes/rh-api-ansible.png
+hero: /images/posts/heroes/resized/resized-rh-api-ansible.png
 tags:
   - 100 days of code
   - 100doc

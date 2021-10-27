@@ -5,7 +5,7 @@ draft: false
 toc: false
 aliases:
     - /blog/automatic-container-version-syncing/
-hero: /images/posts/heroes/automated-container-syncs.png
+hero: /images/posts/heroes/resized/resized-automated-container-syncs.png
 tags:
   - homelab
   - red hat

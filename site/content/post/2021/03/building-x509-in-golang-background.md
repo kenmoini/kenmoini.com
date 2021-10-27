@@ -5,7 +5,7 @@ draft: false
 toc: false
 aliases:
     - /blog/building-x509-in-golang-background/
-hero: /images/posts/heroes/go-pki-background.png
+hero: /images/posts/heroes/resized/resized-go-pki-background.png
 tags:
   - ssl
   - pki

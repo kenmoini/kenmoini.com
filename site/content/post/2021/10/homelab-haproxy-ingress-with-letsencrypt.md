@@ -5,7 +5,7 @@ draft: false
 toc: false
 aliases:
     - /blog/homelab-haproxy-ingress-with-letsencrypt/
-hero: /images/posts/heroes/homelab-ingress.png
+hero: /images/posts/heroes/resized/resized-homelab-ingress.png
 tags:
   - homelab
   - haproxy

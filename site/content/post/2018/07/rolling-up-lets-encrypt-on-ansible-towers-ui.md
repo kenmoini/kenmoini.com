@@ -4,7 +4,7 @@ date: 2018-07-14T22:31:48-05:00
 draft: false
 aliases:
     - /blog/rolling-up-lets-encrypt-on-ansible-towers-ui/
-hero: /images/posts/heroes/ansible-tower-letsencrypt.png
+hero: /images/posts/heroes/resized/resized-ansible-tower-letsencrypt.png
 tags: 
   - ansible
   - centos

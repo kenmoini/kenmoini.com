@@ -5,7 +5,7 @@ draft: false
 toc: false
 aliases:
     - /blog/automate-microsoft-365-dns/
-hero: /images/posts/heroes/do-dns-m365.png
+hero: /images/posts/heroes/resized/resized-do-dns-m365.png
 excerpt:
 tags: 
   - microsoft

@@ -5,7 +5,7 @@ draft: false
 toc: false
 aliases:
     - /blog/building-x509-in-golang-file-encryption/
-hero: /images/posts/heroes/go-pki-file-encryption.png
+hero: /images/posts/heroes/resized/resized-go-pki-file-encryption.png
 tags:
   - ssl
   - pki

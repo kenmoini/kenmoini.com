@@ -5,7 +5,7 @@ draft: false
 toc: false
 aliases:
     - /blog/life-hack-watch-and-restart-libvirt-vms/
-hero: /images/posts/heroes/lifehack-restart-libvirt-vms.png
+hero: /images/posts/heroes/resized/resized-lifehack-restart-libvirt-vms.png
 tags:
   - homelab
   - ocp

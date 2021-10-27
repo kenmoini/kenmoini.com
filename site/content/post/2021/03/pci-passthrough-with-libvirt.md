@@ -5,7 +5,7 @@ draft: false
 toc: false
 aliases:
     - /blog/pci-passthrough-with-libvirt/
-hero: /images/posts/heroes/libvirt-passthrough.png
+hero: /images/posts/heroes/resized/resized-libvirt-passthrough.png
 tags:
   - pci passthrough
   - pcie passthrough

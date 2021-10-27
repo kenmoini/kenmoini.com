@@ -5,7 +5,7 @@ draft: false
 toc: false
 aliases:
     - /blog/disabling-nouveau-drivers-rhel-8/
-hero: /images/posts/heroes/disable-nouveau-drivers-rhel8.png
+hero: /images/posts/heroes/resized/resized-disable-nouveau-drivers-rhel8.png
 tags:
   - rhel
   - rhel 8

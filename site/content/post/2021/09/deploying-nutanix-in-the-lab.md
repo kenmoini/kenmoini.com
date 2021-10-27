@@ -5,7 +5,7 @@ draft: false
 toc: false
 aliases:
     - /blog/deploying-nutanix-in-the-lab/
-hero: /images/posts/heroes/single-node-ahv.png
+hero: /images/posts/heroes/resized/resized-single-node-ahv.png
 tags:
   - nutanix
   - ahv

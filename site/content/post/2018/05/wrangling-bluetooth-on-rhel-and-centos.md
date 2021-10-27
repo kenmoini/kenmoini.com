@@ -4,7 +4,7 @@ date: 2018-05-15T22:31:48-05:00
 draft: false
 aliases:
     - /blog/wrangling-bluetooth-on-rhel-and-centos/
-hero: /images/posts/heroes/bluetooth-rhel.png
+hero: /images/posts/heroes/resized/resized-bluetooth-rhel.png
 tags: 
   - audio
   - bluetooth

@@ -4,7 +4,7 @@ date: 2019-07-21T17:41:38-05:00
 toc: false
 aliases:
     - /blog/how-to-passing-the-amazon-web-services-solution-architect-exam/
-hero: /images/posts/heroes/passing-aws-sap.png
+hero: /images/posts/heroes/resized/resized-passing-aws-sap.png
 tags: 
   - amazon
   - amazon web services

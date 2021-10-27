@@ -5,7 +5,7 @@ draft: false
 toc: false
 aliases:
     - /blog/using-nvidia-gpus-in-openshift/
-hero: /images/posts/heroes/nvidia-gpus-openshift.png
+hero: /images/posts/heroes/resized/resized-nvidia-gpus-openshift.png
 tags:
   - openshift
   - containers

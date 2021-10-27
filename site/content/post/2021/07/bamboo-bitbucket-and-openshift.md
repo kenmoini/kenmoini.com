@@ -5,7 +5,7 @@ draft: false
 toc: false
 aliases:
     - /blog/bamboo-bitbucket-and-openshift/
-hero: /images/posts/heroes/bamboo-openshift.png
+hero: /images/posts/heroes/resized/resized-bamboo-openshift.png
 tags:
   - homelab
   - atlassian

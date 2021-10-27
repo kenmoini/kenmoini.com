@@ -5,7 +5,7 @@ draft: false
 toc: false
 aliases:
     - /blog/new-year-new-wsl/
-hero: /images/posts/heroes/new-fedora-wsl.png
+hero: /images/posts/heroes/resized/resized-new-fedora-wsl.png
 tags:
   - new years
   - 100 days of code

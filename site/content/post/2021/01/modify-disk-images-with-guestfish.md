@@ -6,7 +6,7 @@ toc: false
 aliases:
     - /blog/modify_disk_images_with_guestfish/
     - /blog/modify-disk-images-with-guestfish/
-hero: /images/posts/heroes/modify-disk-guestfish.png
+hero: /images/posts/heroes/resized/resized-modify-disk-guestfish.png
 tags:
   - 100 days of code
   - 100doc

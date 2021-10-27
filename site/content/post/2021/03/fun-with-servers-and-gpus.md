@@ -5,7 +5,7 @@ draft: false
 aliases:
     - /blog/fun-with-servers-and-gpus/
 toc: false
-hero: /images/posts/heroes/fun-with-gpus.png
+hero: /images/posts/heroes/resized/resized-fun-with-gpus.png
 tags:
   - homelab
   - dell

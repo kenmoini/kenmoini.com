@@ -5,7 +5,7 @@ draft: false
 toc: false
 aliases:
     - /blog/building-x509-in-golang-directory-structure/
-hero: /images/posts/heroes/go-pki-directory-structure.png
+hero: /images/posts/heroes/resized/resized-go-pki-directory-structure.png
 tags:
   - ssl
   - pki

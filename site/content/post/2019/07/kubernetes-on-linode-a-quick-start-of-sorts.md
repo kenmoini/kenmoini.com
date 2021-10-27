@@ -4,7 +4,7 @@ date: 2019-07-08T22:31:48-05:00
 draft: false
 aliases:
     - /blog/kubernetes-on-linode-a-quick-start-of-sorts/
-hero: /images/posts/heroes/kubernetes-on-linode.png
+hero: /images/posts/heroes/resized/resized-kubernetes-on-linode.png
 tags:
   - cert-manager
   - certbot

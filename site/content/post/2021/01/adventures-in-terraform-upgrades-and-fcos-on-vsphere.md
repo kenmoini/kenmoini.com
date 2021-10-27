@@ -5,7 +5,7 @@ draft: false
 toc: false
 aliases:
     - /blog/adventures-in-terraform-upgrades-and-fcos-on-vsphere/
-hero: /images/posts/heroes/terraform-mars.png
+hero: /images/posts/heroes/resized/resized-terraform-mars.png
 excerpt:
 tags:
   - 100 days of code

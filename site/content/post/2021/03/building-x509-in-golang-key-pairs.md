@@ -5,7 +5,7 @@ draft: false
 toc: false
 aliases:
     - /blog/building-x509-in-golang-key-pairs/
-hero: /images/posts/heroes/go-pki-key-pairs.png
+hero: /images/posts/heroes/resized/resized-go-pki-key-pairs.png
 tags:
   - ssl
   - pki

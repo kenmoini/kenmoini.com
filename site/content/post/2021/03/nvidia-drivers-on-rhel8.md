@@ -5,7 +5,7 @@ draft: false
 toc: false
 aliases:
     - /blog/nvidia-drivers-on-rhel8/
-hero: /images/posts/heroes/nvidia-drivers-rhel8.png
+hero: /images/posts/heroes/resized/resized-nvidia-drivers-rhel8.png
 tags:
   - rhel
   - rhel 8
