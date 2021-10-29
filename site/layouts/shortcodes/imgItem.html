@@ -1,0 +1,9 @@
+{{ $img := . }}
+{{ $imgSrc := $img.Get "src" }}
+{{ $altText := $img.Get "alt" }}
+{{ $cols := .Parent.Get "cols" | int }}
+{{ $setName := .Parent.Get "name" }}
+{{ $col_width := div 12 $cols }}
+<a class="img-cols-{{ $col_width }}" href="{{ $imgSrc }}" data-lightbox="imageSet-{{ $setName }}" data-title="{{ $altText }}">
+  <img src="{{ $imgSrc }}" alt="{{ $altText }}" />
+</a>

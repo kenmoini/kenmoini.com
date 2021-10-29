@@ -19,7 +19,7 @@
   float:left;
 }
 h1, h2, h3, h4, h5, h6, .article-hero-subtitle {
-  max-width:880px;
+  max-width:944px;
 }
 .text-center {
   text-align: center !important;
@@ -30,7 +30,16 @@ h1, h2, h3, h4, h5, h6, .article-hero-subtitle {
 .text-right {
   text-align: right !important;
 }
-
+p {
+  margin: 0 auto 25px;
+  max-width:880px;
+}
+ul {
+  max-width:880px;
+}
+blockquote>p {
+  max-width:944px !important;
+}
 p > code, li > code {
   display:inline-block;
   background:#292c34;
@@ -41,7 +50,7 @@ p > code, li > code {
 }
 center img {
   max-width:944px;
-  margin: 1em auto 3em;
+  margin: 10px auto 20px;
 }
 figure img {
   max-width:944px;
@@ -60,4 +69,43 @@ figure figcaption p {
 }
 .author-avatar {
   height: inherit;
+}
+blockquote {
+  margin: 50px auto 50px;
+}
+table {
+  max-width:944px;
+  margin: 35px auto;
+}
+table thead tr th {
+  padding: 15px 30px;
+}
+.imgSetRow {
+  justify-content: space-between;
+  display: flex;
+  max-width: 944px;
+  margin: 20px auto;
+}
+.img-cols-3 {
+  max-width: 23%;
+}
+.img-cols-4 {
+  max-width: 31%;
+}
+.img-cols-6 {
+  max-width: 48%;
+}
+[class*="img-cols-"] img {
+  width:100%;
+}
+li ul {
+  padding: 25px 0 0 32px;
+  display:inline-block;
+}
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  [class*="img-col-"] {
+    max-width: 100%;
+  }
 }
