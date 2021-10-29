@@ -143,6 +143,7 @@ In order to run this stack you'll need:
 
 For this purpose, here are my networking resources on my host called Rocinante for the cluster called MyCluster:
 
+{{< maxWidthWrapper >}}
 |      Purpose      | Hostname/A Record | IPv4 Address  |  Subnet Mask  |   Gateway    |
 |-------------------|-------------------|---------------|---------------|--------------|
 | AHV Host          | ahv-rocinante     | 192.168.42.56 | 255.255.255.0 | 192.168.42.1 |
@@ -150,6 +151,7 @@ For this purpose, here are my networking resources on my host called Rocinante f
 | Cluster VIP       | ahv-mycluster     | 192.168.42.58 | 255.255.255.0 | 192.168.42.1 |
 | Data Services VIP | ahv-mycluster-ds  | 192.168.42.59 | 255.255.255.0 | 192.168.42.1 |
 | Prism Central     | ahv-mycluster-pc  | 192.168.42.60 | 255.255.255.0 | 192.168.42.1 |
+{{< /maxWidthWrapper >}}
 
 Of course, your IP addresses and configuration will likely be different.
 

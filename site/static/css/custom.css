@@ -115,11 +115,19 @@ li ul {
     max-width:100%;
   }
   table {
-    max-width: 100%;
-    overflow: scroll;
-    display: block;
+    max-width: 768px !important;
+    width: 100% !important;
+    overflow: scroll !important;
+    display: inline-block !important;
+  }
+  table thead tr th {
+    padding: 14px 20px;
   }
   .imgSetRow {
     display: inline-block;
   }
+}
+.maxWidthWrapper {
+  max-width: 100%;
+  overflow: auto;
 }
