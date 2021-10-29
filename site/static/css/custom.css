@@ -10,6 +10,7 @@
   z-index: 10;
   margin: 100px auto 120px;
   padding-left: 0;
+  padding-right: 0;
   max-width: unset;
 }
 .article-hero-image {
@@ -29,6 +30,9 @@ h1, h2, h3, h4, h5, h6, .article-hero-subtitle {
 }
 .text-right {
   text-align: right !important;
+}
+a {
+  word-break: break-word;
 }
 p {
   margin: 0 auto 25px;
