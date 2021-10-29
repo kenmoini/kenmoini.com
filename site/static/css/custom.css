@@ -108,4 +108,12 @@ li ul {
   [class*="img-col-"] {
     max-width: 100%;
   }
+  center img {
+    max-width:100%;
+  }
+  table {
+    max-width: 100%;
+    overflow: scroll;
+    display: block;
+  }
 }
