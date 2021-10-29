@@ -105,8 +105,11 @@ li ul {
 
 @media only screen and (max-width: 768px) {
   /* For mobile phones: */
-  [class*="img-col-"] {
+  [class*="img-cols-"] {
     max-width: 100%;
+  }
+  [class*="img-cols-"] img {
+    margin: 1em 0;
   }
   center img {
     max-width:100%;
@@ -115,5 +118,8 @@ li ul {
     max-width: 100%;
     overflow: scroll;
     display: block;
+  }
+  .imgSetRow {
+    display: inline-block;
   }
 }
