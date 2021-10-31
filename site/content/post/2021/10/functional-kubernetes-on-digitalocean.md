@@ -26,7 +26,7 @@ authors:
 
 Every few months there's a new Kubernetes release - it's like a haunted festivus every season!  So many new patches!  Exciting new APIs! A cornucopia of CVEs!
 
-I've been running a cluster via [DigitalOcean's Kubernetes Service](https://m.do.co/c/9058ed8261ee) for the last year plus and it was a terribly old version.  I kept getting emails about it needing to be updated and not being able to due to a number of API changes so I decided to deploy a whole new cluster and port the workloads over.
+I've been running a cluster via [DigitalOcean's Kubernetes Service](https://m.do.co/c/9058ed8261ee "A referral link, get $100 in free credits") for the last year plus and it was a terribly old version.  I kept getting emails about it needing to be updated and not being able to due to a number of API changes so I decided to deploy a whole new cluster and port the workloads over.
 
 Of course, I had automated and documented the process - and of course in that time it all broke and changed.  So time to automate and document again!
 
