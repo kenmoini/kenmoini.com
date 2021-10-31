@@ -135,3 +135,6 @@ li ul {
   max-width: 100%;
   overflow: auto;
 }
+div.code-toolbar {
+  max-height: 693px;
+}
