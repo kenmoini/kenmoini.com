@@ -1,6 +1,6 @@
 ---
 title: "Functional Kubernetes on DigitalOcean"
-date: 2021-10-29T04:20:47-05:00
+date: 2021-10-30T04:20:47-05:00
 draft: false
 publiclisting: true
 hero: /images/posts/heroes/resized/resized-k8s-update-do.png
@@ -13,6 +13,10 @@ tags:
   - ingress
   - ingress-nginx
   - cert-manager
+  - metrics
+  - monitoring
+  - grafana
+  - prometheus
   - certbot
   - acme
   - tls
@@ -34,10 +38,10 @@ This time I'm going for the most simple deployment, fewer pieces to break and al
 
 This deployment consists of the following:
 
-- The latest DigitalOcean Kubernetes
-- DO's 1-Click Kubernetes Monitoring add-on
-- ingress-nginx
-- cert-manager
+- The latest [DigitalOcean Kubernetes](https://m.do.co/c/9058ed8261ee "A referral link, get $100 in free credits") which at the time of this writing is 1.21
+- DO's 1-Click [Kubernetes Monitoring add-on](https://marketplace.digitalocean.com/apps/kubernetes-monitoring-stack)
+- [ingress-nginx](https://kubernetes.github.io/ingress-nginx/)
+- [cert-manager](https://cert-manager.io/docs/)
 
 ## Spooky Dance - Binary Bash
 
@@ -125,6 +129,7 @@ metadata:
 data:
   allow-snippet-annotations: 'true'
   use-proxy-protocol: 'true'
+  custom-http-errors: '404,500,503'
 ---
 # Source: ingress-nginx/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -428,6 +433,7 @@ spec:
             - --validating-webhook=:8443
             - --validating-webhook-certificate=/usr/local/certificates/cert
             - --validating-webhook-key=/usr/local/certificates/key
+            - --default-backend-service=ingress-nginx/nginx-errors
           securityContext:
             capabilities:
               drop:
@@ -766,6 +772,54 @@ spec:
       securityContext:
         runAsNonRoot: true
         runAsUser: 2000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-errors
+  namespace: ingress-nginx
+  labels:
+    app.kubernetes.io/name: nginx-errors
+    app.kubernetes.io/part-of: ingress-nginx
+spec:
+  selector:
+    app.kubernetes.io/name: nginx-errors
+    app.kubernetes.io/part-of: ingress-nginx
+  ports:
+  - port: 80
+    targetPort: 8080
+    name: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-errors
+  namespace: ingress-nginx
+  labels:
+    app.kubernetes.io/name: nginx-errors
+    app.kubernetes.io/part-of: ingress-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nginx-errors
+      app.kubernetes.io/part-of: ingress-nginx
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: nginx-errors
+        app.kubernetes.io/part-of: ingress-nginx
+    spec:
+      containers:
+      - name: nginx-error-server
+        image: kenmoini/custom-nginx-ingress-errors:latest
+        ports:
+        - containerPort: 8080
+        # Setting the environment variable DEBUG we can see the headers sent 
+        # by the ingress controller to the backend in the client response.
+        # env:
+        # - name: DEBUG
+        #   value: "true"
 ```
 
 Give it a few minutes and you should see a Load Balancer spin up in your DigitalOcean account.
@@ -857,7 +911,7 @@ spec:
 A few things to pay attention to:
 
 - Name, namespace, and app labels of course
-- The 3 annotations state which cluster-issuer to use, what sort of Ingress Controller (since there can be multiple, see Service Mesh), and if you want to force HTTP > HTTPS redirects or not.
+- The 3 annotations state which cluster-issuer to use, what sort of Ingress Controller (since there can be multiple, see Service Mesh), and if you want to force HTTP > HTTPS redirects or not.  There are [plenty of other annotations available](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/) as well in case you want to do other things to the underlying Nginx instances.
 - The `.spec.tls[*].hosts` and `.spec.rules[*].host` definitions for what domain name to use - this needs to be part of a zone that is already active in your DigitalOcean Domains.
 
 And the rest are to do with the specifics of the service, in this case targeting port 80 on the Grafana service.
@@ -865,6 +919,12 @@ And the rest are to do with the specifics of the service, in this case targeting
 With that you can navigate to `https://grafana.your.domain/` and insert the default credentials of `admin` and `prom-operator` - of course making sure to change both of those since it is being exposed to the Internet and all now.
 
 {{< center >}}![Dashboard for your Dashboards](/images/posts/2021/10/grafana-dash.png){{</ center >}}
+
+## Bonus - Custom Ingress Errors
+
+So if you happen to get a 404, 50x HTTP error on an Ingress you'll be presented with a generic and blank Nginx error page.  Thankfully, the deployment above makes the error pages a little more exciting...
+
+{{< center >}}![Synthwave Error Pages](/images/posts/2021/10/404-error-page.png){{</ center >}}
 
 ## Next Steps
 

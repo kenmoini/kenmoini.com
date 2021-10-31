@@ -18,12 +18,13 @@
   {{ $next = $next | append . }}
   {{/* Checking for that "next" article own "next" to fill the "second next" */}}
   {{ with .PrevInSection }}
-  {{ with .Prev }}
-    {{ if not .Params.publiclisting }}
+  {{ if not .Params.publiclisting }}
+    {{ with .Prev }}
+      {{ $next = $next | append . }}
+    {{ end }}
     {{ else }}
       {{ $next = $next | append . }}
     {{ end }}
-  {{ end }}
   {{ end }}
   {{ end }}
 {{ end }}
