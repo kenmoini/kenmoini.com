@@ -1,7 +1,3 @@
-module:
-  imports:
-  - path: github.com/forestryio/hugo-theme-novela
-
 paginate: 8
 
 social:
@@ -17,3 +13,4 @@ baseURL: "https://kenmoini.com"
 languageCode: "en-us"
 title: "Ken Moini"
 pygmentsstyle: 'monokai'
+theme: novela
