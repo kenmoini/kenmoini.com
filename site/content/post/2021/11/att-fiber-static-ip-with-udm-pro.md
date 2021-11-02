@@ -16,6 +16,7 @@ tags:
   - ubiquiti
   - dream machine pro
   - udmp
+  - udm pro
 authors:
   - Ken Moini
 ---
