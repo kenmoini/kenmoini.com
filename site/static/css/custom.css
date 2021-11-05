@@ -169,3 +169,9 @@ li ul {
 div.code-toolbar {
   max-height: 693px;
 }
+#articleComments {
+  padding-bottom:20px;
+}
+#articleComments h3.footer-next-heading {
+  margin-bottom:30px;
+}
