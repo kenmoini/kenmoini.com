@@ -3,6 +3,7 @@ title: "Single Node OpenShift at the Edge"
 date: 2021-11-04T04:20:47-05:00
 draft: false
 publiclisting: true
+toc: true
 hero: /images/posts/heroes/sno-at-the-edge.png
 tags:
   - homelab

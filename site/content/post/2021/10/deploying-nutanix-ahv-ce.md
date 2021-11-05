@@ -3,6 +3,7 @@ title: "Deploying Nutanix AHV/AOS"
 date: 2021-10-27T04:20:47-05:00
 draft: false
 publiclisting: true
+toc: true
 hero: /images/posts/heroes/resized/resized-deploy-nutanix-ce.png
 tags:
   - nutanix
@@ -28,35 +29,6 @@ authors:
 Evidently my post last month on deploying Nutanix's platform in my traditional prose was not well received - {{< rawHTML >}}<span title="https://kenmoini.com/blog/deploying-nutanix-in-the-lab/">it's archived now and available for those with the link, a sense of humor, and looser butt holes</span>{{< /rawHTML >}}.
 
 For this post, there'll be little entertainment, quips will be held at bay, and edict has been passed making jokes punishable by death...just straight to the nitty gritty of understanding and deploying the Nutanix stack in a lab environment with a workload target being OpenShift, detailed in another article.
-
----
-
-## Table of Contents
-
-- [Goals](#goals)
-- [What is Nutanix?](#what-is-nutanix)
-- [Mise en place](#mise-en-place)
-  - [A Nutanix Next Account](#a-nutanix-next-account)
-  - [Nutanix AHV Installer Sources](#nutanix-ahv-installer-sources)
-  - [Installation Media](#installation-media)
-- [Deployment Prerequisites](#deployment-prerequisites)
-  - [Target Installation Disks](#target-installation-disks)
-  - [Boot Mode](#boot-mode)
-  - [Networking](#networking)
-- [Host Installation](#host-installation)
-  - [Preparation](#preparation)
-  - [AHV Installation](#ahv-installation)
-- [Cluster Creation](#cluster-creation)
-  - [Create a Single-Node Cluster](#create-a-single-node-cluster)
-- [Cluster Configuration](#cluster-configuration)
-  - [Prism Configuration](#prism-configuration)
-  - [Cluster Networking](#cluster-networking)
-  - [Storage](#storage)
-  - [Images](#images)
-- [Deploying Prism Central](#deploying-prism-central)
-  - [Connect Prism Element to Prism Central](#connect-prism-element-to-prism-central)
-- [Deploying Calm via Prism Central](#deploying-calm-via-prism-central)
-- [Next Steps](#next-steps)
 
 ---
 

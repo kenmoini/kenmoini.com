@@ -2,7 +2,7 @@
 title: "Deploying Single Node Nutanix AHV in the Lab"
 date: 2021-09-25T16:20:47-05:00
 draft: false
-toc: false
+toc: true
 publiclisting: false
 aliases:
     - /blog/deploying-nutanix-in-the-lab/

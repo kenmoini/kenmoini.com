@@ -3,6 +3,7 @@ title: "Functional Kubernetes on DigitalOcean"
 date: 2021-10-30T04:20:47-05:00
 draft: false
 publiclisting: true
+toc: true
 hero: /images/posts/heroes/resized/resized-k8s-update-do.png
 tags:
   - digitalocean

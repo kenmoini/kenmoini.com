@@ -8,7 +8,7 @@
 .article-header {
   position: relative;
   z-index: 10;
-  margin: 100px auto 120px;
+  margin: 100px auto 100px;
   padding-left: 0;
   padding-right: 0;
   max-width: unset;
@@ -174,4 +174,7 @@ div.code-toolbar {
 }
 #articleComments h3.footer-next-heading {
   margin-bottom:30px;
+}
+#articleTOC {
+  padding-top:100px;
 }
