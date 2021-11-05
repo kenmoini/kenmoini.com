@@ -1,5 +1,10 @@
 {{ $imgCount := .Get "cols" | int }}
 {{ $col_count := div 12 $imgCount }}
+{{ $extraStyle := "justify-content:center" }}
+{{ if eq $imgCount 1 }}
+<div class="imgSetRow" data-column-size="{{ $col_count }}" style="{{ $extraStyle }}">
+{{ else }}
 <div class="imgSetRow" data-column-size="{{ $col_count }}">
+{{ end }}
   {{ .Inner }}
 </div>

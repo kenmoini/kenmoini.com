@@ -39,7 +39,7 @@ p {
   margin: 0 auto 25px;
   max-width:880px;
 }
-ul {
+ul, ol, div.code-toolbar {
   max-width:820px;
 }
 blockquote>p {
