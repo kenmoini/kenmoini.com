@@ -47,13 +47,13 @@ authors:
 
 > If a Single Node OpenShift deployment crashes at the edge with no one around, does it make a sound?
 
-*A question posed by one of the greatest thinkers of our time...I'm of course talking about me.*
+*A question posed by one of the greatest thinkers of our time...*
 
 Recently I was tasked with working on a hybrid-multi-cloud deployment of a few different Red Hat OpenShift clusters.  I had a self-deployed IPI cluster, a ROSA cluster, and an OSD cluster in AWS, an ARO cluster, and an OSD on GCP cluster.
 
 That's 5 OCP clusters, and I threw in a GKE cluster for RHACM and ACS to manage as well.
 
-With 6 clusters being managed, I really wanted to hit that lucky number 7...but where...and on what credit card...
+With 6 clusters being managed, I really wanted to hit that lucky number 7...but where...and on what credit card...?
 
 *What about OpenShift*...***at the edge***...?
 
