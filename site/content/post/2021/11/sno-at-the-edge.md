@@ -152,11 +152,11 @@ Those are the basic ports needed to access the OpenShift cluster - if you plan o
 
 Now that the Public and Private DNS Zones are resolving queries properly and firewall ports are open we can get to deploying the Single Node OpenShift instance.
 
-So again, my "edge" deployment for the previous demo was just a VM on ESXi here in my lab with the networking in place to make it happen.  That node recycles so often that it no longer runs ESXi and is regretfully running [Nutanix's AHV](http://raza:1313/post/2021/10/deploying-nutanix-ahv-ce/) right now so that's what I'll show below.
+So again, my "edge" deployment for the previous demo was just a VM on ESXi here in my lab with the networking in place to make it happen.  That node recycles so often that it no longer runs ESXi and is running [Nutanix's AHV](http://raza:1313/post/2021/10/deploying-nutanix-ahv-ce/) right now so that's what I'll show below.
 
 ### Create the SNO Cluster in the Assisted Installer Service
 
-> #### WARN: Before someone from the BU bursts a fucking vein out the side of their neck I have to mention that the Assisted Installer as of this writing is still in Tech Preview - even though there are customers actively using it and it works brilliantly lol
+> #### WARN: Before someone from the BU bursts a vein out the side of their neck I have to mention that the Assisted Installer as of this writing is still in Tech Preview - even though there are customers actively using it and it works brilliantly lol
 
 First we'll navigate to the [Red Hat Hybrid Cloud Console](https://console.redhat.com/ "...fuck, these names are getting worse and worse...") and from there navigate to the [Assisted Installer service](https://console.redhat.com/openshift/assisted-installer/clusters).
 
@@ -304,3 +304,5 @@ All that's left to do is click a few buttons in the Assisted Installer Service t
 {{< imgItem src="/images/posts/2021/11/sno-ai-svc-review.png" alt="Review the configuration and start the installation" >}}
 {{< imgItem src="/images/posts/2021/11/sno-ai-svc-complete.png" alt="A successful Assisted Installer Service deployment on Nutanix AHV!" >}}
 {{< /imgSet >}}
+
+> #### Voila!  Single node OpenShift deployed "at the edge" on Nutanix!
