@@ -43,6 +43,8 @@ This deployment consists of the following:
 - [ingress-nginx](https://kubernetes.github.io/ingress-nginx/)
 - [cert-manager](https://cert-manager.io/docs/)
 
+---
+
 ## Spooky Dance - Binary Bash
 
 Of course to do much of anything there are a few binaries needed such as:
@@ -50,6 +52,8 @@ Of course to do much of anything there are a few binaries needed such as:
 - [Helm](https://helm.sh/docs/intro/install/)
 - [doctl](https://github.com/digitalocean/doctl/releases)
 - [Kubectl](https://kubernetes.io/docs/tasks/tools/)
+
+---
 
 ## Deploying the Kubernetes Cluster
 
@@ -74,6 +78,8 @@ doctl kubernetes cluster kubeconfig save $DO_CLUSTER_ID
 # Test server conneciton
 kubectl cluster-info
 ```
+
+---
 
 ## Deploying Ingress
 
@@ -824,6 +830,8 @@ spec:
 
 Give it a few minutes and you should see a Load Balancer spin up in your DigitalOcean account.
 
+---
+
 ## Automatic TLS with cert-manager
 
 So now we have a way to get into the cluster with an Ingress and that Ingress provides HTTP and HTTPS with a self-signed certificate.  What would be nice is to have some SSL certificates that were signed by a CA that's in the default set of trusted certificate stores, ya know, like Let's Encrypt.
@@ -874,6 +882,8 @@ spec:
             key: access-token
 ```
 
+---
+
 ## Deploy Your First Ingress
 
 With everything in place now, we can start to deploy workloads and exposing them to the internet - but which will we expose first?  Why not Grafana?  It is running already in the cluster from our Monitoring stack deployed earlier after all...
@@ -920,11 +930,15 @@ With that you can navigate to `https://grafana.your.domain/` and insert the defa
 
 {{< center >}}![Dashboard for your Dashboards](/images/posts/2021/10/grafana-dash.png){{</ center >}}
 
+---
+
 ## Bonus - Custom Ingress Errors
 
 So if you happen to get a 404, 50x HTTP error on an Ingress you'll be presented with a generic and blank Nginx error page.  Thankfully, the deployment above makes the error pages a little more exciting...
 
 {{< center >}}![Synthwave Error Pages](/images/posts/2021/10/404-error-page.png){{</ center >}}
+
+---
 
 ## Next Steps
 

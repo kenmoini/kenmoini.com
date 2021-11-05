@@ -35,6 +35,8 @@ Now, in my lab I have my own DNS serving a private internal TLD that isn't routa
 
 The audience at hand might not have been happy with the operational requirements of accessing things via a VPN so I needed to expose this service somehow and do so decently securely - this is a step-by-step of how I did that with a few containers running HAProxy, Nginx, and Let's Encrypt.
 
+---
+
 ## External Network Setup
 
 ### Domain Registration
@@ -59,6 +61,8 @@ Wherever you're managing your DNS zone file and the records it houses, in my cas
 
 With those 3 services I can direct people on the public Internet to the NextCloud instance I serve here locally in my lab, a landing page (`lab-apps`) of other applications and services offered, and then a wildcard subdomain of that (`*.lab-apps`) to easily redirect any other applications I want to expose in my lab without having to make a new A record for each of them.
 
+---
+
 ## Internal Network Setup
 
 ### Reserve an IP for the Ingress Pod
@@ -68,6 +72,8 @@ So there are a few containers that are going to be run via [Podman](https://podm
 ### Set Firewall Rules
 
 With the domain and DNS in place, we are technically able to route traffic to the internal network however with any semi-decent router you'll have a basic firewall in place - for my network I just told my Unifi Dream Machine Pro to route ports `443`, `80`, and `8080` to the Ingress Pod IP at `192.168.42.28`.
+
+---
 
 ## Podman Setup
 
@@ -174,6 +180,8 @@ Just make sure to change out everything in the double squiggly-brackets, such as
   ]
 }
 ```
+
+---
 
 ## Deploying the Pod
 

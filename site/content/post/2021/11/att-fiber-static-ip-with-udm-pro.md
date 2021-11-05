@@ -29,6 +29,8 @@ So thankfully we have AT&T's Fiber service where we live - I will never go back 
 
 Even better is that AT&T Fiber has the option of buying Static IP blocks!  
 
+---
+
 ## Buying a Static IP Block
 
 You can buy a single block - the [options](https://www.att.com/support/article/u-verse-high-speed-internet/KM1002300/) are:
@@ -50,6 +52,8 @@ Also, I believe Static IPs are only available on the 1Gbit+ connections, not sur
 - **Broadcast Address:** 161.192.161.39
 - **Usable Host IP Range:** 161.192.161.33 - 161.192.161.37
 - **Gateway/Router Address:** 161.192.161.38
+
+---
 
 ## Configure the Gateway Device
 
@@ -78,6 +82,8 @@ The way you configure a gateway to route a block of static IPs, is via the Publi
 
 At this point, you should be able to ping the IPs 161.192.161.33 - 161.192.161.37 and get a response from the gateway.  Now the Gateway treats those IPs as client-side IPs, meaning the UDM Pro can now use those as WAN IP addresses - let's configure that side of things now.
 
+---
+
 ## Unifi Dream Machine Pro Configuration
 
 With the Gateway configured with the Public Subnet, we can attach our available IPs to the UDM Pro WAN port.
@@ -92,5 +98,7 @@ Set the WAN IPv4 settings to resemble the following:
 {{< imgItem src="/images/posts/2021/11/udmp-navigate-to-internet.png" alt="Navigate to Settings > Internet" >}}
 {{< imgItem src="/images/posts/2021/11/udmp-wan-ipv4-settings.png" alt="Set the Static IPs on the WAN IPv4" >}}
 {{< /imgSet >}}
+
+---
 
 > And that's it, route the IPs through your UDM Pro firewall however you'd like!

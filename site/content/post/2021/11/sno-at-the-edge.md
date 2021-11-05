@@ -2,7 +2,6 @@
 title: "Single Node OpenShift at the Edge"
 date: 2021-11-04T04:20:47-05:00
 draft: false
-toc: false
 publiclisting: true
 hero: /images/posts/heroes/sno-at-the-edge.png
 tags:
@@ -78,6 +77,8 @@ So again, there were the following clusters:
 
 All of these clusters had different DNS Zones, different networks, different infrastructure...how do you introduce an edge single-node OpenShift deployment?
 
+---
+
 ## Living on the Edge
 
 The edge environment in question is actually just a VM host in my homelab!  This is typically a Libvirt host, though it has also been a Nutanix and vSphere host.
@@ -88,6 +89,8 @@ I can't explain how much I love the Assisted Installer.  It's fantastic - you ca
 
 Anywho, so instead of blasting the vCenter panel out to the Internet and using RHACM to deploy IPI to the infrastructure vCenter is managing, we'll pretend we're using something like Redfish to bootstrap a bare-metal system with the Assisted Installer ISO we'll generate, or as is the actual case for this deployment, just booting a VM on Nutanix's AHV manually.
 
+---
+
 ## Networks
 
 To get a Single Node OpenShift deployment going, you need a single IP address and some DNS to match.
@@ -97,6 +100,8 @@ Here in my lab I have a `kemo.labs` TLD and sub-TLDs with DNS Zones being served
 I also route a few networks, my VM network being `192.168.42.0/24` - this is also inaccessible to the public Internet being a private subnet and all.
 
 To fix these issues, all that's needed is [split horizon DNS](https://en.wikipedia.org/wiki/Split-horizon_DNS) with a public TLD, and some firewall rules made to pass some ports to the SNO node.
+
+---
 
 ## Split Horizon DNS
 
@@ -129,6 +134,8 @@ With all that what happens is that:
 
 You can verify everything is playing nice by doing a `dig sno-ocp.kemo.network` from inside and outside of the network.
 
+---
+
 ## Firewall Rules
 
 This is pretty easy - basically you need to pass ports from the WAN IP to the Internal SNO IP and these are the ports needed:
@@ -147,6 +154,8 @@ Those are the basic ports needed to access the OpenShift cluster - if you plan o
 - UDP Port 4500
 - UDP Port 4800
 - TCP Port 8080
+
+---
 
 ## Deploying SNO via the Assisted Installer
 
@@ -288,6 +297,8 @@ If you have NOT set up the Discovery ISO in the previous step during Network Pre
 {{< imgItem src="/images/posts/2021/11/sno-prism-iso-upload.png" alt="Uploading the ISO to the slowest hypervisor platform in this galaxy..." >}}
 {{< /imgSet >}}
 
+---
+
 ## Let it SNO
 
 Now I need to go back to the Nutanix Prism Central Web UI and complete the configuration of that previously created VM with the Discovery ISO, HDD, etc.  Then boot the VM and it should report in and be shown in the Host Discovery screen.
@@ -305,4 +316,6 @@ All that's left to do is click a few buttons in the Assisted Installer Service t
 {{< imgItem src="/images/posts/2021/11/sno-ai-svc-complete.png" alt="A successful Assisted Installer Service deployment on Nutanix AHV!" >}}
 {{< /imgSet >}}
 
-> #### Voila!  Single node OpenShift deployed "at the edge" on Nutanix!
+---
+
+> Voila!  Single node OpenShift deployed "at the edge" on Nutanix!
