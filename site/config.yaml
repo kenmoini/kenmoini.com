@@ -15,3 +15,8 @@ title: "Ken Moini"
 pygmentsstyle: 'monokai'
 theme: novela
 disqusShortname: kenmoini
+
+markup:
+  highlight:
+    style: monokai
+    tabWidth: 2
