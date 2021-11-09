@@ -2,7 +2,7 @@
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  {{ partial "analytics/google-analytics.html" . }}
+  {{ partial "analytics/plausible-analytics.html" . }}
   {{ $style := resources.Get "scss/global.scss" | toCSS | minify | fingerprint }}
   <link rel="stylesheet" href="{{ $style.RelPermalink }}">
   {{ $prism := resources.Get "css/prism.css" }}
