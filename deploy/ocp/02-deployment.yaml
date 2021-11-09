@@ -20,6 +20,8 @@ spec:
         app: kenmoini-com # has to match .spec.selector.matchLabels
     spec:
       terminationGracePeriodSeconds: 30
+      imagePullSecrets:
+        - name: ghcr-pull-secret
       containers:
         - name: kenmoini-com
           imagePullPolicy: Always
@@ -27,3 +29,10 @@ spec:
           ports:
             - containerPort: 8080
               name: web
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "1024Mi"
+              cpu: "1000m"
