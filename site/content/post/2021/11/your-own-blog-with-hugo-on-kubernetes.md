@@ -1,7 +1,7 @@
 ---
 title: "Your Own Git-driven Blog with Hugo and Kubernetes"
 date: 2021-11-08T04:20:47-05:00
-draft: false
+draft: true
 publiclisting: true
 toc: true
 hero: /images/posts/heroes/your-own-blog.png
