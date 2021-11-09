@@ -1,11 +1,11 @@
 kind: Ingress
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: kenmoini-com
+  name: kenmoini-com-ingress
   namespace: kenmoini-com
   labels:
     app: kenmoini-com
-    app.kubernetes.io/name: kenmoini-com
+    app.kubernetes.io/name: kenmoini-com-ingress
     app.kubernetes.io/part-of: kenmoini-com
   annotations:
     kubernetes.io/ingress.class: "nginx"
