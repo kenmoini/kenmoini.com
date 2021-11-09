@@ -2,9 +2,9 @@
 
 This directory has a few quick deployments to slap onto a fresh Kubernetes cluster to:
 
-- [Create Let's Encrypt ClusterIssuers for cert-manager]
-- [Deploy ingress-nginx]
-- [Deploy Plausible Analytics]
+- [Create Let's Encrypt ClusterIssuers for cert-manager](#create-lets-encrypt-clusterissuers-for-cert-manager)
+- [Deploy ingress-nginx](#deploy-ingress-nginx)
+- [Deploy Plausible Analytics](#deploy-plausible-analytics)
 
 
 ## Create Let's Encrypt ClusterIssuers for cert-manager
