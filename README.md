@@ -81,3 +81,5 @@ kubectl apply -f deploy/k8s/ -n kenmoini-com
 This Hugo site uses [Plausible Analytics](https://plausible.io/self-hosted-web-analytics) as an alternative to Google Analytics - this is also deployed to Kubernetes in a different namespace at a different ingress - deployment instructions are here: https://github.com/kenmoini/kenmoini.com/tree/main/deploy/supporting#deploy-plausible-analytics
 
 The supporting part of the site that loads the JavaScript is located at `site/layouts/partials/analytics/plausible-analytics.html` via `site/layouts/partials/head/head.html`
+
+Read more about Plausible Analytics here: https://kenmoini.com/post/2021/11/goodbye-google-hello-plausible/
