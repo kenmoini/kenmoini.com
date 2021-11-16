@@ -40,6 +40,7 @@ data:
   allow-snippet-annotations: 'true'
   use-proxy-protocol: 'true'
   custom-http-errors: '404,500,503'
+  use-http2: "true"
 ---
 # Source: ingress-nginx/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
