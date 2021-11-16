@@ -1,4 +1,4 @@
-FROM quay.io/polyglotsystems/golang-ubi AS builder
+FROM quay.io/polyglotsystems/golang-ubi:latest AS builder
 
 WORKDIR /workspace
 
@@ -8,7 +8,7 @@ RUN cd /workspace/site \
  && /workspace/bin/process_images.sh /workspace/site/static/images/ \
  && /workspace/bin/hugo-linux-amd64
 
-FROM quay.io/polyglotsystems/ubi8-nginx
+FROM quay.io/polyglotsystems/ubi8-nginx:latest
 
 COPY --from=builder /workspace/site/public /var/www/html
 
