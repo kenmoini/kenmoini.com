@@ -21,6 +21,12 @@ In OpenShift this is all usually handled by the Route.
 - Deploy Cert-Manager via Helm:
 
 ```bash
+## Add the Jetstack Helm Repo
+helm repo add jetstack https://charts.jetstack.io
+
+## Update the helm repos
+helm repo update
+
 ## Install cert-manager via Helm
 helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.5.4 --set installCRDs=true
 
