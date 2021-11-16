@@ -53,11 +53,11 @@ p > code, li > code {
   padding:0.5em;
   border-radius: 2px;
 }
-center img {
+center img, center picture source[type="image/webp"] {
   max-width:944px;
   margin: 10px auto 20px;
 }
-figure img {
+figure img, center picture source[type="image/webp"] {
   max-width:944px;
   margin: 1em auto 0;
   border:6px solid #292c34;
@@ -72,8 +72,31 @@ figure figcaption p {
 .pagination .page-item .page-link {
   text-align:center;
 }
-.author-avatar {
+.author-avatar, .author-avatar * {
   height: inherit;
+  width: 100%;
+}
+picture {
+  height: 100%;
+  max-height: 100%;
+  width: 100%;
+  max-width: 100%;
+  display: inline-block
+}
+picture source, picture img {
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  max-width: 100%;
+  min-height: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+picture source {
+  -webkit-animation-name: image-load-in;
+  animation-name: image-load-in;
+  -webkit-animation-duration: .8s;
+  animation-duration: .8s;
+  vertical-align: middle;
 }
 blockquote {
   margin: 50px auto 50px;
@@ -100,23 +123,37 @@ table thead tr th {
 .img-cols-6 {
   max-width: 48%;
 }
-[class*="img-cols-"] img {
+[class*="img-cols-"] img, [class*="img-cols-"] picture source[type="image/webp"] {
   width:100%;
 }
 li ul {
   padding: 25px 0 0 32px;
   display:inline-block;
 }
-
+.centeredPictureHolder {
+  text-align: center;
+  width:100%;
+  margin: 0 auto;
+  max-width:944px;
+}
+.article-hero-image .centeredPictureHolder {
+  max-width: inherit;
+}
+.author-hero-image .centeredPictureHolder {
+  height:100%
+}
 @media only screen and (max-width: 768px) {
   /* For mobile phones: */
   [class*="img-cols-"] {
     max-width: 100%;
   }
-  [class*="img-cols-"] img {
+  blockquote {
+    word-break: break-word;
+  }
+  [class*="img-cols-"] img, [class*="img-cols-"] picture source[type="image/webp"] {
     margin: 1em 0;
   }
-  center img {
+  center img, center picture source, .centeredPictureHolder, .centeredPictureHolder img, .centeredPictureHolder picture source {
     max-width:100%;
   }
   table {
@@ -137,7 +174,7 @@ li ul {
     margin-left: -4rem;
   }
   .layout-styled {
-    top: -2rem;
+    margin-top: -2rem;
   }
   .post-content {
     padding: 35px 0;
@@ -146,7 +183,7 @@ li ul {
     padding: 0 20px;
   }
 }
-.author-hero-image img {
+.author-hero-image img, .author-hero-image picture source[type="image/webp"] {
   height: 100%;
 }
 .social-icon-container a {

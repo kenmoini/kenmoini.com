@@ -1,0 +1,3 @@
+{{- $m := (dict "src" .Destination "alt" .Text) -}}
+{{ partial "func/ImageToPicture" $m }}
+<!-- Adapted from https://pawelgrzybek.com/webp-and-avif-images-on-a-hugo-website/ -->

@@ -13,21 +13,11 @@
               <div class="post-row">
           {{ end }}
 
-          <a href="{{ $article.RelPermalink }}" class="article-link"
-          {{ if and (eq ($biggerFirst) true) (eq ($biggerPlaced) false) }}
-            {{ if eq $counter 0 }}
-              id="article-link-bigger"
-              {{ $biggerPlaced = true }}
-            {{ end }}
-          {{ else if and (not $biggerFirst) (not $biggerPlaced) }}
-            {{ if ne $counter 0 }}
-              id="article-link-bigger"
-              {{ $biggerPlaced = true }}
-            {{ end }}
-          {{ end }}>
+          <a href="{{ $article.RelPermalink }}" class="article-link"{{ if and (eq ($biggerFirst) true) (eq ($biggerPlaced) false) }}{{- if eq $counter 0 }} id="article-link-bigger"{{- $biggerPlaced = true -}}{{- end -}}{{ else if and (not $biggerFirst) (not $biggerPlaced) }}{{- if ne $counter 0 }} id="article-link-bigger"{{- $biggerPlaced = true -}}{{- end -}}{{ end }}>
             <div class="article-data-outer">
               <div class="image-container">
-                <img src="{{ $article.Params.hero }}" class="article-image" />
+                {{- $m := (dict "src" $article.Params.hero "alt" $article.Title) -}}
+                {{ partial "func/ImageToPicture" $m }}
               </div>
               <div class="article-data">
                 <h2 class="article-title">
@@ -42,18 +32,18 @@
               </div>
             </div>
           </a>
-          {{ $counter := mod (add $index 1) 2 }}
-          {{ $len := (where .Pages "Type" "posts") }}
-          {{ if or (eq $counter 0) (eq (add $index 1) $len) }}
+          {{- $counter := mod (add $index 1) 2 -}}
+          {{- $len := (where .Pages "Type" "posts") -}}
+          {{- if or (eq $counter 0) (eq (add $index 1) $len) -}}
               </div>
-              {{ $biggerPlaced = false }}
-              {{ if $biggerFirst }}
-                {{ $biggerFirst = false }}
-              {{ else }}
-                {{ $biggerFirst = true }}
-              {{ end }}
-          {{ end }}
-      {{ end }}
+              {{- $biggerPlaced = false -}}
+              {{- if $biggerFirst -}}
+                {{- $biggerFirst = false -}}
+              {{- else -}}
+                {{- $biggerFirst = true -}}
+              {{- end -}}
+          {{- end -}}
+      {{- end -}}
   </div>
   {{ partial "paginator/paginator.html" . }}
 </section>

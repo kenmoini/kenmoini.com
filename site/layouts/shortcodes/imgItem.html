@@ -5,5 +5,6 @@
 {{ $setName := .Parent.Get "name" }}
 {{ $col_width := div 12 $cols }}
 <a class="img-cols-{{ $col_width }}" href="{{ $imgSrc }}" data-lightbox="imageSet-{{ $setName }}" data-title="{{ $altText }}">
-  <img src="{{ $imgSrc }}" alt="{{ $altText }}" />
+  {{- $m := (dict "src" $imgSrc "alt" $altText) -}}
+  {{ partial "func/ImageToPicture" $m }}
 </a>

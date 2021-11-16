@@ -5,17 +5,17 @@
         <div class="footer-text">
           © {{ dateFormat "2006" now }} {{ .Site.Title }}
         </div>
-        {{ partial "social-links/social-links.html" . }}
+        {{- partial "social-links/social-links.html" . }}
+      </div>
     </div>
-</div>
 
-<script src="/vendor/lightbox2-2.11.3/dist/js/lightbox-plus-jquery.min.js"></script>
-<script>
-  lightbox.option({
-    'resizeDuration': 200,
-    'imageFadeDuration': 200,
-    'fadeDuration': 200,
-    'wrapAround': true,
-    'maxWidth': '1440'
-  })
-</script>
+    <script src="/vendor/lightbox2-2.11.3/dist/js/lightbox-plus-jquery.min.js"></script>
+    <script>
+      lightbox.option({
+        'resizeDuration': 200,
+        'imageFadeDuration': 200,
+        'fadeDuration': 200,
+        'wrapAround': true,
+        'maxWidth': '1440'
+      })
+    </script>

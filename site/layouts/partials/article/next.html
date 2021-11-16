@@ -46,7 +46,8 @@ of the whole section and append them to our $next slice. */}}
               {{ if not $index}} id="article-link-bigger"{{ end }}>
                   <div>
                       <div class="image-container">
-                          <img src="{{ $article.Params.hero }}" class="article-image" />
+                        {{- $m := (dict "src" $article.Params.hero "alt" $article.Params.Title) -}}
+                        {{ partial "func/ImageToPicture" $m }}
                       </div>
                       <div>
                           <h2 class="article-title">

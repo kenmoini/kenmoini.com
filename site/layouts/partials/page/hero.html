@@ -1,0 +1,14 @@
+<section id="articleHero" class="section narrow">
+  <div class="article-hero">
+      <header class="article-header">
+          <h1 class="article-hero-heading">{{ .Page.Params.Title }}</h1>
+      </header>
+      {{ $page := .Page }}
+      {{ with .Params.hero }}
+      <div class="article-hero-image" id="ArticleImage__Hero">
+        {{- $m := (dict "src" . "alt" $page.Params.title) -}}
+        {{ partial "func/ImageToPicture" $m }}
+      </div>
+      {{ end }}
+  </div>
+</section>

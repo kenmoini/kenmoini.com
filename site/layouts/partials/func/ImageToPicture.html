@@ -1,0 +1,39 @@
+{{/*
+  ImageToPicture
+  Converts a what would have been an <img> tag to a <picture> tag.
+
+  @author @ken
+
+  @context File (.)
+
+  @access public
+
+  @return Picture (.)
+
+  @example - Go Template
+    {{ $image := partialCached "func/ImageToPicture" "path/to/image.jpg" }}
+*/}}
+<div class="centeredPictureHolder">
+  <picture>
+  {{- $imgPath := .src | printf "/%s%s" "static" | printf "%s" -}}
+  {{- $destImgPath := .src -}}
+  {{- $fileExt := (path.Ext $imgPath) -}}
+  {{- $isJPG := eq $fileExt ".jpg" -}}
+  {{- $isPNG := eq $fileExt ".png" -}}
+  {{- $ext := replace $fileExt "." "" -1 -}}
+  {{- if or ($isJPG) ($isPNG) -}}
+    {{- $avifPath:= replace $destImgPath (path.Ext $imgPath) ".avif" -}}
+    {{- $avifPathStatic:= printf "static/%s" $avifPath -}}
+    {{- if (fileExists $avifPathStatic) -}}
+    <source srcset="{{ $avifPath | safeURL }}" type="image/avif" />
+    {{- end -}}
+    {{- $webpPath:= replace $destImgPath (path.Ext $imgPath) ".webp" -}}
+    {{- $webpPathStatic:= printf "static/%s" $webpPath -}}
+    {{- if (fileExists $webpPathStatic) }}
+    <source srcset="{{ $webpPath | safeURL }}" type="image/webp" />
+    {{- end }}
+    <source srcset="{{ $destImgPath | safeURL }}" type="image/{{ $ext }}" />
+  {{- end }}
+    <img srcset="{{ $destImgPath | safeURL }}" alt="{{ .alt }}" loading="lazy" decoding="async" />
+  </picture>
+</div>
