@@ -33,7 +33,7 @@ I'm building an automated Kubernetes cluster on Fedora CoreOS and in order to bo
 
 Funny thing - I develop mostly on my main Windows workstation, which has VS Code and Windows Subsystem for Linux that passes an Ubuntu WSL interface which evidently is too old to run that binary in order to convert the YAML to JSON which leaves me stuck in my development and testing of this automation.  Yay!
 
-{{< center >}}![Side Quests, Side Quests everywhere](/images/posts/legacyUnsorted/k8sRunningAwayBalloon.jpg){{</ center >}}
+![Side Quests, Side Quests everywhere](/images/posts/legacyUnsorted/k8sRunningAwayBalloon.jpg)
 
 Guess it's time to make a new WSL distro, and since I know the binary I'm trying to use works on Fedora, `fcct` for anyone who's wondering, I'll build a new Fedora 33 WSL distro.
 

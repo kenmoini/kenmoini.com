@@ -37,6 +37,8 @@ My dev/test environment is here at home in my lab, and production will be Digita
 
 In my lab I have a 3-node ***oVirt/Red Hat Virtualization*** cluster, and a server running ***VMWare vSphere 7*** - both resource pools have plenty of space available.  So naturally, I started with the HA oVirt cluster so I can do some physical-world tests of Kubernetes.
 
+---
+
 ## Terraform: Minor versions, Major headaches
 
 Now, I've written a bit of Terraform over the years, and feel comfortable with it, but it seems that my version 0.11 Terraform scripts would not work out-of-the-box on the version I had installed a few months back, version 0.12.
@@ -60,6 +62,8 @@ That is, until I hit a roadblock with the oVirt Terraform Provider - it doesn't 
 Anywho, because I want a cluster now and not later, I've skipped deploying to oVirt via Terraform and switched to deploying to vSphere with Terraform which is just as fun as you'd imagine it is!  At least there's an official Hashicorp provider for vSphere...
 
 *I'll come back to this post and update it with a link to a post dedicated to using Terraform + oVirt in the future...hopefully...*
+
+---
 
 ## Deploying Fedora CoreOS to VMWare vSphere with Hashicorp Terraform
 
@@ -728,6 +732,8 @@ A simple bootstrapping script, checks to make sure everything we need is there o
 5. Intializes Terraform so that it can pull in a fresh set of providers, ensure we have everything needed
 6. Runs a preflight check with `terraform plan` to ensure we have everything in place and connections process properly
 7. Echos the next step for the user
+
+---
 
 ## Putting It All Together
 

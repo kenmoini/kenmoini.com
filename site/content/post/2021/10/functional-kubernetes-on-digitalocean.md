@@ -929,7 +929,7 @@ And the rest are to do with the specifics of the service, in this case targeting
 
 With that you can navigate to `https://grafana.your.domain/` and insert the default credentials of `admin` and `prom-operator` - of course making sure to change both of those since it is being exposed to the Internet and all now.
 
-{{< center >}}![Dashboard for your Dashboards](/images/posts/2021/10/grafana-dash.png){{</ center >}}
+![Dashboard for your Dashboards](/images/posts/2021/10/grafana-dash.png)
 
 ---
 
@@ -937,7 +937,7 @@ With that you can navigate to `https://grafana.your.domain/` and insert the defa
 
 So if you happen to get a 404, 50x HTTP error on an Ingress you'll be presented with a generic and blank Nginx error page.  Thankfully, the deployment above makes the error pages a little more exciting...
 
-{{< center >}}![Synthwave Error Pages](/images/posts/2021/10/404-error-page.png){{</ center >}}
+![Synthwave Error Pages](/images/posts/2021/10/404-error-page.png)
 
 ---
 

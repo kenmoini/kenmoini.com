@@ -97,7 +97,7 @@ Give it a couple seconds and it should start up - then point your browser to `ht
 
 So this next part was slightly confusing - in order to activate the Bamboo server with a Evaluation/Trial license you had to click the smallest link on the page to proceed to the form that you have to log into and fill out...
 
-{{< center >}}![Bamboo Licensing Screen](/images/posts/legacyUnsorted/bambooLicensingScreen.png){{</ center >}}
+![Bamboo Licensing Screen](/images/posts/legacyUnsorted/bambooLicensingScreen.png)
 
 You see that small "Atlassian" link hidden in that line about "Please enter your Bamboo license key above - either commercial or evaluation. Contact Atlassian if you require a license key."
 

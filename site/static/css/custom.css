@@ -130,6 +130,9 @@ li ul {
   padding: 25px 0 0 32px;
   display:inline-block;
 }
+.article-metadata {
+  opacity: 1;
+}
 .centeredPictureHolder {
   text-align: center;
   width:100%;

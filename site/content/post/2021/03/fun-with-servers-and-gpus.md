@@ -57,7 +57,7 @@ With that, I traded those R620s for 2x) R720s which can power GPUs and other PCI
 
 Now, even in R720/R730s, the actual PCIe slot only provides 75w of power - however, on the edge of PCIe riser you'll see a little port to plug in a cable for extra power!
 
-{{< center >}}![Moar power](/images/posts/legacyUnsorted/20210320_234723.jpg){{</ center >}}
+![Moar power](/images/posts/legacyUnsorted/20210320_234723.jpg)
 
 This plug right here, it gives EPS-12v power - this is IMPORTANT!  "Why," you ask?
 
@@ -65,7 +65,7 @@ This plug right here, it gives EPS-12v power - this is IMPORTANT!  "Why," you as
 
 So now you have a GPU, and a server that can house/power it, but you still need some cable to power it - naturally you search eBay for something like "R720 GPU cable" which lands you on something like this:
 
-{{< center >}}![Seems legit](/images/posts/legacyUnsorted/dellGPGPUcable.jpg){{</ center >}}
+![Seems legit](/images/posts/legacyUnsorted/dellGPGPUcable.jpg)
 
 *Ah yes!  The classic N08NH/9H6FV cable, of course!*  These cables take the 8-pin EPS-12v power at the riser's port and converts it to two PCIe device power cables, a 6-pin an a 6+2-pin line.
 
@@ -108,7 +108,7 @@ Yeah, it took me too long to figure that one out - to be fair though, this isn't
 
 There is no "official Dell EPS-12v cable" that I could find - the right type of cable looks something like this:
 
-{{< center >}}![The right cable](/images/posts/legacyUnsorted/rightCable.jpg){{</ center >}}
+![The right cable](/images/posts/legacyUnsorted/rightCable.jpg)
 
 8-pin and male on both ends, EPS-12v, not-PCIe.
 
@@ -116,6 +116,6 @@ There is no "official Dell EPS-12v cable" that I could find - the right type of 
 
 Something else to know - the Dell Technical Guide says you have to have the same sort of GPU in the system, and this is not quite the case...
 
-{{< center >}}![M40 and Quadro sitting in PCIe...](/images/posts/legacyUnsorted/20210320_234838.jpg){{</ center >}}
+![M40 and Quadro sitting in PCIe...](/images/posts/legacyUnsorted/20210320_234838.jpg)
 
 Anywho, hopefully that helps some people who are messing around with some of this sort of gear, save ya an extra 2-3 weeks and $100 of cables/dongles...

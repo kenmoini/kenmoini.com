@@ -69,7 +69,7 @@ In order to get the needed resources and use Nutanix you'll need a [Nutanix Next
 
 With your Nutanix Next account, you can now access the stickied forum post where you can download all the needed resources such as the Installer ISO: https://next.nutanix.com/discussion-forum-14/download-community-edition-38417
 
-{{< center >}}![Forums, the most straightforward way to distribute software](/images/posts/2021/10/nutanix-forum-post.png){{</ center >}}
+![Forums, the most straightforward way to distribute software](/images/posts/2021/10/nutanix-forum-post.png)
 
 Make sure to download the following:
 
@@ -83,7 +83,7 @@ If you click on the links and nothing happens then copy the link text and paste 
 
 You could burn the AHV Installer ISO to a physical optical disc but no one does that anymore.  I suggest using a dedicated bootable USB Key, any cheap USB 2.0 thumb drive will work, I have a bunch of SanDisk 32GB USB thumbdrives laying around that I use and suggest [Rufus Portable](https://rufus.ie/en/) to burn the ISO to the USB thumbdrive.
 
-{{< center >}}![Rufus burning Phoenix](/images/posts/legacyUnsorted/rufusAHV.png){{</ center >}}
+![Rufus burning Phoenix](/images/posts/legacyUnsorted/rufusAHV.png)
 
 ***Note:*** It's ***EXTREMELY important*** that the installation media (the thumbdrive in this case) be called `PHOENIX` or else the installation will fail because it searches for a drive with that label.
 
@@ -103,7 +103,7 @@ Also to note, Nutanix does not support NVMe over PCIe.
 
 Make sure to boot in BIOS mode.  Also, if it's not obvious, make sure you have Virtualization enabled in the BIOS.
 
-{{< center >}}![Rufus burning Phoenix](/images/posts/2021/10/dell-bios-boot-settings.png){{</ center >}}
+![Rufus burning Phoenix](/images/posts/2021/10/dell-bios-boot-settings.png)
 
 ### Networking
 
@@ -145,7 +145,7 @@ Once Phoenix has loaded, you'll be presented with this installation screen - it'
 
 ***IMPORTANT NOTE:*** If you are creating a Single-Node cluster, like I am in this case, make sure you ***DO NOT*** check the box that says "*Create single-node cluster?*" - it evidently does not work well and it's just easier to create the cluster later once the hypervisor is installed.
 
-{{< center >}}![AHV Community Edition Installation Screen](/images/posts/2021/10/populated-ce-installer-screen.png){{</ center >}}
+![AHV Community Edition Installation Screen](/images/posts/2021/10/populated-ce-installer-screen.png)
 
 You can see how I configured the information with the different disks in my R720 and with the IPs from my table above.
 
@@ -172,7 +172,7 @@ You could log into the AHV host and then SSH into the CVM or you can SSH into th
 
 You could log in via the terminal on the host, but normally you'd want to use an SSH client - I use PuTTY on Windows and the built-in terminal on Mac/*nix to SSH into the CVM:
 
-{{< center >}}![AHV Community Edition Installation Screen](/images/posts/2021/10/putty-cvm-logged-in.png){{</ center >}}
+![AHV Community Edition Installation Screen](/images/posts/2021/10/putty-cvm-logged-in.png)
 
 ### Create a Single-Node Cluster
 
@@ -245,7 +245,7 @@ In the left-hand pane, navigate to **Network > Network Configuration** - click t
 
 Give your Network a **Name**, a **VLAN ID** (0 being default/none) and click **Save**.
 
-{{< center >}}![Creating a Network in Prism Element](/images/posts/legacyUnsorted/prismCreateNetwork.png){{</ center >}}
+![Creating a Network in Prism Element](/images/posts/legacyUnsorted/prismCreateNetwork.png)
 
 ### Storage
 
@@ -253,7 +253,7 @@ You can choose to create a new Storage Container dedicated to your workloads or 
 
 To manage the cluster's storage, you'll use the dropdown to the right of the Cluster Name in the top bar, select **Storage**.
 
-{{< center >}}![Layout and overview of Prism Element Storage configuration](/images/posts/legacyUnsorted/prismStorage.png){{</ center >}}
+![Layout and overview of Prism Element Storage configuration](/images/posts/legacyUnsorted/prismStorage.png)
 
 ### Images
 
@@ -273,7 +273,7 @@ Prism Central is essentially the vCenter of the Nutanix world - you can manage m
 
 Navigate back to the Prism Element dashboard - you should see a block regarding Prism Central and that this instance is "Not registered to Prism Central."
 
-{{< center >}}![Prism Element Dashboard](/images/posts/2021/10/prism-initial-screen.png){{</ center >}}
+![Prism Element Dashboard](/images/posts/2021/10/prism-initial-screen.png)
 
 Go ahead and click that "Register or create new" link in that block which will open up a modal window - from the modal pop-up, select "Deploy".
 
@@ -318,7 +318,7 @@ With the admin password and Nutanix Next credentials set in Prism Central, you c
 
 With Prism Element registered with the Prism Central instance, you can click on that dashboard box to launch Prism Central.
 
-{{< center >}}![Prism Central Dashboard](/images/posts/2021/10/prism-central-dashboard.png){{</ center >}}
+![Prism Central Dashboard](/images/posts/2021/10/prism-central-dashboard.png)
 
 ---
 

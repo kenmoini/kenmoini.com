@@ -76,7 +76,7 @@ The installer kept failing looking for something called "PHOENIX" - come to find
 
 So to install I suggest a dedicated USB drive, a cheap/small 16GB disk will work - I etch it with [Rufus Portable](https://rufus.ie/en/), just make sure not to change the assumed Volume Label from "PHOENIX", ya know, like it's fucking Knoppix in 2001.  The last time I had to deal with install media targeting itself with hard-coded volume labels was when the Twin Towers were still a thing.
 
-{{< center >}}![Rufus burning Phoenix](/images/posts/legacyUnsorted/rufusAHV.png){{</ center >}}
+![Rufus burning Phoenix](/images/posts/legacyUnsorted/rufusAHV.png)
 
 ## Boot Mode
 
@@ -140,7 +140,7 @@ Once you are finally logged in, you'll find a prompt for the Nutanix NEXT accoun
 
 Now that you have logged into the Prism admin user, associated your Nutanix NEXT Account, you are finally presented with the Prism Web UI!
 
-{{< center >}}![Prism made of so many squares](/images/posts/legacyUnsorted/prismKemoCluster.png){{</ center >}}
+![Prism made of so many squares](/images/posts/legacyUnsorted/prismKemoCluster.png)
 
 ## Configuring Prism
 
@@ -154,7 +154,7 @@ In the left-hand pane, navigate to **Network > Network Configuration** - click t
 
 Give your Network a **Name**, a **VLAN ID** (0 being default/none) and click **Save**.
 
-{{< center >}}![Creating a Network in Prism](/images/posts/legacyUnsorted/prismCreateNetwork.png){{</ center >}}
+![Creating a Network in Prism](/images/posts/legacyUnsorted/prismCreateNetwork.png)
 
 ### Storage
 
@@ -162,7 +162,7 @@ You can choose to create a new Storage Container dedicated to your workloads or 
 
 To manage the cluster's storage, you'll use the dropdown to the right of the Cluster Name in the top bar, select **Storage**.
 
-{{< center >}}![Layout and overview of Prism Storage configuration](/images/posts/legacyUnsorted/prismStorage.png){{</ center >}}
+![Layout and overview of Prism Storage configuration](/images/posts/legacyUnsorted/prismStorage.png)
 
 ### Images
 

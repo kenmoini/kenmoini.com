@@ -310,6 +310,10 @@ Note that this will use the latest version of Golang for every build - if you wa
 
 There's some additional modifications you could do, such as building for different architectures and operating systems, only building on version tags, and so on.  Either way, as long as the upstream software project you want to sync versions has a way to query for their latest version then you should be good to go with just a few swaps!
 
-You could even extend this automation workflow to other container image layers - if you have a downstream project that consumes this container image, maybe you add additional builder packages like NPM to this Golang builder, and you want to sync when there is a new version of this container image, you would just query something like this: `curl -s https://api.github.com/repos/PolyglotSystems/golang-ubi8/releases/latest | grep "tag_name" | cut -d ':' -f 2,3 | tr -d \",`
+You could even extend this automation workflow to other container image layers - if you have a downstream project that consumes this container image, maybe you add additional builder packages like NPM to this Golang builder, and you want to sync when there is a new version of this container image, you would just query something like this:
+
+```bash
+curl -s https://api.github.com/repos/PolyglotSystems/golang-ubi8/releases/latest | grep "tag_name" | cut -d ':' -f 2,3 | tr -d \",
+```
 
 > ***With a little Push, you should now have releases of the Golang base image automated to sync with the versions of Golang itself!***

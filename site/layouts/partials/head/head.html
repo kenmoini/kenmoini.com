@@ -1,4 +1,5 @@
   <head>
+    {{- $gitHash := readFile "gitHash.nfo" }}
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -16,5 +17,5 @@
     {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
     {{ end -}}
     <link rel="stylesheet" href="/vendor/lightbox2-2.11.3/dist/css/lightbox.min.css" />
-    <link rel="stylesheet" href="/css/custom.css" />
+    <link rel="stylesheet" href="/css/custom.css#{{ $gitHash }}" />
   </head>

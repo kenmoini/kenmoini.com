@@ -33,7 +33,7 @@ Evidently, Ansible Tower 3.8 has new ways to license the server, and the preferr
 So how do you store your automation in a public GitHub repo and still securely pass around the subscription manifest zip file?
 
 
-{{< center >}}![I may have a problem...](/images/posts/legacyUnsorted/17aSDTa5W_p_dBQwCre5-4A.png){{</ center >}}
+![I may have a problem...](/images/posts/legacyUnsorted/17aSDTa5W_p_dBQwCre5-4A.png)
 
 ## New-ish Red Hat APIs
 
