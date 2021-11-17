@@ -81,9 +81,11 @@ picture {
   max-height: 100%;
   width: 100%;
   max-width: 100%;
-  display: inline-block
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-picture source, picture img {
+picture img {
   -ms-flex-negative: 0;
   flex-shrink: 0;
   max-width: 100%;
@@ -91,6 +93,7 @@ picture source, picture img {
   -o-object-fit: cover;
   object-fit: cover;
 }
+/*
 picture source {
   -webkit-animation-name: image-load-in;
   animation-name: image-load-in;
@@ -98,6 +101,7 @@ picture source {
   animation-duration: .8s;
   vertical-align: middle;
 }
+*/
 blockquote {
   margin: 50px auto 50px;
 }
@@ -122,9 +126,6 @@ table thead tr th {
 }
 .img-cols-6 {
   max-width: 48%;
-}
-[class*="img-cols-"] img, [class*="img-cols-"] picture source[type="image/webp"] {
-  width:100%;
 }
 li ul {
   padding: 25px 0 0 32px;
