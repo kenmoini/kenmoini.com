@@ -8,6 +8,7 @@ RUN cd /workspace/site \
  && /workspace/bin/set_git_hash.sh \
  && cd /workspace/bin/ \
  && /workspace/bin/process_images.sh /workspace/site/static/images/ \
+ && cd /workspace/site \
  && /workspace/bin/hugo-linux-amd64
 
 FROM quay.io/polyglotsystems/ubi8-nginx:latest
