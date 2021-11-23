@@ -4,7 +4,7 @@ SCRIPT_DIR=$(dirname ${BASH_SOURCE[0]})
 
 # Remove EXIF data from images
 echo "Removing EXIF data from images..."
-$SCRIPT_DIR/Image-ExifTool-12.35/exiftool -recurse -all= $1
+$SCRIPT_DIR/Image-ExifTool-12.35/exiftool -overwrite_original -recurse -all= $1
 
 # converting JPEG images
 echo "Converting JPEG images..."

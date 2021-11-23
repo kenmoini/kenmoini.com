@@ -15,6 +15,10 @@ title: "Ken Moini"
 pygmentsstyle: 'monokai'
 theme: novela
 disqusShortname: kenmoini
+params:
+  description: The digital residence of parts of my mind. I work on things that live on the Internet, practice modern alchemy, and dabble in danger.
+#  seo:
+#    default_image:
 
 markup:
   goldmark:

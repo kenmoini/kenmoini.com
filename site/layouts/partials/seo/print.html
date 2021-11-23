@@ -50,7 +50,7 @@
 	{{- $description = .Summary -}}
 {{- else -}}
 {{/* 4. site description  */}}
-	{{- $description = .Site.Params.Description -}}
+	{{- $description = .Site.Params.description -}}
 {{- end -}}
 
 {{- $.Scratch.SetInMap "seo" "description" $description -}}
