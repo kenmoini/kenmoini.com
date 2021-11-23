@@ -1,0 +1,19 @@
+<div class="social-icon-outer">
+  <div class="social-icon-container">
+      {{ range $index, $component := .Site.Social }}
+          {{ with $component }}
+              {{ $path := print "icons/social/" $index }}
+              {{ if eq $index "twitter" }}
+                <a target="_blank" href="https://twitter.com/{{ . }}">{{ partial $path $ }}</a>
+              {{ else if eq $index "linkedin" }}
+                <a target="_blank" href="https://www.linkedin.com/in/{{ . }}">{{ partial $path $ }}</a>
+              {{ else if eq $index "github" }}
+                <a target="_blank" href="https://github.com/{{ . }}">{{ partial $path $ }}</a>
+              {{ else }}
+                <a target="_blank" href="{{ . }}">{{ partial $path $ }}</a>
+              {{ end }}
+              <span class="hidden">{{ $component }}</span>
+          {{ end }}
+      {{ end }}
+  </div>
+</div>
