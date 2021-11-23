@@ -146,6 +146,13 @@ li ul {
 .author-hero-image .centeredPictureHolder {
   height:100%
 }
+.icon-wrapper {
+  height:40px;
+}
+.moon-mask {
+  height: 32px;
+  width: 28px;
+}
 @media only screen and (max-width: 768px) {
   /* For mobile phones: */
   [class*="img-cols-"] {
