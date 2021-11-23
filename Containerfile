@@ -6,6 +6,7 @@ COPY . /workspace
 
 RUN cd /workspace/site \
  && /workspace/bin/set_git_hash.sh \
+ && cd /workspace/bin/ \
  && /workspace/bin/process_images.sh /workspace/site/static/images/ \
  && /workspace/bin/hugo-linux-amd64
 
