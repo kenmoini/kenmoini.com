@@ -196,7 +196,9 @@ The way I am accomplishing this is by:
 {{< imgItem src="/images/posts/2021/11/prism-view-nics.png" alt="Copy the MAC Address of the NIC" >}}
 {{< /imgSet >}}
 
-To set NMState configuration with the Assisted Installer service, you have to do so before downloading the Discovery ISO - thankfully, with one machine this is pretty easy to do:
+To set NMState configuration with the Assisted Installer service, you have to do so before downloading the Discovery ISO - thankfully, with one machine this is pretty easy to do.  
+
+Make sure to get the Cluster UUID from the Assisted Installer Service, it's part of the URL in the Address Bar of your browser:
 
 ```bash
 ###############################################################################
@@ -205,7 +207,7 @@ AI_SVC_ENDPOINT="https://api.openshift.com"
 AI_SVC_PATH_BASE="/api/assisted-install/v1"
 
 ###############################################################################
-## Get the UUID of the Cluster from the Assisted Installer Service
+## Get the UUID of the Cluster from the Assisted Installer Service WebUI's URL Address Bar
 AI_SVC_CLUSTER_ID=""
 AI_SVC_CLUSTER_SSH_PUBLIC_KEY=$(cat ~/.ssh/id_rsa.pub)
 
