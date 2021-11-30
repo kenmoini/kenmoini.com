@@ -28,6 +28,8 @@ My old Plex Media Server was just an old Windows 7 system with Plex installed an
 
 Running Deluge as a separate VM has some benefits such as encapsulating all the traffic for that system to an OpenVPN server elsewhere - this is how to do exactly that.
 
+---
+
 ## Prerequisite - Remote OpenVPN Server
 
 If you don't already have an OpenVPN server you could do something like:
@@ -263,6 +265,8 @@ Now that the VPN is setup and services are loaded and all, we can access the Del
 - Set Queue limits under **Preferences > Queue**
 - Enable optional Plugins under **Preferences > Plugins** such as AutoAdd, Label, and Scheduler - refresh your browser after adding/removing plugins
 - Configure optional plugins
+
+---
 
 ## Next Steps
 
