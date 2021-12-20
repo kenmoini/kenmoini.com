@@ -3,7 +3,7 @@ title: "SystemD Services in OpenShift 4"
 date: 2021-12-20T04:20:47-05:00
 draft: false
 publiclisting: true
-toc: true
+toc: false
 hero: /images/posts/heroes/systemd-machineconfig.png
 tags:
   - open source
@@ -29,7 +29,7 @@ authors:
 
 > Configuring SystemD with YAML makes me long for Bash
 
-Evidently, if you deploy the Nutanix CSI Operator on Red Hat's OpenShift Container Platform the StorageClass can ***claim*** PVs and PVCs but when it comes to binding the storage to a running container you'll run into a very interesting error when viewing the Pod Events stream:
+Evidently, if you deploy the Nutanix CSI Operator on Red Hat's OpenShift Container Platform the StorageClass can ***claim*** PVs and PVCs but when it comes to ***binding*** the storage to a running container you'll run into a very interesting error when viewing the Pod Events stream:
 
 ```text
 MountVolume.SetUp failed for volume "pvc-a139d12a-036a-490c-bc2d-214e8da078e3" : rpc error: code = Internal desc = iscsi/lvm failure, last err seen: iscsi: failed to sendtargets to portal 192.168.42.58:3260 output: Failed to connect to bus: No data available iscsiadm: can not connect to iSCSI daemon (111)! iscsiadm: Cannot perform discovery. Initiatorname required. iscsiadm: Could not perform SendTargets discovery: could not connect to iscsid , err exit status 20
@@ -37,11 +37,15 @@ MountVolume.SetUp failed for volume "pvc-a139d12a-036a-490c-bc2d-214e8da078e3" :
 
 Basically, what that means is that the iSCSId service isn't running on the Red Hat CoreOS hosts.
 
+---
+
 ***So what can you do to enable this service?***
 
 You could SSH into each of the OCP Application nodes and do a `system enable --now iscsid.service` but the problem with that is that it is an unsupported anti-pattern and as soon as the system reboots or is reconfigured the service would be reset back to its normal state due to how the read-only composition of CoreOS works.
 
 The best way to enable the needed SystemD service on all of the Application nodes would be with a **MachineConfig**.
+
+---
 
 A **MachineConfig** and the [Machine Config Operator](https://docs.openshift.com/container-platform/4.9/post_installation_configuration/machine-configuration-tasks.html) will allow you to set machine/node/RHCOS configuration as a traditional Kubernetes object.  Upon updating the state of a MachineConfig the operator will compose all the known configuration and apply it to the nodes, executing a rolling reboot to apply the updated configuration.
 
