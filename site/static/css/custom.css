@@ -216,7 +216,7 @@ li ul {
   max-width: 100%;
   overflow: auto;
 }
-div.code-toolbar {
+div.code-toolbar pre {
   max-height: 693px;
 }
 #articleComments {
