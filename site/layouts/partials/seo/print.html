@@ -30,6 +30,20 @@
 {{- $.Scratch.SetInMap "seo" "updated_time" (.Lastmod.Format "2006-01-02T15:04:05-07:00") -}}
 {{- end -}}
 
+{{/* Article Tags */}}
+{{- $tags := "" -}}
+{{- if .Params.tags -}}
+{{- $tagstring := delimit .Params.tags ", " -}}
+{{- .Scratch.SetInMap "seo" "tags" $tagstring -}}
+{{- end -}}
+
+{{/* Article Authors */}}
+{{- $authors := "" -}}
+{{- if .Params.authors -}}
+{{- $authorsstring := delimit .Params.authors ", " ", and " -}}
+{{- .Scratch.SetInMap "seo" "authors" $authorsstring -}}
+{{- end -}}
+
 {{/* Description
 	---------------------------- 
 	We use the following order of precedence

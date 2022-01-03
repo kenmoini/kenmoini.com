@@ -9,6 +9,12 @@
   {{- $seo := .seo }}
     <title>{{ $seo.title }}</title>
     <meta name="description" content="{{ $seo.description }}">
+  {{- with ($seo.tags) }}
+    <meta name="keywords" content="{{ $seo.tags }}">
+  {{- end }}
+  {{- with ($seo.authors) }}
+    <meta name="author" content="{{ $seo.authors }}">
+  {{- end }}
     <meta property="og:title" content="{{ $seo.title }}">
     <meta property="og:site_name" content="{{ $seo.site_name }}">
     <meta property="og:description" content="{{ $seo.description }}">
@@ -36,4 +42,5 @@
     <meta property="article:published_time" content="{{- $seo.published_time }}">
   {{- with $seo.updated_time }}
     <meta property="article:updated_time" content="{{- $seo.updated_time }}">
+    <meta name="revised" content="{{- $seo.updated_time }}">
   {{- end }}
