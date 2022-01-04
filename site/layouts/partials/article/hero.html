@@ -5,7 +5,7 @@
             <div class="article-hero-subtitle">
                 <div class="article-meta">
                     {{ partial "article/authors.html" . }}
-                    {{ .Page.Date.Format "January 2, 2006" }}
+                    <time datetime='{{ .Page.Date.Format "2006-01-02 15:04" }}'>{{ .Page.Date.Format "January 2, 2006" }}</time>
                     • {{ .ReadingTime }} min read
                 </div>
             </div>

@@ -228,3 +228,7 @@ div.code-toolbar pre {
 #articleTOC {
   padding-top:100px;
 }
+time {
+  display: inline-block;
+  margin: 0 0.25em 0 0;
+}
