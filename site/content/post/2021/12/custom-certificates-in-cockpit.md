@@ -27,7 +27,7 @@ One of the most frequent run-ins with these self-signed certificates is with ***
 
 ## Installing Cockpit
 
-Cockpit is installed by default in RHEL 8, all that you need to do is install it:
+Cockpit is installed by default in RHEL 8, all that you need to do is enable it:
 
 ```bash
 systemctl enable --now cockpit.socket
@@ -36,10 +36,10 @@ systemctl enable --now cockpit.socket
 On systems where it's not installed you can install it with the following:
 
 ```bash
-## Debian/Ubuntu Systems
+## Debian/Ubuntu-based Systems
 apt install cockpit
 
-## RHEL systems
+## RHEL-based systems
 dnf install cockpit
 
 ## Don't forget to enable the service
