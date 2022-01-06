@@ -1,7 +1,7 @@
 ---
 title: "Disconnected OpenShift Assisted Installer Service"
 date: 2022-01-01T04:20:47-05:00
-draft: true
+draft: false
 publiclisting: true
 toc: true
 hero: /images/posts/heroes/disconnected-ai-svc.png
