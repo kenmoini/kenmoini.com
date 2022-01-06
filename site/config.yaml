@@ -12,7 +12,7 @@ taxonomies:
 baseURL: "https://kenmoini.com"
 languageCode: "en-us"
 title: "Ken Moini"
-pygmentsstyle: 'monokai'
+
 theme: novela
 disqusShortname: kenmoini
 params:
@@ -21,6 +21,14 @@ params:
 #    default_image:
 
 markup:
+  highlight:
+    codeFences: false
+    guessSyntax: false
+    lineNos: false
+    lineNumbersInTable: false
+    noClasses: true
+    style: none
+    tabWidth: 2
   goldmark:
     extensions:
       definitionList: true
@@ -40,6 +48,3 @@ markup:
       hardWraps: false
       unsafe: false
       xhtml: false
-  highlight:
-    style: monokai
-    tabWidth: 2
