@@ -299,6 +299,8 @@ spec:
     name: user-ca-bundle
 ```
 
+***Warning!*** Don't apply that Proxy Cluster Config YAML to the cluster all willy nilly - access it with `oc edit proxy/cluster` or via the Web UI in **Administration > Cluster Settings > Configuration > Proxy > YAML**.
+
 Once those two objects are available/modified, the whole cluster will reload as the Root CA bundle is generated with those additional Root CA Certificates.
 
 From here the OpenShift cluster can automatically sync the build Root CA bundle in PEM format to an empty ConfigMap that has been given an annotation as such:
