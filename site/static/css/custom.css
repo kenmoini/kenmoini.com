@@ -218,6 +218,7 @@ li ul {
 }
 div.code-toolbar pre {
   max-height: 693px;
+  border-radius: 0 !important;
 }
 #articleComments {
   padding-bottom:20px;
@@ -231,4 +232,9 @@ div.code-toolbar pre {
 time {
   display: inline-block;
   margin: 0 0.25em 0 0;
+}
+h4 code, h5 code {
+  background: #292c34!important;
+  padding: 10px;
+  color: #FAFAFA;
 }
