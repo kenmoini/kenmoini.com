@@ -1,0 +1,8 @@
+apiVersion: helm.openshift.io/v1beta1
+kind: HelmChartRepository
+metadata:
+  name: jetstack-helm-charts
+spec:
+  connectionConfig:
+    url: 'https://charts.jetstack.io'
+  name: JetStack Helm Charts
