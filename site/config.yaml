@@ -9,9 +9,23 @@ social:
 taxonomies:
   author: authors
 
+title: "Ken Moini"
 baseURL: "https://kenmoini.com"
 languageCode: "en-us"
-title: "Ken Moini"
+defaultContentLanguage: en
+languages:
+  en:
+    languageName: English
+    weight: 1
+    contentDir: content/en
+  fr:
+    languageName: Français
+    weight: 2
+    contentDir: content/fr
+  es:
+    languageName: Spanish
+    weight: 3
+    contentDir: content/es
 
 theme: novela
 disqusShortname: kenmoini
