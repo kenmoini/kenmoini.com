@@ -603,7 +603,7 @@ MIRROR_BASE_PATH="/opt/disconnected-mirror"
 # RH_OFFLINE_TOKEN is the token generated from this page: https://access.redhat.com/management/api
 RH_OFFLINE_TOKEN=$(cat $HOME/rh-api-offline-token)
 
-ASSISTED_SERVICE_V1_API="https://api.openshift.com/api/assisted-install/v2"
+ASSISTED_SERVICE_V2_API="https://api.openshift.com/api/assisted-install/v2"
 
 ## Make working directories
 mkdir -p $MIRROR_BASE_PATH/{mirror-ingress/{haproxy,nginx/templates/,scripts}/,ai-svc/{local-store,volumes/{db,opt,imgsvc}}/,auth,dns,pki,downloads/{images,olm,rhcos,tools}}
@@ -623,7 +623,7 @@ QUERY_CLUSTER_VERSIONS_REQUEST=$(curl -s --fail \
 --header "Content-Type: application/json" \
 --header "Accept: application/json" \
 --request GET \
-"${ASSISTED_SERVICE_V1_API}/openshift_versions")
+"${ASSISTED_SERVICE_V1_API}/openshift-versions")
 
 ## Check to make sure we retrieved data
 if [ -z "$QUERY_CLUSTER_VERSIONS_REQUEST" ]; then
