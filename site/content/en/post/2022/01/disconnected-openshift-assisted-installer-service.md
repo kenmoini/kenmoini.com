@@ -1456,9 +1456,9 @@ platform:
   none: {}
 fips: false
 sshKey: 'ssh-rsa kjhf9dfkjf...YOUR_SSH_KEY_HERE...'
-pullSecret: '$(jq -rcM $MIRROR_PULL_SECRET_PATH)'
+pullSecret: '$(jq -rcM $MIRROR_PULL_SECRET_PATH .)'
 additionalTrustBundle: |
-  $($MIRROR_BASE_PATH/pki/ca.cert.pem | sed 's/^/  /')
+  $(cat $MIRROR_BASE_PATH/pki/ca.cert.pem | sed 's/^/  /')
 $(cat ${MIRROR_BASE_PATH}/image_content_sources.yaml)
 EOF
 ```
@@ -1817,3 +1817,7 @@ podman import $TARGET_EXTRACTION_DIR/downloads/dns-container.tar
 
 ## PROFIT!!!!1
 ```
+
+## Credits
+
+- Alexis de Talhouët for debugging errors I made in this post and trying it with other components, such as the oc mirror-registry!
