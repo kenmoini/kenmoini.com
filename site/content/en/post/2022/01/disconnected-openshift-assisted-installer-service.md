@@ -600,8 +600,8 @@ Save the Offline Token to a file in the Mirror VM at `$HOME/rh-api-offline-token
 ## Set needed variables
 MIRROR_BASE_PATH="/opt/disconnected-mirror"
 
-# RH_API_OFFLINE_TOKEN is the token generated from this page: https://access.redhat.com/management/api
-RH_API_OFFLINE_TOKEN=$(cat $HOME/rh-api-offline-token)
+# RH_OFFLINE_TOKEN is the token generated from this page: https://access.redhat.com/management/api
+RH_OFFLINE_TOKEN=$(cat $HOME/rh-api-offline-token)
 
 ASSISTED_SERVICE_V1_API="https://api.openshift.com/api/assisted-install/v1"
 
