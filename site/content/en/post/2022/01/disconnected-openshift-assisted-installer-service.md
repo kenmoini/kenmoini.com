@@ -603,7 +603,7 @@ MIRROR_BASE_PATH="/opt/disconnected-mirror"
 # RH_OFFLINE_TOKEN is the token generated from this page: https://access.redhat.com/management/api
 RH_OFFLINE_TOKEN=$(cat $HOME/rh-api-offline-token)
 
-ASSISTED_SERVICE_V1_API="https://api.openshift.com/api/assisted-install/v1"
+ASSISTED_SERVICE_V1_API="https://api.openshift.com/api/assisted-install/v2"
 
 ## Make working directories
 mkdir -p $MIRROR_BASE_PATH/{mirror-ingress/{haproxy,nginx/templates/,scripts}/,ai-svc/{local-store,volumes/{db,opt,imgsvc}}/,auth,dns,pki,downloads/{images,olm,rhcos,tools}}
