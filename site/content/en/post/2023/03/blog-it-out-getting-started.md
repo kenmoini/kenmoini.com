@@ -50,12 +50,12 @@ In this ***Blog it Out!*** series I'll tour you through the things you need and 
 In the end, you'll get a fully automated and feature-rich blog, doing all the cool things with containers and Kubernetes, and more.  The series will (probably) go along a little like this:
 
 - **Getting Started** - *(You are here!)*
-- **Rhymes and Reasons** - What we're building, what we're not doing, and why we're doing or not doing any of it.
+- **[Rhymes and Reasons](./blog-it-out-rhymes-and-reasons)** - What we're building, what we're not doing, and why we're doing or not doing any of it
 - **Hugo-a-go-go** - Setting up the basics of the blog, uploading to GitHub, and some common things to know
 - **Paint It Black** - Themes and how to tame them
 - **Your First Article** - A Hello World of sorts, learning up on Markdown
 - **Tupperware Time** - Containing the blog, pushing to a container registry
-- **Making It Web Scale** - Obligatory time to deploy this static site to a Kubernetes cluster
+- **Making It Web Scale** - Obligatory time to deploy this static site as a simple server, with a container, S3 bucket, GitHub Pages, and a Kubernetes cluster
 - **Bleeping Bots** - Automating the building and delivery with GitHub Actions
 - **The Million Dollar Blog** - Enhancements, upgrades, and next steps
 
@@ -76,8 +76,8 @@ What you need to come prepared with is:
 - **A terminal**.  Either via your Mac terminal, Linux terminal, or via Windows Subsystem for Linux.  Please for the love of all things unholy, don't use Powershell.  SSHing to a remote Linux terminal is acceptable.
 - **An editor**.  Something like [VS Code](https://code.visualstudio.com/) is a great option - you could do this all in NotePad if you really wanted to though.
 - **A web browser**.  Ideally either Firefox or Chrome so you can leverage the DOM inspector and some other tools later on.
-- **A GitHub account**.  Yeah, you could use GitLab instead but you're on your own with that one.  Just fucking get a GitHub account cause, surprise: every vendor works with bad agencies like ICE.
-- **A Server or a Kubernetes cluster**.  You'll probably want to host this thing somewhere...while you could host it on any simple web server an S3 bucket, or even use GitHub Pages for free, *but a Kubernetes cluster is so much cooler*.  You can probably save some cost by not spinning it up until you have the container ready to rock and roll.  I would suggest either [DigitalOcean](https://m.do.co/c/9058ed8261ee) or [Linode](https://www.linode.com/lp/refer/?r=c4acc0a829d048727ced26c4920968c9bc6597fd).  *Note: those are referal links that benefit both parties.*
+- **A GitHub account**.  Yeah, you could use GitLab instead but you're on your own with that one.  Just fucking get a GitHub account cause, ***surprise***: every vendor works with bad agencies like ICE.
+- **A Server or a Kubernetes cluster**.  You'll probably want to host this thing somewhere...while you could host it on any simple web server, an S3 bucket, or even just use GitHub Pages for free...*a Kubernetes cluster is so much cooler*.  We'll go through all those deployment options though.  You can probably save some cost by not spinning it up until you have the container ready to rock and roll.  I would suggest either [DigitalOcean](https://m.do.co/c/9058ed8261ee) or [Linode](https://www.linode.com/lp/refer/?r=c4acc0a829d048727ced26c4920968c9bc6597fd).  *Note: those are referal links that benefit both parties.*
 - **A Domain Name?** - I mean, you're on my site, KenMoini(dot)com...don't you want your own domain too?  I suggest a registrar like [NameCheap](https://namecheap.com) and we'll work through the DNS stuff later.  This is optional if you're going to use something like GitHub Pages.
 
 Most of that should be pretty low hanging fruit and you may already have it all ready to go.  
