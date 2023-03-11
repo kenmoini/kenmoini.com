@@ -33,13 +33,13 @@ authors:
 
 So I have this blog here, and I'm going to show you how to rip it off.  Really.
 
-Ok, please don't rip off my content because it's:
+Ok, please don't rip off my ***content*** because it's:
 
 1. Trash
 2. Mine
 3. Not yours
 
-The site layout and mechanics though, all fair game...I'll even teach you how to do it, in fact that's what this blog series is all about!
+The site layout and mechanics though, all fair game.  I won't just link you to the [repo for this site](https://github.com/kenmoini/kenmoini.com), I'll even teach you how to do it from *scratch-ish*, in fact that's what this blog series is all about!
 
 ## Blog It Out!
 
@@ -72,8 +72,11 @@ What you need to come prepared with is:
 - **A terminal**.  Either via your Mac terminal, Linux terminal, or via Windows Subsystem for Linux.  Please for the love of all things unholy, don't use Powershell.
 - **A web browser**.  Ideally either Firefox or Chrome so you can leverage the DOM inspector and some other tools later on.
 - **A GitHub account**.  Yeah, you could use GitLab instead but you're on your own with that one.  Just fucking get a GitHub account cause, surprise: every vendor works with bad agencies like ICE.
-- **A Server or a Kubernetes cluster**.  You'll probably want to host this thing somewhere...while you could host it on any simple web server an S3 bucket, or even use GitHub Pages, but a Kubernetes cluster is so much cooler.  You can probably save some cost by not spinning it up until you have the container ready to rock and roll.  I would suggest either [DigitalOcean](https://m.do.co/c/9058ed8261ee) or [Linode](https://www.linode.com/lp/refer/?r=c4acc0a829d048727ced26c4920968c9bc6597fd).  *Note: those are referal links that benefit both parties.*
+- **A Server or a Kubernetes cluster**.  You'll probably want to host this thing somewhere...while you could host it on any simple web server an S3 bucket, or even use GitHub Pages for free, *but a Kubernetes cluster is so much cooler*.  You can probably save some cost by not spinning it up until you have the container ready to rock and roll.  I would suggest either [DigitalOcean](https://m.do.co/c/9058ed8261ee) or [Linode](https://www.linode.com/lp/refer/?r=c4acc0a829d048727ced26c4920968c9bc6597fd).  *Note: those are referal links that benefit both parties.*
+- **A Domain Name?** - I mean, you're on my site, KenMoini(dot)com...don't you want your own domain too?  I suggest a registrar like [NameCheap](https://namecheap.com).  This is optional if you're going to use something like GitHub Pages.
 
-Most of that should be pretty low hanging fruit and you may already have it all ready to go.
+Most of that should be pretty low hanging fruit and you may already have it all ready to go.  
+
+The series is comprised of short/sweet/simple, easy to digest articles - and the work that we'll step through should also be able to be completed in an hour or two.
 
 > In the next article of this series, we'll explore why we're doing the things we'll be doing.
