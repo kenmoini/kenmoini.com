@@ -45,13 +45,13 @@ The site layout and mechanics though, all fair game.  I won't just link you to t
 
 ## Blog It Out!
 
-In this ***Blog it Out!*** series I'll tour you through the things you need and need to do in order to get a blog like this - it's really not hard, can be hosted almost anywhere, and it's a bit more secure than you'd think.
+In this ***Blog It Out!*** series I'll tour you through the things you need and need to do in order to get a blog like this - it's really not hard, can be hosted almost anywhere, and it's a bit more secure than you'd think.
 
 In the end, you'll get a fully automated and feature-rich blog, doing all the cool things with containers and Kubernetes, and more.  The series will (probably) go along a little like this:
 
 - **Getting Started** - *(You are here!)*
-- **[Rhymes and Reasons](./blog-it-out-rhymes-and-reasons)** - What we're building, what we're not doing, and why we're doing or not doing any of it
-- **Hugo-a-go-go** - Setting up the basics of the blog, uploading to GitHub, and some common things to know
+- **[Rhymes and Reasons](/post/2023/03/blog-it-out-rhymes-and-reasons)** - What we're building, what we're not doing, and why we're doing or not doing any of it
+- **[Hugo-a-go-go](/post/2023/03/blog-it-out-hugo-a-go-go)** - Setting up the basics of the blog, uploading to GitHub, and some common things to know
 - **Paint It Black** - Themes and how to tame them
 - **Your First Article** - A Hello World of sorts, learning up on Markdown
 - **Tupperware Time** - Containing the blog, pushing to a container registry
