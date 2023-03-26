@@ -1,5 +1,5 @@
 ---
-title: "Easy Multi-architecture Ansible"
+title: "Easy Multi-Architecture Ansible"
 date: 2023-03-25T04:20:47-05:00
 draft: false
 toc: false
@@ -24,11 +24,15 @@ authors:
 
 > ARM can sometimes be a pain in the ARSE
 
+---
+
 Lately I've been collecting a variety of different computing architectures - from a 32-bit Motion Computing tablet that is super cool but that the Internet hates - to some new ARM servers powered by [Ampere Altra CPUs](https://www.servethehome.com/raspberry-pi-cluster-versus-ampere-altra-max-supermicro-arm-server/) in the [AVA](https://www.ipi.wiki/products/ava-developer-platform) and [AADP](https://www.ipi.wiki/products/ampere-altra-developer-platform) kits.  Oh, and I got one of those blue iMAC G3 systems for a little taste of nostalgia too.
 
 Now, some of these systems I've been adding to my normal automation routines - the AVA Dev Kit runs RHEL so I just automate it the same for the most part.  There are a few differences however, even on the same system.
 
 For instance, when adding my ARM 64 systems to my general system configuration Ansible Automation workflows, I found myself having to change out links to binaries and ISOs and the such that had `x86_64` hard-coded in the URLs that needed to be replaced with `aarch64`.  *Unless I was getting some Debian-based thing*, then I needed to replace it with `arm64`.
+
+---
 
 ## The Birth of a Collection
 
@@ -49,6 +53,8 @@ For Debian and RHEL type of notations.  I don't have an AIX or Solaris system to
 My first, and a super simple general catch-all Ansible Collection, but something that let's one perform architecture detection and setting of some useful facts/variables in just 3 lines of YAML!
 
 You can find the collection at https://github.com/kenmoini/ansible-collections
+
+---
 
 ## Using the Collection
 
@@ -72,6 +78,8 @@ collections:
   - name: kenmoini.kemo
   #- name: other.collections
 ```
+
+---
 
 ### Using the Collection
 
