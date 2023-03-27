@@ -44,11 +44,13 @@ I'm sure you're tired of reading all these *not-fun* words and want to get to bu
 If this is your first time doing something with Git on your local terminal there are a few things you'll need to do:
 
 - Maybe install Git
-- Configuring the local Git user
-- Creating an SSH Key Pair
-- Adding the Public Key to GitHub
+- Configure the local Git user
+- Create an SSH Key Pair
+- Adding the ***PUBLIC*** Key to GitHub
 
-The following should work for most Linux/Mac terminals:
+### Installing Packages & Configuring Git
+
+The following should work for most Linux/Mac terminals - let's start by installing Git and `jq` cause we'll need that later:
 
 ```bash
 ################# Local Git Setup
@@ -63,9 +65,15 @@ dnf install -y git jq
 apt install -y git jq
 
 ## Configure the local git user
-git config --global user.name "Ken Moini"
-git config --global user.email "ken@kenmoini.com"
+git config --global user.name "YOUR NAME"
+git config --global user.email "YOU@hotmail.com"
+```
 
+### Creating an SSH Keypair
+
+That should take care of installing the Git client and configuring your local user - next let's make an SSH keypair to use to authenticate to Git services like GitHub:
+
+```bash
 ################# SSH Key Generation
 
 ## Create the SSH folders if you don't already have them created (safe to re-run)
@@ -78,14 +86,22 @@ chmod 700 $HOME/.ssh
 ## - As a specific file (-f ~/.ssh/git_id_rsa)
 ## - Without a password (-N '')
 ssh-keygen -t rsa -b 4096 -f ~/.ssh/git_id_rsa -N ''
+```
 
+That will create an SSH Private Key at `~/.ssh/git_id_rsa` and a SSH Public Key at `~/.ssh/git_id.rsa.pub` - notice the `.pub` at the end of the Public Key.  This Public key is safe to share - your Private key must be kept safe and private.
+
+### Configuring SSH for Git Auth
+
+Next, let's make sure SSH and thus Git uses the key when authenticating to GitHub:
+
+```bash
 ## Configure OpenSSH to use the key when connecting to github.com
 cat >> ~/.ssh/config <<EOF
 Host github.com
   User git
   Hostname github.com
   PreferredAuthentications publickey
-  IdentityFile /home/yourUserName/.ssh/git_id_rsa
+  IdentityFile /home/YOUR_USERNAME/.ssh/git_id_rsa
 EOF
 
 ## Read out the SSH Public Key
@@ -105,6 +121,10 @@ Click the **New SSH Key** button on the **SSH and GPG Keys** page - the **Key Ty
 {{< /imgSet >}}
 
 Click the **Add SSH Key** button and you should now be ready to Clone/Pull/Push from/to GitHub!
+
+---
+
+> Now to never do that again
 
 ---
 
