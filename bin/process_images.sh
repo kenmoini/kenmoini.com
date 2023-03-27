@@ -2,6 +2,10 @@
 
 SCRIPT_DIR=$(dirname ${BASH_SOURCE[0]})
 
+echo -e "\n===== Processing images...\n"
+
+echo -e "\n===== Current size: $(du -h -d0 $1)\n"
+
 # Remove EXIF data from images
 echo -e "\n===== Removing EXIF data from images...\n"
 $SCRIPT_DIR/Image-ExifTool-12.35/exiftool -overwrite_original -recurse -all= $1
@@ -31,3 +35,5 @@ if [ ! -f "$webp_path" ]; then
   echo "Restoring original $0.bak to $0";
   mv "$0.bak" "$0";
 fi;' {} \;
+
+echo -e "\n===== Processed size: $(du -h -d0 $1)\n"
