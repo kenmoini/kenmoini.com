@@ -117,7 +117,7 @@ Take the contents of that SSH Public Key - should start with `ssh-rsa` and end w
 Click the **New SSH Key** button on the **SSH and GPG Keys** page - the **Key Type** should be `Authentication Key`, and you can just paste in the contents of the ***SSH PUBLIC KEY*** - not the PRIVATE KEY - into the box...it should look a little like this:
 
 {{< imgSet cols="1" name="add-ssh-key" >}}
-{{< imgItem src="/images/posts/2023/03/add-ssh-key.png" alt="Copy and paste your SSH PUBLIC Key, not the PRIVATE one.  Make sure to get the ssh-rsa bit at that start" >}}
+{{< imgItem src="/images/posts/2023/03/add-ssh-key.jpg" alt="Copy and paste your SSH PUBLIC Key, not the PRIVATE one.  Make sure to get the ssh-rsa bit at that start" >}}
 {{< /imgSet >}}
 
 Click the **Add SSH Key** button and you should now be ready to Clone/Pull/Push from/to GitHub!
@@ -137,7 +137,7 @@ First start by [creating a new GitHub Repository](https://github.com/new) - **na
 Something I would suggest though is going ahead and selecting a **License** and seeding the repo with a **README**.  The license choice is up to you, I like the MIT license personally - the README file will be pretty bare but you can add to it later.  The form should look something like this:
 
 {{< imgSet cols="1" name="init-git-repo" >}}
-{{< imgItem src="/images/posts/2023/03/new-repo.png" alt="Set a name, a description, add the LICENSE and README, and enjoy that new repo smell." >}}
+{{< imgItem src="/images/posts/2023/03/new-repo.jpg" alt="Set a name, a description, add the LICENSE and README, and enjoy that new repo smell." >}}
 {{< /imgSet >}}
 
 ---
@@ -217,7 +217,7 @@ git push -u origin main
 With that you should now have the Hugo binary added to your GitHub repository - navigate to it and it should now look a little like this:
 
 {{< imgSet cols="1" name="add-hugo-bin" >}}
-{{< imgItem src="/images/posts/2023/03/added-hugo-bin.png" alt="Add the Hugo binary, keeps your site versioned" >}}
+{{< imgItem src="/images/posts/2023/03/added-hugo-bin.jpg" alt="Add the Hugo binary, keeps your site versioned" >}}
 {{< /imgSet >}}
 
 ---
@@ -241,7 +241,7 @@ git push
 Point your browser back to your repository on GitHub, or hit the refresh/reload button, and you should now see the new `src` subdirectory added and it should look something like this:
 
 {{< imgSet cols="1" name="added-blog-skeleton" >}}
-{{< imgItem src="/images/posts/2023/03/added-base-blog-skeleton.png" alt="The base skeleton will have more added to it, this is just to get the directory structure going." >}}
+{{< imgItem src="/images/posts/2023/03/added-base-blog-skeleton.jpg" alt="The base skeleton will have more added to it, this is just to get the directory structure going." >}}
 {{< /imgSet >}}
 
 ## Recap
