@@ -90,7 +90,7 @@ Yours may be different and that's ok - as long as there are some non-dynamic IPs
 Reason being, your PXE server needs to have a static IP not in the DHCP range that it'll be handing out - in my case this is `192.168.42.16` with a hostname of `pxe.kemo.labs`.
 
 {{< imgSet cols="1" name="current-config-udmp" >}}
-{{< imgItem src="/images/posts/2023/03/udmp-dhcp-mode-server.png" alt="Take note of all your DHCP Server settings if you haven't already." >}}
+{{< imgItem src="/images/posts/2023/03/udmp-default-network.png" alt="Take note of all your DHCP Server settings if you haven't already." >}}
 {{< /imgSet >}}
 
 This configuration from the UDMP Default Network's DHCP service is essentially going to be copied into PXE server's ISC DHCPD service.
@@ -250,8 +250,8 @@ Assuming you have a GitHub account, you should [Fork that repository](https://gi
 Now that you have your own fork, Clone it down to your local editor/terminal, or wherever you'll be running the Ansible automation - and yes it should work fine with Tower/Controller.
 
 ```bash
-# Clone your repo down
-git clone git@github.com:kenmoini/ansible-pxe-server.git
+# Clone YOUR fork of the repo down
+git clone git@github.com:YOUR_USERNAME/ansible-pxe-server.git
 
 # Open in VSCode?
 code ansible-pxe-server
@@ -259,7 +259,7 @@ code ansible-pxe-server
 
 ### Modifying Inventory
 
-First thing you'll probably want to do is set the Ansible Inventory to target your PXE server - if you chose to run the Playbook on the PXE server itself, thus connecting locally, your inventory may look like this:
+First thing you'll probably want to do is set the Ansible Inventory to target your PXE server - if you chose to run the Playbook on the PXE server itself, thus connecting locally, your `inventory` file may look like this:
 
 ```yaml
 all:
