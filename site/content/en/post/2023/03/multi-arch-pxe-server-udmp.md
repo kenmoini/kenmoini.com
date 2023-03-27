@@ -26,7 +26,7 @@ authors:
   - Ken Moini
 ---
 
-> ARM Server can be a handlful
+> ARM Servers can be a handlful
 
 So lately I've been investing into ARM architecture.  I want something that's interesting from a research perspective, but not so much of a foil to current computing that it'd be limiting - in fact, ARM architectures may actually accellerate my interests.
 
@@ -38,19 +38,25 @@ One thing that I've learned is that ARM64 does not provide BIOS booting, only EF
 {{< imgItem src="/images/posts/2023/03/ava-dev-kit-red-open.png" alt="Ampere CPU and Ampere-class GPU?!  Oh yeah!" >}}
 {{< /imgSet >}}
 
-Thing is, I've never understood PXE booting, but I was determined to get it working and for my whole lab, not just my new ARM systems.  So that's what this article is all about: ***I have a Unifi Dream Machine Pro, how do I get it to do multi-arch PXE booting for X86_64 and ARM64?***
+Thing is, I've never understood PXE booting, but I was determined to get it working and for my whole lab, not just my new ARM systems.
 
-#### ***Spoiler Alert*** 
+So that's what this article is all about: ***I have a Unifi Dream Machine Pro, how do I get it to do multi-arch PXE booting for X86_64 and ARM64?***
 
-> The Unifi Dream Machine Pro can't do multi-arch PXE
+---
+
+> **Spoiler Alert:** The Unifi Dream Machine Pro can't do multi-arch PXE
+
+---
 
 *I know, I know*, we've built so much trust and rapport over these last few articles, you can't believe I got you with a clickbait article title!
 
-*Honestly, I can't believe you wouldn't expect that of me* - after all, I used to use the *Archer* voicemail intro as my own for years, just chaning it up a bit every few weeks.
+*Honestly, I can't believe you wouldn't expect that of me* - after all, I used to use the *Archer* voicemail intro as my own for years, just changing it up a bit every few weeks.
 
 Anywho, fact of the matter is, the Unifi Dream Machine Pro cannot do multi-arch PXE booting - ***on it's own***.  It can if you pass off the DHCP for the primary default network to ISC DHCPD - so that's what we'll do.
 
 In order to get this all working we have to pass off the default network's DHCP service to ISC DHCPD running externally, which is running along side all the other services needed for PXE booting: TFTP, FTP, HTTP, and NFS.
+
+---
 
 ## Make It Make Sense
 
@@ -66,9 +72,9 @@ ISC DHCPD can variate the `filename` and `next-server` DHCP Options provided bas
 
 ### Network Architecture
 
-So in your UDMP you should have a few Networks...
+So in your UDMP you should have a few **Networks**...
 
-The Default Network is the one we have to swap out the DHCP on.
+The **Default Network** is the one we have to swap out the DHCP on.
 
 You should have a subnet that doesn't have all the addresses set as dynamically requestable via DHCP.  In my case, I have a Default Network that is configured as such:
 
@@ -83,6 +89,10 @@ Yours may be different and that's ok - as long as there are some non-dynamic IPs
 
 Reason being, your PXE server needs to have a static IP not in the DHCP range that it'll be handing out - in my case this is `192.168.42.16` with a hostname of `pxe.kemo.labs`.
 
+{{< imgSet cols="1" name="current-config-udmp" >}}
+{{< imgItem src="/images/posts/2023/03/udmp-dhcp-mode-server.png" alt="Take note of all your DHCP Server settings if you haven't already." >}}
+{{< /imgSet >}}
+
 This configuration from the UDMP Default Network's DHCP service is essentially going to be copied into PXE server's ISC DHCPD service.
 
 ### The Rest of the Gang
@@ -95,6 +105,8 @@ Now, PXE booting doesn't work with just DHCP - there are plenty of other service
 - **NFS**: Another option to transfer those files cause Ubuntu can be picky!
 
 Honestly those are the easy services, simple to install, little deviation outside of the default configuration, and they just do basic serving of files.
+
+---
 
 ## Create the PXE Server System
 
@@ -187,7 +199,7 @@ curl
 
 If you're not doing this on Libvirt, then of course skip this step - if you are, here's a handy-dandy bit of Bash you can spray and pray:
 
-```bash=
+```bash
 # Set the RHEL ISO Path
 RHEL_ISO_PATH="/opt/rhel9.1-x86_64.iso"
 KICKSTART_PATH="/opt/pxe.ks.cfg"
@@ -218,6 +230,8 @@ sudo virsh autostart ${VM_NAME} --enable
 You should then be able to view it in something like Cockpit with the `cockpit-machines` package installed, and see the installation automatically progress - once it does you'll need to boot the VM to continue.
 
 Configure the RHEL Subscription however you need - you just need the default BaseOS and AppStream repositories enabled to continue, which are typically enabled by default.
+
+---
 
 ## PXE Server Automation
 
@@ -273,7 +287,7 @@ all:
 
 You'll need to provide some variables to this Playbook in order for it to work - most of them are commented at the top of the Playbook, but the important ones you need to override can be put in a separate variable file and provided at runtime.  Here's the list you should probably pay attention to at a minimum:
 
-```yaml=
+```yaml
 ###################################
 # General Configuration
 
@@ -327,7 +341,7 @@ Once the service configuration has been determined, we can start to get distros 
 
 The distribution list is provided as a list of dictionaries, so something like this might be what you want to work around:
 
-```yaml=
+```yaml
 # Root-level distros var
 distros:
 
@@ -489,7 +503,7 @@ You can store those variables in another separate file perhaps, like `pxe-distro
 
 At this point you should everything lined up and ready to go!  Run the automation with something like the following:
 
-```bash=
+```bash
 ansible-playbook \
  -i inventory \
  -e @pxe-svc-cfg.yml \
@@ -509,6 +523,8 @@ Depending on how many distros it has to mirror, after a little while the automat
 
 Before we can continue to test the actual PXE booting process, we need to configure the UDMP with the bits needed to perform DHCP Relaying.
 
+---
+
 ## Configuring the UDMP
 
 This is super easy too - just switch the Default Network from DHCP Server to DHCP Relay and give it the IP of the PXE server:
@@ -519,6 +535,8 @@ This is super easy too - just switch the Default Network from DHCP Server to DHC
 {{< /imgSet >}}
 
 Now that you have a new DHCP server providing addresses, while things ***should*** continue to work just as they have, it may be a good time to just power cycle all your networked devices - or take the UDMP's network offline for a little over an hour.  This can be done at night, early in the morning, randomly while you're sleeping - it's just handy cause some devices do hiccup a bit, I know my Denon speakers and some other devices didn't handle the swap gracefully without a power cycle.  It just kinda depends on the device.
+
+---
 
 ## EZ PXE Client Testing
 
@@ -564,6 +582,8 @@ For ARM64, you could also emulate that with Libvirt/QEMU, but what's more fun is
 {{< imgItem src="/images/posts/2023/03/pikvm-pxe-boot-found-nbf.png" alt="Once the DHCP lease has been made, it will load the Next Boot File." >}}
 {{< imgItem src="/images/posts/2023/03/pikvm-pxe-boot-ava-menu.png" alt="And we now have a PXE menu for ARM 64 UEFI!" >}}
 {{< /imgSet >}}
+
+---
 
 ## Next Steps
 
