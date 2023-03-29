@@ -50,7 +50,7 @@ For Debian and RHEL type of notations.  I don't have an AIX or Solaris system to
 
 ***Clever, I know.***
 
-My first, and a super simple general catch-all Ansible Collection, but something that let's one perform architecture detection and setting of some useful facts/variables in just 3 lines of YAML!
+My first, and a super simple general catch-all Ansible Collection, but something that lets one perform architecture detection and setting of some useful facts/variables in just 3 lines of YAML!
 
 You can find the collection at https://github.com/kenmoini/ansible-collections
 
