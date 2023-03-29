@@ -50,9 +50,9 @@ In this ***Blog It Out!*** series I'll tour you through the things you need and 
 In the end, you'll get a fully automated and feature-rich blog, doing all the cool things with containers and Kubernetes, and more.  The series will (probably) go along a little like this:
 
 - **Getting Started** - *(You are here!)*
-- **[Rhymes and Reasons](https://kenmoini.com/post/2023/03/blog-it-out-rhymes-and-reasons)** - What we're building, what we're not doing, and why we're doing or not doing any of it
-- **[Hugo-a-go-go](https://kenmoini.com/post/2023/03/blog-it-out-hugo-a-go-go)** - Setting up the basics of the blog, uploading to GitHub, and some common things to know
-- **[Paint It Black](https://kenmoini.com/post/2023/03/blog-it-out-paint-it-black)** - Themes and how to tame them
+- **[Rhymes and Reasons]({{< ref "/post/2023/03/blog-it-out-rhymes-and-reasons" >}})** - What we're building, what we're not doing, and why we're doing or not doing any of it
+- **[Hugo-a-go-go]({{< ref "/post/2023/03/blog-it-out-hugo-a-go-go" >}})** - Setting up the basics of the blog, uploading to GitHub, and some common things to know
+- **[Paint It Black]({{< ref "/post/2023/03/blog-it-out-paint-it-black" >}})** - Themes and how to tame them
 - **Your First Article** - A Hello World of sorts, learning up on Markdown
 - **Tupperware Time** - Containing the blog, pushing to a container registry
 - **Making It Web Scale** - Obligatory time to deploy this static site as a simple server, with a container, S3 bucket, GitHub Pages, and a Kubernetes cluster
@@ -94,6 +94,6 @@ In the next article of this series, we'll explore why we're doing the things we'
 ### Links
 
 - **Example Repository:** [github.com/kenmoini/my-awesome-blog](https://github.com/kenmoini/my-awesome-blog)
-- **Next Article:** [Rhymes and Reasons](https://kenmoini.com/post/2023/03/blog-it-out-rhymes-and-reasons)
+- **Next Article:** [Rhymes and Reasons]({{< ref "/post/2023/03/blog-it-out-rhymes-and-reasons" >}})
 - Get a domain: [NameCheap](https://namecheap.com)
 - Get a cloud VM: [DigitalOcean](https://m.do.co/c/9058ed8261ee) or [Linode](https://www.linode.com/lp/refer/?r=c4acc0a829d048727ced26c4920968c9bc6597fd)

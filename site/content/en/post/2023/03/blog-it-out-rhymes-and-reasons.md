@@ -99,5 +99,5 @@ In the next article of this series, we'll get our hands dirty and get going with
 ### Links
 
 - **Example Repository:** [github.com/kenmoini/my-awesome-blog](https://github.com/kenmoini/my-awesome-blog)
-- **Next Article:** [Hugo-a-go-go](https://kenmoini.com/post/2023/03/blog-it-out-hugo-a-go-go)
-- **Previous Article:** [Getting Started](https://kenmoini.com/post/2023/03/blog-it-out-getting-started)
+- **Next Article:** [Hugo-a-go-go]({{< ref "/post/2023/03/blog-it-out-hugo-a-go-go" >}})
+- **Previous Article:** [Getting Started]({{< ref "/post/2023/03/blog-it-out-getting-started" >}})

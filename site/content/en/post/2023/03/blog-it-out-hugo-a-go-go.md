@@ -263,6 +263,6 @@ With just nothing more than a basic set of folders, we now need to give it some 
 ### Links
 
 - **Example Repository:** [github.com/kenmoini/my-awesome-blog](https://github.com/kenmoini/my-awesome-blog)
-- **Next Article:** [Paint It Black](https://kenmoini.com/post/2023/03/blog-it-out-paint-it-black)
-- **Previous Article:** [Rhymes and Reasons](https://kenmoini.com/post/2023/03/blog-it-out-rhymes-and-reasons)
-- [Hugo Website](https://gohugo.io/)
+- **Next Article:** [Paint It Black]({{< ref "/post/2023/03/blog-it-out-paint-it-black" >}})
+- **Previous Article:** [Rhymes and Reasons]({{< ref "/post/2023/03/blog-it-out-rhymes-and-reasons" >}})
+- [The Hugo Website](https://gohugo.io/)

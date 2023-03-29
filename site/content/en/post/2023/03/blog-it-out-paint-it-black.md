@@ -370,7 +370,7 @@ We've got the basics of a site but now we need substance - our next article in t
 ### Links
 
 - **Example Repository:** [github.com/kenmoini/my-awesome-blog](https://github.com/kenmoini/my-awesome-blog)
-- **Next Article:** [Your First Article](https://kenmoini.com/post/2023/04/blog-it-out-your-first-article)
+{{/* - **Next Article:** [Your First Article]({{< ref "/post/2023/04/blog-it-out-your-first-article" >}}) */}}
 - **Previous Article:** [Hugo-a-go-go]({{< ref "/post/2023/03/blog-it-out-hugo-a-go-go" >}})
 - [Hugo Theme Gallery](https://themes.gohugo.io/)
 - [terminal theme](https://themes.gohugo.io/themes/hugo-theme-terminal/)
