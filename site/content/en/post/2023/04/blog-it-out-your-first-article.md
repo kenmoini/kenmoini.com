@@ -1,7 +1,7 @@
 ---
 title: Blog it Out! - Your First Article
 date: 2023-04-01T04:20:47-05:00
-draft: true
+draft: false
 publiclisting: true
 toc: false
 hero: /images/posts/heroes/paint-it-black.png
