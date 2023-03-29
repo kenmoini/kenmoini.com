@@ -90,4 +90,14 @@ The good news is that the only coding that's involved is stuff like HTML, CSS, a
 
 There will be some miscelaneous things that we'll build that feel like coding like a Dockerfile and some YAML for GitHub Actions but each step and line will be detailed.
 
-> In the next article of this series, we'll get our hands dirty and get going with Hugo!
+---
+
+## Next Steps
+
+In the next article of this series, we'll get our hands dirty and get going with Hugo - enough talk, time for some action!
+
+### Links
+
+- **Example Repository:** [github.com/kenmoini/my-awesome-blog](https://github.com/kenmoini/my-awesome-blog)
+- **Next Article:** [Hugo-a-go-go](https://kenmoini.com/post/2023/03/blog-it-out-hugo-a-go-go)
+- **Previous Article:** [Getting Started](https://kenmoini.com/post/2023/03/blog-it-out-getting-started)

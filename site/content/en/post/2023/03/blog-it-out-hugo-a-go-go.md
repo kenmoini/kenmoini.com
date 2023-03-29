@@ -188,7 +188,7 @@ PLATFORM_ARCH=$(uname -m | sed 's/x86_64/amd64/')
 TARGET_ARCH=$PLATFORM_ARCH
 if [[ "$PLATFORM_TYPE" == "darwin" ]] && [[ "$PLATFORM_ARCH" == "arm64" ]]; then TARGET_ARCH="universal"; fi
 
-# Get the latest Hugo Release
+# Get the latest Hugo Extended Edition Release URL
 LATEST_HUGO_VERSION_URL=$(curl -sSL https://api.github.com/repos/gohugoio/hugo/releases/latest | jq -r '.assets[] | select(.browser_download_url | contains("'${PLATFORM_TYPE}'")) | .browser_download_url' | grep 'extended' | grep 'tar' | grep "$TARGET_ARCH")
 
 # Download the latest version
@@ -200,8 +200,12 @@ tar zxvf hugo.tar.gz
 # Clean things up
 rm LICENSE README.md hugo.tar.gz
 
+# Move the Hugo binary so it can build on different system types
+# ie, one for Ubuntu GitHub Action Runners and one for your Mac
+mv hugo hugo-${PLATFORM_TYPE}-${TARGET_ARCH}
+
 # Check the hugo binary
-./hugo version
+./hugo-${PLATFORM_TYPE}-${TARGET_ARCH} version
 
 # Return to the parent directory and the root of the cloned repository
 cd ..
@@ -244,8 +248,21 @@ Point your browser back to your repository on GitHub, or hit the refresh/reload 
 {{< imgItem src="/images/posts/2023/03/added-base-blog-skeleton.jpg" alt="The base skeleton will have more added to it, this is just to get the directory structure going." >}}
 {{< /imgSet >}}
 
+---
+
 ## Recap
 
 This is where we'll close this article - we created a repository on GitHub, cloned it down to our terminal, downloaded Hugo, added it to the repo - then created the boilerplate files for the site and added them to the repository as well, pushing them to GitHub from the local terminal.  That `git add/commit/push` process should be something that you get very comfortable with.
 
-> In the next article of this series, we'll look for some themes and add a splash of color to our newly created site
+---
+
+## Next Steps
+
+With just nothing more than a basic set of folders, we now need to give it some personality.   In the next article of this series, we'll look for some themes and add a splash of color to our newly created site.
+
+### Links
+
+- **Example Repository:** [github.com/kenmoini/my-awesome-blog](https://github.com/kenmoini/my-awesome-blog)
+- **Next Article:** [Paint It Black](https://kenmoini.com/post/2023/03/blog-it-out-paint-it-black)
+- **Previous Article:** [Rhymes and Reasons](https://kenmoini.com/post/2023/03/blog-it-out-rhymes-and-reasons)
+- [Hugo Website](https://gohugo.io/)
