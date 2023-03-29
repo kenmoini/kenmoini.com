@@ -39,11 +39,11 @@ Otherwise it's pretty straight forward - find one you like, give it a test drive
 
 ---
 
-## Hugo Themes and How to Find Them
+## Hugo Themes and Where to Find Them
 
 Easy - **just go here**: https://themes.gohugo.io/
 
-Find a theme you like.  They're free.  It's where I found my last 3 themes and will probably find my next theme.  I've used these themes for other sites not just blogs - [documentation sites](https://themes.gohugo.io/themes/doks/), [interactive workshop interfaces](https://themes.gohugo.io/themes/hugo-theme-learn/), all sorts.
+Find a theme you like.  They're free.  It's where I found my last 3 themes and will probably find my next theme.  I've used these themes for other sites too, not just blogs - [documentation sites](https://themes.gohugo.io/themes/doks/), [interactive workshop interfaces](https://themes.gohugo.io/themes/hugo-theme-learn/), all sorts.
 
 Even if it doesn't fit exactly with everything you want to ever do with your blog - iterate, don't try to fit into an ideal of perfection from inception.
 
@@ -69,7 +69,7 @@ Scroll down a bit and you can find a [Demo Link](https://hugo-terminal.vercel.ap
 
 Just a bit further you'll find a lot of great documentation *that can probably do you better than reading the rest of this*.
 
-The terminal them checks pretty much all of those options and gives you and easy way to give your theme a splash of color even!
+The terminal theme checks pretty much all of those boxes and gives you a few extra goodies!
 
 ---
 
@@ -355,7 +355,7 @@ In your terminal, you can run the following command to start a local dev server:
 ./hack/run-dev.sh
 ```
 
-Starting a local server is now just a short script invocation thanks to those helper scripts - load your browser and point it to `http://localhost:1313/ and you should see something like this:
+Starting a local server is now just a short script invocation thanks to those helper scripts - load your browser and point it to http://localhost:1313/ and you should see something like this:
 
 {{< imgSet cols="1" name="blog-view" >}}
 {{< imgItem src="/images/posts/2023/03/example-blog-content-view.jpg" alt="Hello friend indeed - not so bad to get to this!" >}}

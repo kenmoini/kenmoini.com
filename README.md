@@ -2,7 +2,7 @@
 
 My personal site, a Hugo blog.
 
-To learn how I built & deploy this site and how you can do so too read this article: https://kenmoini.com/post/2021/11/your-own-blog-with-hugo-on-kubernetes/
+To learn how I built & deploy this site and how you can do so too read this article series: [Blog It Out!](https://kenmoini.com/post/2023/03/blog-it-out-getting-started)
 
 # Deployment
 
