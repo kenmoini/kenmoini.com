@@ -11,10 +11,14 @@ RUN cd /workspace/site \
  && cd /workspace/site \
  && /workspace/bin/hugo-linux-amd64
 
-FROM quay.io/polyglotsystems/ubi8-nginx:latest
+#FROM quay.io/polyglotsystems/ubi8-nginx:latest
+FROM registry.access.redhat.com/ubi9/nginx-120:latest
 
-COPY --from=builder /workspace/site/public /var/www/html
+#COPY --from=builder /workspace/site/public /var/www/html
+COPY --from=builder /workspace/site/public /opt/app-root/src
 
 EXPOSE 8080
 
 USER 1001
+
+CMD nginx -g "daemon off;"
