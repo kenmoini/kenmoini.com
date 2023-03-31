@@ -1,1 +1,0 @@
-<a href="{{ .Destination | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if strings.HasPrefix .Destination "http" }} target="_blank" rel="noopener"{{ end }}>{{ .Text | safeHTML }}{{ if (strings.Contains .Destination "kenmoini.com/") and (not strings.HasSuffix .Destination "/")  }}/{{ end }}</a>
