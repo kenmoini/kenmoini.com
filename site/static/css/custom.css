@@ -216,8 +216,15 @@ li ul {
   max-width: 100%;
   overflow: auto;
 }
-div.code-toolbar pre {
+div.code-toolbar pre, .code-toolbar pre {
   max-height: 693px;
+  padding: 2.5em!important;
+  border-radius: 0 !important;
+}
+div.code-toolbar pre.line-numbers, .code-toolbar pre.line-numbers {
+  max-height: 693px;
+  padding: 2.5em!important;
+  padding-left: 5em!important;
   border-radius: 0 !important;
 }
 #articleComments {
@@ -237,4 +244,8 @@ h4 code, h5 code {
   background: #292c34!important;
   padding: 10px;
   color: #FAFAFA;
+}
+
+.command-line span.token.output {
+	user-select: none;
 }

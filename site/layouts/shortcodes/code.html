@@ -1,0 +1,34 @@
+{{- $inner := replaceRE "^\r?\n" "" .Inner | string -}}
+{{- $user := default "kemo" (.Get "user") -}}
+{{- $host := default "localhost" (.Get "host") -}}
+{{- $conStr := default "\\" (.Get "continuation-str") -}}
+{{- $prompt := default  (printf "[%s@%s] $" $user $host) (.Get "prompt") -}}
+{{- $cmdLines := false -}}
+{{- if .Get "command-line" -}}{{- $cmdLines = true -}}{{- end -}}
+{{- if .Get "command-prompt" -}}{{- $cmdLines = true -}}{{- end -}}
+{{- if .Get "cmd" -}}{{- $cmdLines = true -}}{{- end -}}
+{{- if .Get "terminal" -}}{{- $cmdLines = true -}}{{- end -}}
+{{- if len .Params | eq 0 -}}
+  <pre><code>{{- trim $inner "\n" -}}</code></pre>
+{{- else -}}
+  {{- if .IsNamedParams -}}
+    <pre class="
+      {{- if .Get "lang" }}language-{{ .Get "lang" }}{{ end }}
+      {{- if .Get "line-numbers" }} line-numbers{{ end }}
+      {{- if $cmdLines }} command-line{{ end }}"
+      {{- /* line highlight plugin */ -}}
+      {{- if .Get "line" }} data-line="{{ .Get "line" }}"{{ end }}
+      {{- /* line number plugin */ -}}
+      {{- if .Get "start" }} data-start="{{ .Get "start" }}"{{ end }}
+      {{- /* command-line plugin */ -}}
+      data-user="{{- $user -}}" data-host="{{- $host -}}" data-prompt="{{- $prompt -}}"
+      data-continuation-str="{{ $conStr }}"
+      {{- if .Get "output" }} data-output="{{ .Get "output" }}"{{ end }}
+      ><code {{ if .Get "lang" }}class="language-{{ .Get "lang" }}"{{ end }}
+      >{{- trim $inner "\n" -}}</code></pre>
+  {{- else -}}
+    <pre class="language-{{ .Get 0 }}">
+      <code class="language-{{ .Get 0 }}">{{- trim $inner "\n" -}}</code>
+    </pre>
+  {{- end -}}
+{{- end -}}
