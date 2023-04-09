@@ -33,7 +33,9 @@ authors:
 
 Today I figured I'd write this up since I've had to find this HAProxy config stuff a few times now and it's always been a trial and error sort of thing - the last article I read on enabling HAProxy stats literally said it "100% works" in the title, published in 2022, annnnd - *did not work*.  So here's my own version that probably won't work in a month or two.
 
-In this article I'll share some config on how to enable some extra functions in HAProxy to provide stats for the load balancer, an administrative socket for local operations against the live HAProxy instances, and how to use that socket to clear out Stick Tables, disable Frontends, etc.
+In this article I'll share some config on how to enable some extra functions in HAProxy to provide stats for the load balancer, an administrative socket for local operations against the live HAProxy instances, and how to use that socket to clear out Stick Tables, disable servers in backends, etc.
+
+---
 
 ## Installing HAProxy
 
@@ -52,13 +54,15 @@ apt install haproxy -y
 systemctl enable --now haproxy
 ```
 
+---
+
 ## Configuring the Statistics Endpoint
 
 In case you want some information on backends, frontends, servers on the backends, requests to the frontends, responses to the clients, status of the servers, etc - then you can enable the statistics endpoint for the server.
 
 There are a few conflicting ways on how to do it that you'll see online - ultimately, you just need to set a listener for the port you want the statistics to be served on (default is 1936), and set some `stats` specific configuration there:
 
-```
+```ini
 # global config up here
 # default config also maybe up here
 
@@ -104,6 +108,8 @@ listen stats
 
 You can read more about [all the other `stats` configuration parameters here](https://docs.haproxy.org/2.7/configuration.html#4.2-stats%20admin), though that should be a really good starting point.  You've got the basic needed settings, enabling of the stats module, and some good fundamentals for keeping it secure.  You should be able to do a `curl -u 'notadmin:securePassword' http://localhost:1936/haproxy?stats` and see some output.
 
+---
+
 ## Enabling an Administrative Socket
 
 You could serve the statistics endpoint via a system socket and [interact with it via `socat`](https://www.haproxy.com/documentation/hapee/latest/api/runtime-api/show-stat/) - but that's not useful since your stats may be scraped by something like your observability tool, which is why it's available via HTTP.
@@ -112,7 +118,7 @@ However, what is very useful is enabling an administrative system socket to inte
 
 To enable the administrative system socket, just drop it into your `global` section - alternatively, you could also place it on a `frontend` to make more atomic administrative sockets:
 
-```
+```ini
 # Maybe your global section looks like this...
 global
     log         127.0.0.1 local2 debug
@@ -141,6 +147,8 @@ chown root:root /run/haproxy/
 chmod 775 /run/haproxy/
 ```
 
+---
+
 ## Using the Administrative Socket
 
 Now that there's an administrative socket enabled, you can use it with something like `socat` to interact with it.
@@ -161,12 +169,12 @@ You can read more about the Runtime API here: https://www.haproxy.com/documentat
 
 In case you're using a fail-over pattern that directs traffic to a primary server, failing over to a secondary and keeping the traffic there until manually reset, your `backend` may look something like this:
 
-```
+```ini
 backend https
     stick-table type ip size 2 nopurge
     stick on dst
-    server       cloudserver {{ cloud_server_endpoint }}:80 check on-error mark-down observe layer7 error-limit 1
-    server       localserver {{ local_server_endpoint }}:80 check backup
+    server       cloudserver cloud_server_endpoint:80 check on-error mark-down observe layer7 error-limit 1
+    server       localserver local_server_endpoint:80 check backup
 ```
 
 In this example, your stick-table name would be the same as the backend so to clear it and reset the traffic back to the cloudserver, you'd run:
@@ -187,6 +195,8 @@ echo "disable server https/cloudserver" | sudo socat stdio /run/haproxy/admin.so
 # or, enable the cloudserver from the https backend example above
 echo "enable server https/cloudserver" | sudo socat stdio /run/haproxy/admin.sock
 ```
+
+---
 
 ## Bonus - Example Repo
 
