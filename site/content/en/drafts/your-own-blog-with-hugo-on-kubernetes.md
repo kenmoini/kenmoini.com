@@ -76,7 +76,7 @@ This guide will assume you're on a Linux or Mac system - if you're using Windows
 
 You could lump everything into one directory, but let's set up some organized chaos with a basic directory structure for a site at `example.com`:
 
-```bash
+{{< code lang="bash" command-line="true" output="" >}}
 ## Create Project folder
 mkdir -p ~/Development/example-com
 
@@ -85,7 +85,7 @@ mkdir -p ~/Development/example-com/bin
 
 ## Navigate to the Project folder
 cd ~/Development/example-com/
-```
+{{< /code >}}
 
 ### Get Binaries
 
@@ -95,7 +95,7 @@ Download the Hugo binary for your system from here - ideally the Extended versio
 
 Store the extracted Hugo binary in the `~/Development/example-com/bin` directory:
 
-```bash
+{{< code lang="bash" command-line="true" output="" >}}
 ## Create a temporary working directory and enter it
 mkdir -p ~/Development/example-com/tmp
 cd ~/Development/example-com/tmp
@@ -124,7 +124,7 @@ chmod +x ../bin/*
 ## Clean up
 cd ..
 rm -rf tmp/
-```
+{{< /code >}}
 
 Having a copy of the binary local to the project helps build compatability and speeds up CI/CD builds vs having to fetch them from the Internet.
 
@@ -134,7 +134,7 @@ Having a copy of the binary local to the project helps build compatability and s
 
 Now that the Hugo binary is available, we can use it to generate the base skeleton of a new site to build on:
 
-```bash
+{{< code lang="bash" command-line="true" output="" >}}
 ## Change to the project root if not there already
 cd ~/Development/example-com/
 
@@ -143,7 +143,7 @@ cd ~/Development/example-com/
 
 ## OR...
 ./bin/hugo-macos-amd64 new site site -f yaml
-```
+{{< /code >}}
 
 That command will generate the skeleton in a subdirectory called `./site`, which will make it easier to organize our site content separately from the automation and deployment content.  The `-f yaml` suffix tells Hugo to create a site with a YAML-based configuration file which is easier to use than the TOML based one.
 
@@ -157,7 +157,7 @@ For the purposes of this article, let's assume to use the [terminal](https://the
 
 You can initialize the theme as a Go module, but I prefer to do it the old fashioned way by extracting the Git repo's package:
 
-```bash
+{{< code lang="bash" command-line="true" output="" >}}
 ## Change to the project root if not there already
 cd ~/Development/example-com/
 
@@ -175,16 +175,16 @@ rm master.zip
 
 ## Move the theme
 mv hugo-theme-terminal-master/ terminal/
-```
+{{< /code >}}
 
 With the theme where it needs to be, tell your Hugo site to use it by modifying the site's config file - modify your `~/Development/example-com/site/config.yaml` file to look something like this:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 baseURL: http://example.com/
 languageCode: en-us
 title: My New Hugo Site
 theme: terminal
-```
+{{< /code >}}
 
 To see additional configuration supported by the theme look in `~/Development/example-com/site/themes/terminal/exampleSite/` and you'll find a set of files you could drop into the site root for some example content - one of those files is a `config.toml` file with other theme-supported configuration.  You can use this site to convert TOML into YAML: https://toolkit.site/format.html
 
@@ -192,7 +192,7 @@ To see additional configuration supported by the theme look in `~/Development/ex
 
 Now that we have a basic site and basic theme, what's needed is some content!  Let's add our first blog post:
 
-```bash
+{{< code lang="bash" command-line="true" output="" >}}
 ## Change to the project root if not there already
 cd ~/Development/example-com/
 
@@ -201,7 +201,7 @@ cd site
 
 ## Add a new blog post
 ../bin/hugo-linux-amd64 new posts/my-awesome-blog-entry.md
-```
+{{< /code >}}
 
 Hugo will generate a new file in `~/Development/example-com/site/content/posts/my-awesome-block-entry.md` - make sure to add some content to it.
 
@@ -215,7 +215,7 @@ The theme can also extend the Front Matter of content so make sure to `cat ~/Dev
 
 In case you're one to learn by disassembly and tinkering then you may find benefit in just using the exampleSite content provided by the theme and modifying from there:
 
-```bash
+{{< code lang="bash" command-line="true" output="" >}}
 ## Change to the project root if not there already
 cd ~/Development/example-com/
 
@@ -224,7 +224,7 @@ cd site
 
 ## Copy exampleSite files to our site
 cp -R themes/terminal/exampleSite/{content,static}/ .
-```
+{{< /code >}}
 
 ---
 
@@ -232,7 +232,7 @@ cp -R themes/terminal/exampleSite/{content,static}/ .
 
 Now that you have a site with a theme and some content, you can finally generate the static site content.  To do this locally, use the developmental HTTP server built into Hugo:
 
-```bash
+{{< code lang="bash" command-line="true" output="" >}}
 ## Change to the project root if not there already
 cd ~/Development/example-com/
 
@@ -241,7 +241,7 @@ cd site
 
 ## Start the Hugo development server
 ../bin/hugo-linux-amd64 serve --bind 0.0.0.0 --port 1234
-```
+{{< /code >}}
 
 Now you can navigate to http://localhost:1234/ and access the site - you can also develop and update content and it should reload on the fly!
 
@@ -270,7 +270,7 @@ So the process for our container build would look like:
 
 This is what it looks like in our `Containerfile`:
 
-```docker
+{{< code lang="docker" line-numbers="true" >}}
 ## Pull a Golang Builder image
 FROM quay.io/polyglotsystems/golang-ubi AS builder
 
@@ -295,19 +295,19 @@ EXPOSE 8080
 
 ## Set a default non-root user that will work well in almost any K8s/OCP cluster
 USER 1001
-```
+{{< /code >}}
 
 This uses images offered by Polyglot Systems on [Quay](https://quay.io/) - you can swap out for any other Golang and Nginx/Httpd image from something like Docker Hub but just know that using Docker Hub will likely cause your automated builds to fail due to pull limits.  Quay does not have pull limits and provides container security scanning which is why I prefer it.
 
 Anyway, with that Containerfile created, you can build and run it with the following commands locally:
 
-```bash
+{{< code lang="bash" command-line="true" output="" >}}
 ## Build a container from the Containerfile with a tag of my-blog
 podman build -f Containerfile -t my-blog .
 
 ## Run the my-blog tagged image and expose the port
 podman run -p 8080:8080 my-blog
-```
+{{< /code >}}
 
 From there you should be able to access the container running at `http://localhost:8080`
 

@@ -45,14 +45,14 @@ Ansible Tower uses Nginx (pronounced engine-x) as their HTTP server for the Web 
 
 The certificate is self-signed and can be easily replaced.  Here are the lines from the nginx.conf file that matter for this scope, starting at line 42 as of today/this version:
 
-{{< highlight bash >}}
+{{< code lang="nginx" line-numbers="true" >}}
 # If you have a domain name, this is where to add it
 server_name _;
 keepalive_timeout 65;
  
 ssl_certificate /etc/tower/tower.cert;
 ssl_certificate_key /etc/tower/tower.key;
-{{< /highlight >}}
+{{< /code >}}
 
 ## Method 1 – Let’s Encrypt
 
@@ -62,34 +62,40 @@ Remember a few lines up in the configuration snippet where it had a comment “#
 
 Go ahead and reload the nginx configuration
 
-{{< highlight bash >}}
-# systemctl reload nginx.service
-{{< /highlight >}}
+{{< code lang="bash" command-line="true" >}}
+sudo systemctl reload nginx.service
+{{< /code >}}
 
 Next, let’s enable the repos we need to install Let’s Encrypt.  Here are some one-liners, some parts will still be interactive (adding the PPA, accepting GPG keys in yum, etc).  Installing a PPA/EPEL and enabling repos where needed, updating, and installing the needed packages.  Slightly interactive prompts.
 Debian/Ubuntu
 
-{{< highlight bash >}}
-# add-apt-repository ppa:certbot/certbot && apt-get update && apt-get install python-certbot-nginx -y
-{{< /highlight >}}
+{{< code lang="bash" command-line="true" >}}
+sudo add-apt-repository ppa:certbot/certbot && apt-get update && apt-get install python-certbot-nginx -y
+{{< /code >}}
 
 ### Red Hat Enterprise Linux (RHEL)/CentOS in AWS
 
-{{< highlight bash >}}
-# rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && yum -y install yum-utils && yum-config-manager --enable rhui-REGION-rhel-server-extras rhui-REGION-rhel-server-optional && yum update -y && yum -y install python-certbot-nginx
-{{< /highlight >}}
+{{< code lang="bash" command-line="true" >}}
+sudo rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && yum -y install yum-utils && yum-config-manager --enable rhui-REGION-rhel-server-extras rhui-REGION-rhel-server-optional
+
+sudo yum update -y
+sudo yum -y install python-certbot-nginx
+{{< /code >}}
 
 ### Red Hat Enterprise Linux (RHEL)/CentOS (Normal?)
 
-{{< highlight bash >}}
-# rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && yum -y install yum-utils && yum-config-manager --enable rhel-7-server-extras-rpms rhel-7-server-optional-rpms && yum update -y && yum -y install python-certbot-nginx
-{{< /highlight >}}
+{{< code lang="bash" line-numbers="true" >}}
+sudo rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && yum -y install yum-utils && yum-config-manager --enable rhel-7-server-extras-rpms rhel-7-server-optional-rpms
+
+sudo yum update -y
+sudo yum -y install python-certbot-nginx
+{{< /code >}}
 
 And boom, just like that we….are almost there.  One more command and we should be set:
 
-{{< highlight bash >}}
-# certbot --nginx
-{{< /highlight >}}
+{{< code lang="bash" line-numbers="true" >}}
+sudo certbot --nginx
+{{< /code >}}
 
 If the server_name variable in your nginx.conf was modified to point to your FQDN, nginx was reloaded, and all packages enabled properly, the Certbot/Let’s Encrypt command should give you the option of selecting “1: tower.example.com” and do so.  Important: Certbot will ask if you want to force all traffic to be HTTPS.  Ansible Tower already has this configuration in place, so just select “1” when asked about forcing HTTPS to skip that configuration change.
 
@@ -101,10 +107,10 @@ Navigate to your Ansible Tower Web UI, and you should have a “Secure” badged
 
 This is really easy to do actually.  All you have to do is place your certificate files on your Ansible Tower server (in /etc/ssh or /etc/certificates for example), and modify the nginx configuration to point to them.  You may recall the lines in the configuration from earlier...
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 ssl_certificate /etc/tower/tower.cert;
 ssl_certificate_key /etc/tower/tower.key;
-{{< /highlight >}}
+{{< /code >}}
 
 Yes, there.  All you have to do is replace those two files, or preferably deposit your own and change the configuration to point to the new files.
 

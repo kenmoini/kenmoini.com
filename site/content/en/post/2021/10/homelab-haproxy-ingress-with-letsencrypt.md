@@ -81,15 +81,15 @@ So you could run this on Docker, or if you don't want to worry about some bullsh
 
 You can install Podman and the variety of companion tools with the following command on a RHEL-based system:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 sudo dnf install -y podman buildah skopeo
-```
+{{< /code >}}
 
 ### Podman Networking
 
 So the default Podman network is based on NAT - I use a Bridged network via macvlan to pipe IPs from my main routed network directly to my Pods.  You can do the same with the following configuration:
 
-```json
+{{< code lang="json" line-numbers="true" >}}
 {
   "cniVersion": "0.4.0",
   "name": "{{ bridgeName }}",
@@ -132,11 +132,11 @@ So the default Podman network is based on NAT - I use a Bridged network via macv
       }
   ]
 }
-```
+{{< /code >}}
 
 Just make sure to change out everything in the double squiggly-brackets, such as `{{ bridgeName }}` and so on - I use the following configuration saved at `/etc/cni/net.d/lanBridge.conflist`:
 
-```json
+{{< code lang="json" line-numbers="true" >}}
 {
   "cniVersion": "0.4.0",
   "name": "lanBridge",
@@ -179,7 +179,7 @@ Just make sure to change out everything in the double squiggly-brackets, such as
       }
   ]
 }
-```
+{{< /code >}}
 
 ---
 
@@ -187,15 +187,15 @@ Just make sure to change out everything in the double squiggly-brackets, such as
 
 Let's create a few directories on our container host:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 mkdir -p /opt/service-containers/ingress/{scripts,nginx-templates,haproxy,webroot,certs}
-```
+{{< /code >}}
 
 I like to use SystemD to run my container services and ensure they're run at boot and so on.  Let's start with the actual service unit file:
 
 #### /etc/systemd/system/caas-ingress.service
 
-```ini
+{{< code lang="ini" line-numbers="true" >}}
 [Unit]
 Description=Homelab Ingress
 After=network-online.target
@@ -211,13 +211,13 @@ Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
-```
+{{< /code >}}
 
 With that SystemD unit file in place you can run `systemctl daemon-reload` to make it accessible - however you'll note that the start and stop scripts still haven't been made yet.
 
 #### /opt/service-containers/ingress/scripts/service_stop.sh
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 #!/bin/bash
 
 set -x
@@ -229,7 +229,7 @@ echo "Killing container..."
 
 echo "Removing container..."
 /usr/bin/podman pod rm $POD_NAME -f -i
-```
+{{< /code >}}
 
 All that script does is source a shared variable file then stop and remove a named Pod.
 
@@ -237,7 +237,7 @@ All that script does is source a shared variable file then stop and remove a nam
 
 #### /opt/service-containers/ingress/scripts/service_vars.sh
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 #!/bin/bash
 
 POD_NAME="ingress"
@@ -253,7 +253,7 @@ NGINX_CONTAINER_IMAGE="nginx:latest"
 
 HAPROXY_VOLUME_MOUNTS="-v ${POD_VOLUME_ROOT}/haproxy:/usr/local/etc/haproxy:ro -v ${POD_VOLUME_ROOT}/certs:/usr/local/etc/certs:ro"
 NGINX_VOLUME_MOUNTS="-v ${POD_VOLUME_ROOT}/webroot:/usr/share/nginx/html -v ${POD_VOLUME_ROOT}/nginx-templates:/etc/nginx/templates"
-```
+{{< /code >}}
 
 A few key points...
 
@@ -272,7 +272,7 @@ A few key points...
 
 #### /opt/service-containers/ingress/scripts/service_start.sh
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 #!/bin/bash
 
 set -x
@@ -311,13 +311,13 @@ sleep 3
 # Deploy HAProxy
 echo -e "Deploying HAProxy...\n"
 nohup podman run -dt --sysctl net.ipv4.ip_unprivileged_port_start=0 --pod "${POD_NAME}" ${HAPROXY_VOLUME_MOUNTS} --name "${POD_NAME}-haproxy" $HAPROXY_CONTAINER_IMAGE
-```
+{{< /code >}}
 
 Something to note there is the `-e NGINX_PORT=8080` environmental variable definition provided to the Nginx container - this is passed to a Template that's defined as such:
 
 #### /opt/service-containers/ingress/nginx-templates/default.conf.template
 
-```config
+{{< code lang="config" line-numbers="true" >}}
 server {
     listen       ${NGINX_PORT};
     server_name  localhost;
@@ -332,7 +332,7 @@ server {
         root   /usr/share/nginx/html;
     }
 }
-```
+{{< /code >}}
 
 This just changes the port of the Nginx container to 8080 so that it doesn't conflict with the HAProxy port 80 - you can extend this to additionally apply other Nginx configuration options.
 
@@ -340,7 +340,7 @@ This just changes the port of the Nginx container to 8080 so that it doesn't con
 
 #### /opt/service-containers/ingress/haproxy/haproxy.cfg
 
-```config
+{{< code lang="config" line-numbers="true" >}}
 global
   log stdout format raw local0
   daemon
@@ -391,7 +391,7 @@ backend nextcloud
   acl url_discovery path /.well-known/caldav /.well-known/carddav
   http-request redirect location /remote.php/dav/ code 301 if url_discovery
   http-request add-header X-Forwarded-Proto https if { ssl_fc }
-```
+{{< /code >}}
 
 This HAProxy configuration does a few things:
 
@@ -404,9 +404,9 @@ The crt-list is just a text file that looks something like this:
 
 #### /opt/service-containers/ingress/haproxy/crt-list.cfg
 
-```text
+{{< code lang="text" >}}
 /usr/local/etc/certs/default.pem
-```
+{{< /code >}}
 
 The first line is a default certificate for any unmatched SSL Termination requests.  The following lines should be a path to a certificate file, the capabilities, and the domain to match.
 
@@ -414,7 +414,7 @@ You can create the default.pem certificate file with something like this:
 
 #### /opt/service-containers/ingress/seed-certificate.sh
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 #!/bin/bash
 
 openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -keyout default.key -out default.crt
@@ -422,21 +422,21 @@ openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -keyout default.key -ou
 cat default.key default.crt > ./certs/default.pem
 
 rm default.key default.crt
-```
+{{< /code >}}
 
 Run that, providing a wildcard `*` as the Common Name when prompted.
 
 Next we'll need some way to generate certificates for our own domains, such as the `nextcloud.kenmoini.com` domain - this is where Certbot comes into play.  Before we generate certificates we need the Pod running so let's do that:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 systemctl start caas-ingress
-```
+{{< /code >}}
 
 With the Pod started we can create a new certificate for the different domains/services we want to serve securely - this script does so in a pretty easy fashion:
 
 #### /opt/service-containers/ingress/create-certificate.sh
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 #!/bin/bash
 
 set -e
@@ -472,33 +472,33 @@ function cat-cert() {
 
 # Run merge certificate for the requested domain name
 cat-cert $DOMAIN
-```
+{{< /code >}}
 
 This script will run a certbot container, generate the needed certificates, and stuff them somewhere we can use with HAProxy.  I ran it as such: 
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 cd /opt/service-containers/ingress
 ./create-certificate.sh nextcloud.kenmoini.com ken@kenmoini.com
-```
+{{< /code >}}
 
 With it created we can add the entry to our crt-list from earlier, which should look like this now:
 
-```text
+{{< code lang="text" >}}
 /usr/local/etc/certs/default.pem
 /usr/local/etc/certs/nextcloud.kenmoini.com.pem [alpn h2 ssl-min-ver TLSv1.2] nextcloud.kenmoini.com
-```
+{{< /code >}}
 
 Restart the HAProxy container and it should pick up the new certificate and config:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 podman restart ingress-haproxy
-```
+{{< /code >}}
 
 Since Certbot/Let's Encrypt provides only 90 day certificates there needs to be a way to renew the certificates, ideally automatically - stuff this script as an entry in your crontab that runs every 30 days or so:
 
 #### /opt/service-containers/ingress/renew-certificates.sh
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 #!/bin/bash
 
 set -e
@@ -536,7 +536,7 @@ echo "$(date) Reload haproxy" >> /var/log/letsencrypt-renew.log
 podman restart ingress-haproxy
 
 echo "$(date) Done" >> /var/log/letsencrypt-renew.log
-```
+{{< /code >}}
 
 Add a line like this to your Crontab to schedule this every 15 days at 4AM: `0 4 */15 * * /opt/service-containers/ingress/renew-certificates.sh >/dev/null 2>&1`
 

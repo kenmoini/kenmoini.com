@@ -47,7 +47,7 @@ All the services will run with this Plex system group and user which will simpli
 
 In case you're also attaching a large NFS share for all your various media files, you can add something like the following to your `/etc/fstab` file:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Create the directory to mount the NFS Share to
 mkdir -p /mnt/Media
 
@@ -56,13 +56,13 @@ echo "nfs.example.com:/Media   /mnt/Media    nfs    rw,relatime   0   0" >> /etc
 
 ## Mount everything that isn't already mounted
 mount -a
-```
+{{< /code >}}
 
 ### Firewall Setup
 
 Ubuntu uses `ufw` as the firewall compared to `firewalld` in RHEL-based systems - go ahead and setup the firewall requirements for the different services:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Set all incoming to be denied by default
 sudo ufw default deny incoming
 
@@ -92,7 +92,7 @@ sudo ufw allow 32400
 
 ## Enable the Firewall
 sudo ufw enable
-```
+{{< /code >}}
 
 ---
 
@@ -102,7 +102,7 @@ sudo ufw enable
 
 Another extremely easy thing to install - download the GitHub Release, extract, run.
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 cd /opt
 
 wget https://github.com/Jackett/Jackett/releases/download/v0.20.68/Jackett.Binaries.LinuxAMDx64.tar.gz
@@ -117,7 +117,7 @@ cd Jackett/
 ./install_service_systemd.sh
 
 systemctl status jackett
-```
+{{< /code >}}
 
 ### Set up Jackett Indexers
 
@@ -135,7 +135,7 @@ systemctl status jackett
 
 ### Installing Bazarr
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Install needed packages
 sudo apt-get install -y python3-dev python3-pip python3-distutils unzip wget
 
@@ -185,7 +185,7 @@ sudo systemctl daemon-reload
 
 ## Start Bazarr
 sudo systemctl enable --now bazarr
-```
+{{< /code >}}
 
 ---
 

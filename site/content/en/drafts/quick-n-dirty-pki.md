@@ -52,22 +52,22 @@ Let's create the Root CA first which will then create the subordinate CAs.
 
 Kick things off by creating a PKI root (as the root user):
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 mkdir -p /root/pki/root-ca/{certs,crl,newcerts,private,intermediates}
 chmod 700 /root/pki/root-ca/private
-```
+{{< /code >}}
 
 ### Skeleton Files
 
 A few files are used to keep track of the certificate index, serial numbers, etc - create them as so:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Create the Index
 touch /root/pki/root-ca/index.txt
 
 ## Initiate the starting Serial Number
 echo 1000 > /root/pki/root-ca/serial
-```
+{{< /code >}}
 
 ### Root CA Configuration File
 
@@ -75,7 +75,7 @@ OpenSSL uses configuration files to set defaults and save settings in between op
 
 Create a file called `/root/pki/root-ca/openssl.cnf` with something along the lines of the following:
 
-```ini
+{{< code lang="ini" line-numbers="true" >}}
 # OpenSSL root CA configuration file.
 # Copy to `/root/pki/root-ca/openssl.cnf`.
 
@@ -225,25 +225,25 @@ subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer
 keyUsage = critical, digitalSignature
 extendedKeyUsage = critical, OCSPSigning
-```
+{{< /code >}}
 
 ### Root CA RSA Private Key
 
 Next let's create a new RSA Private Key for the Root CA - protect this Private Key, otherwise your whole chain is compromised.  Make sure to give it a good pass phrase as well:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Generate the private key
 openssl genrsa -aes256 -out /root/pki/ca/private/ca.key.pem 4096
 
 ## Set the permissions
 chmod 400 /root/pki/ca/private/ca.key.pem
-```
+{{< /code >}}
 
 ### Root CA Certificate
 
 With the configuration and private key in place we can make the Root CA Certificate which will provide the identification of the Root CA:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Change directories to make it easier
 cd /root/pki/ca
 
@@ -255,7 +255,7 @@ openssl req -config openssl.cnf \
 
 ## Set the permissions on the certificate
 chmod 444 certs/ca.cert.pem
-```
+{{< /code >}}
 
 My output looked something like this:
 
@@ -279,13 +279,13 @@ Organization Name [ACME Corp]:Kemo Network
 Organizational Unit Name [ACME Corp InfoSec]:Kemo Network InfoSec
 Common Name []:Kemo Network Root Certificate Authority
 Email Address [infosec@acme.com]:certmaster@kemo.network
-```
+{{< /code >}}
 
 Verify the Root CA certificate with the following command if you'd like:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 openssl x509 -noout -text -in certs/ca.cert.pem | less
-```
+{{< /code >}}
 
 ---
 
@@ -297,7 +297,7 @@ The Intermediate Certificate Authorities are very similar to the Root CA - they 
 
 Organize subordinate CAs into a slugged format of their CommonName - so `Kemo Labs Intermediate Certificate Authority` is transformed into a path-friendly `kemo-labs-intermediate-certificate-authority`.
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Shotgun both Intermediate CA directories
 mkdir -p /root/pki/ca/intermediates/{kemo-labs-intermediate-certificate-authority,kemo-network-intermediate-certificate-authority}/{certs,crl,csr,newcerts,private,signing}
 
@@ -314,13 +314,13 @@ echo 1000 > /root/pki/ca/intermediates/kemo-network-intermediate-certificate-aut
 ## Create the Certificate Revocation List initial Serial
 echo 1000 > /root/pki/ca/intermediates/kemo-labs-intermediate-certificate-authority/crlnumber
 echo 1000 > /root/pki/ca/intermediates/kemo-network-intermediate-certificate-authority/crlnumber
-```
+{{< /code >}}
 
 ### OpenSSL Configuration File
 
 Like the Root CA, the subordinate CAs also need an OpenSSL configuration file so make the following Intermediate CA OpenSSL configuration under any Intermediate CA's directory:
 
-```ini
+{{< code lang="ini" line-numbers="true" >}}
 # OpenSSL intermediate CA configuration file example for an ICA CN="Kemo Labs Intermediate Certificate Authority".
 # Copy to `/root/pki/ca/intermediates/kemo-labs-intermediate-certificate-authority/openssl.cnf`.
 
@@ -471,13 +471,13 @@ subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer
 keyUsage = critical, digitalSignature
 extendedKeyUsage = critical, OCSPSigning
-```
+{{< /code >}}
 
 ### Generate the Intermediate CAs Private Keys
 
 Since we have two Intermediate CAs there are two Private Keys to generate in their own paths:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Change directory to make commands more digestible
 cd /root/pki/ca/intermediates
 
@@ -492,13 +492,13 @@ openssl genrsa -aes256 \
 ## Set permissions
 chmod 400 kemo-labs-intermediate-certificate-authority/private/intermediate.key.pem
 chmod 400 kemo-network-intermediate-certificate-authority/private/intermediate.key.pem
-```
+{{< /code >}}
 
 ### Create the Intermediate CA Certificates & CSRs
 
 Now we can create the Certificates for the Intermediate CAs - very similar to the process before when creating the Root CA Certificate, except this time we'll create a Certificate Request identifying the ICAs, which will then be signed by the Root CA creating the desired Certificate.
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Change directory to make commands more digestible
 cd /root/pki/ca/intermediates
 
@@ -513,11 +513,11 @@ openssl req -new -sha256 \
  -config kemo-network-intermediate-certificate-authority/openssl.cnf \
  -key kemo-network-intermediate-certificate-authority/private/intermediate.key.pem \
  -out kemo-network-intermediate-certificate-authority/csr/intermediate.csr.pem
-```
+{{< /code >}}
 
 With the Intermediate CA Certificate Signing Requests (CSRs) created, we can now sign them with the Root CA:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Change directory to make commands more digestible
 cd /root/pki/ca/intermediates
 
@@ -536,13 +536,13 @@ openssl ca -config /root/pki/ca/openssl.cnf -extensions v3_intermediate_ca \
 ## Set permissions
 chmod 444 kemo-labs-intermediate-certificate-authority/certs/intermediate.cert.pem
 chmod 444 kemo-network-intermediate-certificate-authority/certs/intermediate.cert.pem
-```
+{{< /code >}}
 
 ### Verify Certificate Chain
 
 You can do a discount-double-check on the signed chain so far:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Change directory to make commands more digestible
 cd /root/pki/ca/intermediates
 
@@ -551,7 +551,7 @@ openssl verify -CAfile /root/pki/ca/certs/ca.cert.pem \
 
 openssl verify -CAfile /root/pki/ca/certs/ca.cert.pem \
   kemo-network-intermediate-certificate-authority/certs/intermediate.cert.pem
-```
+{{< /code >}}
 
 ---
 
@@ -563,7 +563,7 @@ We're almost ready to sign and create certificates for use by clients and server
 
 Touch a few things, echo a couple others...
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Make the directories for the Signing CAs
 mkdir -p /root/pki/ca/intermediates/kemo-labs-intermediate-certificate-authority/signing/kemo-labs-web-service-signing-certificate-authority/{certs,crl,csr,newcerts,private}
 
@@ -593,13 +593,13 @@ echo 1000 > /root/pki/ca/intermediates/kemo-network-intermediate-certificate-aut
 
 echo 1000 > /root/pki/ca/intermediates/kemo-network-intermediate-certificate-authority/signing/kemo-network-vpn-service-signing-certificate-authority/crlnumber
 
-```
+{{< /code >}}
 
 ### OpenSSL Configuration File
 
 The Signing CAs have pretty much the same sort of OpenSSL configuration, only changing a few variables is all really:
 
-```ini
+{{< code lang="ini" line-numbers="true" >}}
 # OpenSSL Signing CA configuration file example for an SCA CN="Kemo Labs Web Service Signing Certificate Authority".
 # Copy to `/root/pki/ca/intermediates/kemo-labs-intermediate-certificate-authority/signing/kemo-labs-web-service-signing-certificate-authority/openssl.cnf`.
 
@@ -750,13 +750,13 @@ subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer
 keyUsage = critical, digitalSignature
 extendedKeyUsage = critical, OCSPSigning
-```
+{{< /code >}}
 
 ### Generate the Signing CA Private Keys
 
 Just as with all the other CAs we need to set up some Private Keys:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Change directories to make commands more digestible
 cd /root/pki/ca/intermediates
 
@@ -774,13 +774,13 @@ openssl genrsa -aes256 \
 chmod 400 kemo-labs-intermediate-certificate-authority/signing/kemo-labs-web-service-signing-certificate-authority/private/signing.key.pem
 chmod 400 kemo-network-intermediate-certificate-authority/signing/kemo-network-web-service-signing-certificate-authority/private/signing.key.pem
 chmod 400 kemo-network-intermediate-certificate-authority/signing/kemo-network-vpn-service-signing-certificate-authority/private/signing.key.pem
-```
+{{< /code >}}
 
 ### Generate Signing CA CSRs
 
 Now we need some CSRs to be signed by the Intermediate CAs:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Change directory to make commands more digestible
 cd /root/pki/ca/intermediates/kemo-labs-intermediate-certificate-authority/signing/kemo-labs-web-service-signing-certificate-authority
 
@@ -807,13 +807,13 @@ openssl req -new -sha256 \
  -config openssl.cnf \
  -key private/signing.key.pem \
  -out csr/signing.csr.pem
-```
+{{< /code >}}
 
 ### Sign the CSRs
 
 Now that the Signing CAs CSRs are generated we can sign them by the Intermediate CAs and then we're off to signing actual certificates to use!
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Change directory to make commands more digestible
 cd /root/pki/ca/intermediates/kemo-labs-intermediate-certificate-authority
 
@@ -837,7 +837,7 @@ openssl ca -config openssl.cnf -extensions v3_signing_ca \
   -days 1875 -notext -md sha256 \
   -in signing/kemo-network-vpn-service-signing-certificate-authority/csr/signing.csr.pem \
   -out signing/kemo-network-vpn-service-signing-certificate-authority/certs/signing.cert.pem
-```
+{{< /code >}}
 
 ---
 
@@ -845,7 +845,7 @@ openssl ca -config openssl.cnf -extensions v3_signing_ca \
 
 Your different services will likely need to pass along the CA Chain in addition to their own certificates so now that the Root > Intermediate > Signing CA Chain is created we can create it:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Cat out the signing > intermediate > root CA certificate files into a chain
 cat /root/pki/ca/intermediates/kemo-labs-intermediate-certificate-authority/signing/kemo-labs-web-service-signing-certificate-authority/certs/signing.cert.pem \
  /root/pki/ca/intermediates/kemo-labs-intermediate-certificate-authority/certs/intermediate.cert.pem \
@@ -863,7 +863,7 @@ cat /root/pki/ca/intermediates/kemo-network-intermediate-certificate-authority/s
 chmod 444 /root/pki/ca/intermediates/kemo-labs-intermediate-certificate-authority/signing/kemo-labs-web-service-signing-certificate-authority/certs/ca-chain.cert.pem
 chmod 444 /root/pki/ca/intermediates/kemo-network-intermediate-certificate-authority/signing/kemo-network-web-service-signing-certificate-authority/certs/ca-chain.cert.pem
 chmod 444 /root/pki/ca/intermediates/kemo-network-intermediate-certificate-authority/signing/kemo-network-vpn-service-signing-certificate-authority/certs/ca-chain.cert.pem
-```
+{{< /code >}}
 
 ---
 
@@ -877,7 +877,7 @@ So I'm doing things the lazy way and I'm just going to create a wildcard certifi
 
 The process for creating an SSL Certificate for `*.kemo.labs` is pretty simple: create a private key, a Certificate Signing Request with the domain as the CommonName, sign the CSR with the Kemo Labs Web Signing CA, and then package up the CA Chain and Certificate & Key Pair.
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Change directory to make commands more digestible
 cd /root/pki/ca/intermediates/kemo-labs-intermediate-certificate-authority/signing/kemo-labs-web-service-signing-certificate-authority
 
@@ -903,13 +903,13 @@ chmod 444 certs/wildcard.kemo.labs.cert.pem
 
 ## Verify the certificate and chain
 openssl verify -CAfile certs/ca-chain.cert.pem certs/wildcard.kemo.labs.cert.pem
-```
+{{< /code >}}
 
 ### Bundling for HAProxy
 
 Now that the wildcard certificate is created we can bundle everything for use with HAProxy:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Concatenate the key then certificate chain
 cat /root/pki/ca/intermediates/kemo-labs-intermediate-certificate-authority/signing/kemo-labs-web-service-signing-certificate-authority/private/wildcard.kemo.labs.key.pem \
 /root/pki/ca/intermediates/kemo-labs-intermediate-certificate-authority/signing/kemo-labs-web-service-signing-certificate-authority/certs/wildcard.kemo.labs.cert.pem \
@@ -917,13 +917,13 @@ cat /root/pki/ca/intermediates/kemo-labs-intermediate-certificate-authority/sign
 
 ## Set permissions
 chmod 444 /root/pki/ca/intermediates/kemo-labs-intermediate-certificate-authority/signing/kemo-labs-web-service-signing-certificate-authority/bundle_haproxy-wildcard.kemo.labs.pem
-```
+{{< /code >}}
 
 ## Adding to the System Root CA Store
 
 Before you can really use the generated Certificates you'll need to add the CA Chain to your system Root CA stores - basically add the ca-chain.cert.pem files to your system store.
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## RHEL 8 Systems
 cp /root/pki/ca/certs/ca.cert.pem /usr/share/pki/ca-trust-source/anchors/kemo-network-root-ca.pem
 
@@ -932,4 +932,4 @@ cp /root/pki/ca/intermediates/kemo-labs-intermediate-certificate-authority/certs
 cp /root/pki/ca/intermediates/kemo-labs-intermediate-certificate-authority/signing/kemo-labs-web-service-signing-certificate-authority/certs/signing.cert.pem /usr/share/pki/ca-trust-source/anchors/kemo-labs-web-sca.pem
 
 update-ca-trust
-```
+{{< /code >}}

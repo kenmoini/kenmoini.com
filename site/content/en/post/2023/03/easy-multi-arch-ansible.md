@@ -64,20 +64,20 @@ To use the collection and start detecting architectures yourself, you need to in
 
 You can either install the Ansible Collection with the command-line:
 
-```bash
+{{< code lang="bash" cmd="true" output="1" >}}
 # Install the Collection if you're an Ansible CLI user
 ansible-galaxy collection install kenmoini.kemo
-```
+{{< /code >}}
 
 Alternatively, use the a `collections/requirements.yml` file in your repo if you're wanting to install multiple Collections/Roles, and/or use it in Ansible Tower/Controller:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 # your collections/requirements.yml file
 ---
 collections:
   - name: kenmoini.kemo
   #- name: other.collections
-```
+{{< /code >}}
 
 ---
 
@@ -85,7 +85,7 @@ collections:
 
 Simply import the `architecture_helper` Role into you Playbook, and you'll find 3 new facts/variables set, `detected_architecture`, `rpm_architecture`, and `deb_architecture`:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 ---
 - name: Example for kenmoini.kemo.architecture_helper
   hosts: some_host_pattern
@@ -101,6 +101,6 @@ Simply import the `architecture_helper` Role into you Playbook, and you'll find 
           - "detected_architecture: {{ detected_architecture }}"
           - "deb_architecture: {{ deb_architecture }}"
           - "rpm_architecture: {{ rpm_architecture }}"
-```
+{{< /code >}}
 
 Now when you download things such as OpenShift binaries, Ubuntu ISOs, etc, you can have a few easy to use variables that can adapt across Debian and RHEL based systems, on 32 and 64 bit architectures!

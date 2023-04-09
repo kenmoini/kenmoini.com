@@ -41,7 +41,7 @@ There are a few ways to handle x509 PKI, be that CFSSL or manual OpenSSL command
 
 Being a Golang application it's super simple to deploy - for this example we'll deploy it as a SystemD-driven container service though there are many other [deployment options available](https://github.com/kenmoini/locksmith#deployment-options).
 
-```bash
+{{< code lang="bash" command-line="true" >}}
 ## Download the SystemD Service Unit File
 sudo wget -O /etc/systemd/system/locksmith.service https://raw.githubusercontent.com/kenmoini/locksmith/main/init/caas-locksmith.service
 
@@ -73,7 +73,7 @@ sudo podman pull quay.io/kenmoini/locksmith:latest
 
 ## Enable and Start the Service
 sudo systemctl enable --now locksmith.service
-```
+{{< /code >}}
 
 The default API root is now accessible at `http://CONTAINER_IP:8080/locksmith/v1`
 
@@ -90,7 +90,7 @@ There are a few different ways to roll out PKI and it depends on your requiremen
 
 First thing we'll need to do is create a Root CA with Locksmith - since we're just working with an API we can do that simply via a cURL request:
 
-```bash
+{{< code lang="bash" command-line="true" >}}
 #!/bin/bash
 
 PKI_SERVER="locksmith.example.com:8080"
@@ -118,6 +118,6 @@ curl --request POST \
  --header "Content-Type: application/json" \
  --data "$(generatePatchData)" \
  http://$PKI_SERVER/locksmith/v1/root
-```
+{{< /code >}}
 
 > Fuck...the struct is messed up and the CRL endpoints don't reflect the proper data passed...need to fix Locksmith...

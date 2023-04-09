@@ -45,9 +45,9 @@ I've taken the liberty to also automate most of the steps required to set up a p
 
 From that repo linked right above, find the `setup_fedora_wsl_distro.ps1` file and run it on the Windows system you want to deploy Fedora 33 to - if you'd like to do that automatically, run the following line in an Administrative Powershell terminal window:
 
-```powershell
+{{< code lang="powershell" line-numbers="true" >}}
 $ScriptFromGitHub = Invoke-WebRequest "https://raw.githubusercontent.com/kenmoini/wsl-helper/main/setup_fedora_wsl_distro.ps1"; Invoke-Expression $($ScriptFromGitHub.Content)
-```
+{{< /code >}}
 
 That Powershell script doesn't do too much magic:
 
@@ -60,9 +60,9 @@ That Powershell script doesn't do too much magic:
  
 You can also download that Powershell script and modify before running with the following one-liner:
 
-```powershell
+{{< code lang="powershell" line-numbers="true" >}}
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/kenmoini/wsl-helper/main/setup_fedora_wsl_distro.ps1" -OutFile ".\setup_fedora_wsl_distro.ps1"
-```
+{{< /code >}}
 
 Then you could also optionally pass the `-reset` and/or `-keepCache` switches to the Powershell script which will either reset everything and start from scratch, or keep the local temporary files cached.  The combination of those two switches via `.\setup_fedora_Wsl_distro.ps1 -reset -keepCache` will allow automatic & quick development/testing of new bootstraping assets in case you are modifying the scripts.
 
@@ -76,10 +76,10 @@ Thankfully, I've got most of that set up in an automated script that lets you fl
 
 At the Powershell terminal, run the following commands to download the configuration script to your Fedora33 WSL distro and subsequently run it:
 
-```powershell
+{{< code lang="powershell" line-numbers="true" >}}
 wsl -d Fedora33 curl -sSL -o /opt/wsl_setup.sh https://raw.githubusercontent.com/kenmoini/wsl-helper/main/configure_wsl_fedora.sh
 wsl -d Fedora33 bash /opt/wsl_setup.sh
-```
+{{< /code >}}
 
 This will launch the interactive script, prompting you for input to:
 
@@ -104,9 +104,9 @@ Otherwise, on every run of that script it will update the WSL distro, install a 
 
 If you open WSL with the `wsl` command, then it loads your default WSL distro - if you want that default distro to be the new Fedora33 distro we just created, run the following Powershell command:
 
-```powershell
+{{< code lang="powershell" line-numbers="true" >}}
 wsl --set-default Fedora33
-```
+{{< /code >}}
 
 ***Note*** that you will need to figure out how to move your files across distros, and can access the other distros on your system with a combination of `wsl -l -v` and `wsl -d DISTRO_NAME_HERE`
 
@@ -114,13 +114,13 @@ wsl --set-default Fedora33
 
 Now that I have a new and updated Fedora 33 WSL distro, I can test my objective with Fedora CoreOS Config Transpiler (fcct, the binary that wasn't working earlier due to an old version of glibc6 in the Ubuntu WSL distro).  I ran the following command at the Powershell terminal to jump into a Fedora33 distro shell:
 
-```powershell
+{{< code lang="powershell" line-numbers="true" >}}
 wsl -d Fedora33
-```
+{{< /code >}}
 
 With that, ran the following in the Bash terminal to test `fcct`:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 $ sudo curl -o /usr/local/bin/fcct -sL https://github.com/coreos/fcct/releases/download/v0.8.0/fcct-x86_64-unknown-linux-gnu
 $ sudo chmod +x /usr/local/bin/fcct
 
@@ -131,7 +131,7 @@ EOF
 
 $ fcct ignition_test.yaml
 {"ignition":{"version":"3.2.0"}}
-```
+{{< /code >}}
 
 {{< center >}}![AWWWWYEAH](/images/posts/legacyUnsorted/yesbitchyes.gif){{</ center >}}
 

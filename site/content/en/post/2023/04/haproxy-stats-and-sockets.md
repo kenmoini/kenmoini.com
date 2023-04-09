@@ -41,7 +41,7 @@ In this article I'll share some config on how to enable some extra functions in 
 
 Not going to emphasize this part since it's pretty easy - it's a package called `haproxy`.  Install it if you haven't already - alternatively you can run the container image instead and mount things if you like an extra layer of headaches.
 
-```bash
+{{< code lang="bash" command-line="true" output="1, 3-4, 6-9" >}}
 # Install HAProxy, EL
 dnf install haproxy -y
 
@@ -52,7 +52,7 @@ apt install haproxy -y
 
 # Enable HAProxy
 systemctl enable --now haproxy
-```
+{{< /code >}}
 
 ---
 
@@ -62,7 +62,7 @@ In case you want some information on backends, frontends, servers on the backend
 
 There are a few conflicting ways on how to do it that you'll see online - ultimately, you just need to set a listener for the port you want the statistics to be served on (default is 1936), and set some `stats` specific configuration there:
 
-```ini
+{{< code lang="ini" line-numbers="true" >}}
 # global config up here
 # default config also maybe up here
 
@@ -104,7 +104,7 @@ listen stats
     stats   uri             /haproxy?stats
 
 # backend/frontend config down here maybe
-```
+{{< /code >}}
 
 You can read more about [all the other `stats` configuration parameters here](https://docs.haproxy.org/2.7/configuration.html#4.2-stats%20admin), though that should be a really good starting point.  You've got the basic needed settings, enabling of the stats module, and some good fundamentals for keeping it secure.  You should be able to do a `curl -u 'notadmin:securePassword' http://localhost:1936/haproxy?stats` and see some output.
 
@@ -118,7 +118,7 @@ However, what is very useful is enabling an administrative system socket to inte
 
 To enable the administrative system socket, just drop it into your `global` section - alternatively, you could also place it on a `frontend` to make more atomic administrative sockets:
 
-```ini
+{{< code lang="ini" line-numbers="true" >}}
 # Maybe your global section looks like this...
 global
     log         127.0.0.1 local2 debug
@@ -132,20 +132,20 @@ global
     # Enable a global administrative socket
     stats       socket  /run/haproxy/admin.sock mode 660 level admin
     stats       timeout 10s
-```
+{{< /code >}}
 
 The key part of the `global` section are the last two lines - again, you could put this in a `frontend` instead for more atomic control of load balanced services and their administrative sockets.
 
 Wherever you do put the socket, make sure to create the parent directory and properly chown/chmod it:
 
-```bash
+{{< code lang="bash" command-line="true" output="1, 3-4" >}}
 # Create the runtime HAProxy directory
-mkdir -p /run/haproxy/
+sudo mkdir -p /run/haproxy/
 
 # Give it the proper ownership and permissions
-chown root:root /run/haproxy/
-chmod 775 /run/haproxy/
-```
+sudo chown root:root /run/haproxy/
+sudo chmod 775 /run/haproxy/
+{{< /code >}}
 
 ---
 
@@ -155,13 +155,13 @@ Now that there's an administrative socket enabled, you can use it with something
 
 You can query the socket endpoint like so:
 
-```bash
+{{< code lang="bash" command-line="true" output="1, 3-4" >}}
 # Get help information
 echo "help" | sudo socat stdio /run/haproxy/admin.sock
 
 # Get load balancer information and statistics
 echo "show info;show stat" | sudo socat stdio /run/haproxy/admin.sock
-```
+{{< /code >}}
 
 You can read more about the Runtime API here: https://www.haproxy.com/documentation/hapee/latest/api/runtime-api/
 
@@ -169,32 +169,32 @@ You can read more about the Runtime API here: https://www.haproxy.com/documentat
 
 In case you're using a fail-over pattern that directs traffic to a primary server, failing over to a secondary and keeping the traffic there until manually reset, your `backend` may look something like this:
 
-```ini
+{{< code lang="ini" line-numbers="true" >}}
 backend https
     stick-table type ip size 2 nopurge
     stick on dst
     server       cloudserver cloud_server_endpoint:80 check on-error mark-down observe layer7 error-limit 1
     server       localserver local_server_endpoint:80 check backup
-```
+{{< /code >}}
 
 In this example, your stick-table name would be the same as the backend so to clear it and reset the traffic back to the cloudserver, you'd run:
 
-```bash
+{{< code lang="bash" command-line="true" output="1" >}}
 # Clear the https backend stick table
 echo "clear table https" | sudo socat stdio /run/haproxy/admin.sock
-```
+{{< /code >}}
 
 ### Disable a Backend Server
 
 If you're needing to test traffic patterns resolving to different servers in a backend list, you can simply disable the servers:
 
-```bash
+{{< code lang="bash" command-line="true" output="1, 3-4" >}}
 # Disable the cloudserver from the https backend example above
 echo "disable server https/cloudserver" | sudo socat stdio /run/haproxy/admin.sock
 
 # or, enable the cloudserver from the https backend example above
 echo "enable server https/cloudserver" | sudo socat stdio /run/haproxy/admin.sock
-```
+{{< /code >}}
 
 ---
 

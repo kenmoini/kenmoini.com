@@ -44,19 +44,19 @@ If there's an option to enable something called **"ACS"** that's IOMMU's Access 
 
 By now, you should expect a kernel module to load - edit your `/etc/default/grub` file and add either `intel_iommu=on` or `amd_iommu=on` to your `GRUB_CMDLINE_LINUX` definition - it should look something like this:
 
-```
+{{< code lang="text" >}}
 ...
 GRUB_CMDLINE_LINUX="crashkernel=auto resume=/dev/mapper/rhel-swap rd.lvm.lv=rhel/root rd.lvm.lv=rhel/swap rhgb quiet modprobe.blacklist=nouveau nomodeset amd_iommu=on"
 ...
-```
+{{< /code >}}
 
 ## 4. Enable VFIO Unsafe Interrupts
 
 If you're working with an NVidia card you'll likely need this piece right here too - don't ask me too much about what it does, it works for me and I found it on page 3 of a Google search soooo...do that with what you will, but it works:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 echo "options vfio_iommu_type1 allow_unsafe_interrupts=1" > /etc/modprobe.d/unsafe-interrupts.conf
-```
+{{< /code >}}
 
 ## 5. Rebuild GRUB
 
@@ -71,9 +71,9 @@ Rebuild the GRUB2 configuration file by running the `grub2-mkconfig -o` command 
 
 Of course, reboot to freshen things up...
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 sudo systemctl reboot
-```
+{{< /code >}}
 
 ## 7. Installing Libvirt/KVM
 
@@ -85,7 +85,7 @@ Next, we'll need to find our PCI devices we want to pass through, in this case m
 
 First, find the friendly named device, this is what it shows for me:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 # lspci | grep -i nvidia
 
 41:00.0 3D controller: NVIDIA Corporation GM200GL [Tesla M40] (rev a1)
@@ -93,7 +93,7 @@ First, find the friendly named device, this is what it shows for me:
 81:00.1 Audio device: NVIDIA Corporation TU104 HD Audio Controller (rev a1)
 81:00.2 USB controller: NVIDIA Corporation TU104 USB 3.1 Host Controller (rev a1)
 81:00.3 Serial bus controller [0c80]: NVIDIA Corporation TU104 USB Type-C UCSI Controller (rev a1)
-```
+{{< /code >}}
 
 What you want to take note of is the set of numbers in front of the root devices, in my case it's `41:00.0` and `81:00.0-81:00.3`
 
@@ -103,7 +103,7 @@ Note that if your logical/physical device exposes a number of PCI devices like m
 
 With that we can now convert it into node device format.  So for my first card, the M40 at `41:00.0`, my libvirt node device would be `pci_NNNN_41_00:0` where NNNN can be something different depending on your PCI controllers - you can find out exactly by running:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 # virsh nodedev-list | grep pci
 
 ...
@@ -113,13 +113,13 @@ pci_0000_81_00_1
 pci_0000_81_00_2
 pci_0000_81_00_3
 ...
-```
+{{< /code >}}
 
 ## 10. Create your VMs with --host-device
 
 Finally, you can add your device(s) to the Virtual Machine with `virt-install` (the last line):
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 virt-install --name=raza-ocp-app-1-m40 \
  --vcpus ${AN_VCPUS} \
  --memory=${AN_RAM} \
@@ -130,11 +130,11 @@ virt-install --name=raza-ocp-app-1-m40 \
  --noautoconsole \
  --events on_reboot=restart \
  --host-device=pci_0000_41_00_0
-```
+{{< /code >}}
 
 And again, if you're using something like a Quadro that has multiple devices, you'll need to pass all of them through, such as the following (note the last line):
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 virt-install --name=raza-ocp-app-2-quadro \
  --vcpus ${AN_VCPUS} \
  --memory=${AN_RAM} \
@@ -145,6 +145,6 @@ virt-install --name=raza-ocp-app-2-quadro \
  --noautoconsole \
  --events on_reboot=restart \
  --host-device=pci_0000_81_00_0 --host-device=pci_0000_81_00_1 --host-device=pci_0000_81_00_2 --host-device=pci_0000_81_00_3
-```
+{{< /code >}}
 
 Now you have the devices dedicated to those VMs - of course those VMs will need the drivers installed in order to use them, or if like in my case where these VMs are actually OpenShift nodes, they'll just use the [Operator Framework to wire everything up automatically](https://kenmoini.com/blog/using-nvidia-gpus-in-openshift/)!

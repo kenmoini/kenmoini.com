@@ -52,9 +52,9 @@ The documentation for GitLab is normally fantastic and very detailed, though it 
 
 So let’s open up our /etc/gitlab/gitlab.rb file and modify a few things...
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ # vi /etc/gitlab/gitlab.rb
-{{< /highlight >}}
+{{< /code >}}
 
 You’ll want to find the section about registries and make sure your config looks at least a little like this:
 
@@ -117,22 +117,22 @@ registry['storage'] = {
   }
 }
 ...
-{{< /highlight >}}
+{{< /code >}}
 
 Now once you change the GitLab configuration you need to run the Chef reconfiguration script…that’s easy too...
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 # gitlab-ctl reconfigure
-{{< /highlight >}}
+{{< /code >}}
 
 ## Push it real good
 
 Once you have GitLab reconfigured you can push to your Minio S3 GitLab-backed Container Registry! You’re using Podman, Buildah, and Skopeo, right?
 ***Pro-tip:*** Don’t create OCI format containers if you’re planning on storing containers in GitLab. They use the Docker Distribution default registry which, well, only accepts Docker format containers, not OCI.
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 # podman login gitlab.example.com
 # podman push base-rhel7 gitlab.example.com/my_user/my_repo/base-rhel7:latest
-{{< /highlight >}}
+{{< /code >}}
 
 {{< figure src="/images/posts/legacyUnsorted/k33jf.jpg" class="col-sm-12 text-center" >}}

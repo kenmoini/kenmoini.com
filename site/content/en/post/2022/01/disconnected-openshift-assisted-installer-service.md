@@ -141,7 +141,7 @@ This [Libvirt] hypervisor host needs:
 
 First let's install Libvirt/KVM and some other tools:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Check if you have virtualization enabled
 VIRT_TEST=$(cat /proc/cpuinfo | egrep "vmx|svm" | wc -l)
 if [[ $VIRT_TEST -eq 0 ]]; then
@@ -165,13 +165,13 @@ systemctl enable --now cockpit.socket
 
 ## Enable Libvirt
 systemctl enable --now libvirtd
-```
+{{< /code >}}
 
 ### Bridge Network Interface Creation
 
 Prior to creating the Libvirt Networks and VMs there needs to be a bridged network interface created from the physical interface on the hypervisor host - you can do so with the following:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Create the bridge, assuming a name of bridge0
 nmcli con add type bridge con-name bridge0 ifname bridge0
 
@@ -194,7 +194,7 @@ nmcli con up bridge0
 
 ## Delete the old physical connection
 nmcli con delete enp0s1
-```
+{{< /code >}}
 
 ### Libvirt Network Setup
 
@@ -202,17 +202,17 @@ With Libvirt installed and started we can now create some Libvirt networks, a br
 
 ***/var/lib/libvirt/bridged-network.xml***
 
-```xml
+{{< code lang="xml" line-numbers="true" >}}
 <network>
   <name>bridge0</name>
   <forward mode="bridge"/>
   <bridge name="bridge0"/>
 </network>
-```
+{{< /code >}}
 
 ***/var/lib/libvirt/disconnected-network.xml***
 
-```xml
+{{< code lang="xml" line-numbers="true" >}}
 <network>
   <name>isolatedNet</name>
   <bridge name="virbr50"/>
@@ -222,13 +222,13 @@ With Libvirt installed and started we can now create some Libvirt networks, a br
     </dhcp>
   </ip>
 </network>
-```
+{{< /code >}}
 
 Make sure that the `192.168.50.0/24` used in the disconnected network doesn't overlap with your bridged network - there's a range for DHCP and space before it for static IPs.  The `virbr50` device will be created automatically.
 
 Next we'll define the networks and start them:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 virsh net-define /var/lib/libvirt/bridged-network.xml
 virsh net-start bridge0
 virsh net-autostart bridge0
@@ -236,7 +236,7 @@ virsh net-autostart bridge0
 virsh net-define /var/lib/libvirt/disconnected-network.xml
 virsh net-start isolatedNet
 virsh net-autostart isolatedNet
-```
+{{< /code >}}
 
 Assuming that all worked out well then your physical host should have Libvirt/KVM installed with two networks, one bridged to the host's physical adapter that has access to the Internet so a connected VM can pull down the resources it needs to service the second disconnected virtual network as a mirror to install OpenShift and the Assisted Installer Service.
 
@@ -252,7 +252,7 @@ In high-security disconnected environments this mirror VM is not usually a basti
 
 Assuming you have the latest RHEL 8.5 ISO located at `/var/lib/libvirt/images/rhel8.5.iso`, then create the Mirror VM as such:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Set networking configuration
 MIRROR_VM_HOSTNAME="mirror-vm"
 
@@ -337,7 +337,7 @@ virt-install --name=$MIRROR_VM_HOSTNAME \
  --memballoon none --cpu host-passthrough --autostart --noautoconsole --events on_reboot=restart \
  --initrd-inject /var/lib/libvirt/kickstart.$MIRROR_VM_HOSTNAME.cfg \
  --extra-args "inst.ks=file://kickstart.$MIRROR_VM_HOSTNAME.cfg console=tty0 console=ttyS0,115200n8"
-```
+{{< /code >}}
 
 At this point if you also have Cockpit installed and enabled with the `cockpit-machines` package then you can visually follow the install of the Mirror VM:
 
@@ -351,7 +351,7 @@ The VM will complete the install then shutdown - start it back up via Cockpit or
 
 To really make sure things are being routed and served properly it's helpful to have another machine on the same Libvirt isolated network that can load the Assisted Installer Web UI and HTTP Mirror.  You can rinse and repeat the the previous steps for making the Mirror VM to create another VM that will act as a GUI-enabled bastion.
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Generate a root password hash - ideally replace 'aSecurePassword'
 GUI_BASTION_ROOT_PW_HASH=$(python -c "import crypt; print crypt.crypt('aSecurePassword')")
 
@@ -424,7 +424,7 @@ virt-install --name=$GUI_BASTION_VM_HOSTNAME \
  --memballoon none --cpu host-passthrough --autostart --noautoconsole --events on_reboot=restart \
  --initrd-inject /var/lib/libvirt/kickstart.$GUI_BASTION_VM_HOSTNAME.cfg \
  --extra-args "inst.ks=file://kickstart.$GUI_BASTION_VM_HOSTNAME.cfg console=tty0 console=ttyS0,115200n8"
-```
+{{< /code >}}
 
 ---
 
@@ -440,7 +440,7 @@ In other environments this Mirror VM could be a bare metal host or a VM on anoth
 
 The Mirror VM is now created but there's still a tiny bit of work to do to make it usable - one of the first things being subscribing RHEL.  Once the Mirror VM has installed and booted, SSH into it and run the following commands:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## The Mirror VM's Hostname
 MIRROR_VM_HOSTNAME="mirror-vm"
 ## ISOLATED_NETWORK_DOMAIN is the domain base for the Isolated Network
@@ -468,13 +468,13 @@ dnf install curl wget tar jq podman skopeo httpd-tools openssl nano nfs-utils ba
 
 ## Set lower unprivileged ports for Podman
 echo 0 > /proc/sys/net/ipv4/ip_unprivileged_port_start
-```
+{{< /code >}}
 
 ### Network Bridge
 
 Now that we have some basics installed and set up we'll create a Bridge Network Interface - this bridge is to the disconnected/isolated Network.
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Create a bridge attached to the NIC in the isolated network to allow Containers/Pods to pull IPs from the Isolated network space
 ## No need to modify the isolated bridge configuration unless you modified the Libvirt Isolated Network space
 nmcli con add type bridge con-name bridge0 ifname bridge0
@@ -486,13 +486,13 @@ nmcli con add type bridge-slave ifname enp2s0 master bridge0
 nmcli con up bridge0
 # Delete the old connection
 nmcli con delete enp2s0
-```
+{{< /code >}}
 
 ### Podman CNI Bridge
 
 With the bridge network interface created, we can create a Bridged CNI for Podman which will allow containers to access the same disconnected/isolated IP address space:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Ensure our needed directories exist
 mkdir -p /etc/cni/net.d/
 
@@ -551,13 +551,13 @@ EOF
 
 ## Restart Podman for good measure
 systemctl restart podman
-```
+{{< /code >}}
 
 ### Multi-DNS Resolution
 
 Since this is a Mirror VM that sits between two networks and needs to resolve multiple domain bases we'll need to set up multi-DNS resolution - if there are separate Mirror VMs in two different networks then this is likely not something that needs to be done.  You can read more about it in the [Red Hat Enterprise Linux documentation](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_and_managing_networking/using-different-dns-servers-for-different-domains_configuring-and-managing-networking).
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Set up mutli-DNS resolution
 NM_MAIN_CONF_LINE_NO=$(grep -n "\[main\]" /etc/NetworkManager/NetworkManager.conf | grep -Eo '^[^:]+')
 NM_MAIN_AFTER_CONF_LINE_NO=$(( $NM_MAIN_CONF_LINE_NO + 1))
@@ -576,7 +576,7 @@ systemctl --now enable systemd-resolved
 
 ## Reload NetworkManager
 systemctl reload NetworkManager
-```
+{{< /code >}}
 
 Reboot the Mirror VM since it probably loaded a new kernel earlier during the package update: `systemctl reboot`
 
@@ -596,7 +596,7 @@ In order to interact with the RH APIs **you need an Offline Token** - get one fr
 
 Save the Offline Token to a file in the Mirror VM at `$HOME/rh-api-offline-token`
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Set needed variables
 MIRROR_BASE_PATH="/opt/disconnected-mirror"
 
@@ -633,11 +633,11 @@ fi
 
 ## Save the versions to a JSON file for use later
 echo $QUERY_CLUSTER_VERSIONS_REQUEST > ${MIRROR_BASE_PATH}/ai-svc/cluster-versions.json
-```
+{{< /code >}}
 
 The returned data that is stored in that `$MIRROR_BASE_PATH/ai-svc/cluster-versions.json` file should look something like this, minified:
 
-```json
+{{< code lang="json" line-numbers="true" >}}
 {
   "4.6": {
     "cpu_architectures": [
@@ -669,7 +669,7 @@ The returned data that is stored in that `$MIRROR_BASE_PATH/ai-svc/cluster-versi
     "support_level": "production"
   }
 }
-```
+{{< /code >}}
 
 We'll use this information in some later steps to create a few configuration files and map version data for other services.
 
@@ -683,10 +683,10 @@ Before we get much farther we need some domain/host name resolution, so naturall
 
 If this is simply a low-side system you could just get away with using the `/etc/hosts` file and do something like this:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 echo '127.0.0.1    mirror-vm mirror-vm.isolated.local' >> /etc/hosts
 echo '127.0.0.1    mirror mirror.isolated.local' >> /etc/hosts
-```
+{{< /code >}}
 
 This would allow for local resolution of your hostname is all really, which would allow mirroring of the external assets to a localhost registry, but no other systems could access it unless they also had /etc/hosts definitions pointing to this Mirror VM - you'd need a proper DNS server in the disconnected environment for the OpenShift clusters anyway so let's deploy that for our Libvirt environment.
 
@@ -703,7 +703,7 @@ All the DNS we're serving will be for the disconnected network - for operators o
 
 Go Zones just needs a simple YAML file and it'll create all the needed BIND configuration:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Set vars
 MIRROR_BASE_PATH="/opt/disconnected-mirror"
 MIRROR_VM_HOSTNAME="mirror-vm"
@@ -749,18 +749,18 @@ forwarders {
   127.0.0.53;
 };
 EOF
-```
+{{< /code >}}
 
 With that you can start the container with the following:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 podman run --name dns-go-zones \
  --net host \
  -m 512m \
  -v $MIRROR_BASE_PATH/dns/volumes/go-zones:/etc/go-zones/ \
  -v $MIRROR_BASE_PATH/dns/volumes/bind:/opt/app-root/vendor/bind/ \
  quay.io/kenmoini/go-zones:file-to-bind
-```
+{{< /code >}}
 
 This will start the Go Zones container with Podman, giving it host network access, some memory limits, and mounting a few volumes.
 
@@ -776,7 +776,7 @@ Before starting to mirror the container images we need a Certificate Authority a
 
 First we must make a few files to configure OpenSSL:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 MIRROR_VM_HOSTNAME="mirror-vm"
 ISOLATED_NETWORK_DOMAIN="isolated.local"
 
@@ -899,13 +899,13 @@ subjectAltName = @iso_wc_alt_names
 [ iso_wc_alt_names ]
 DNS.1 = *.${ISOLATED_NETWORK_DOMAIN}
 EOF
-```
+{{< /code >}}
 
 ### Generating a Certificate Authority
 
 With those configuration files created, we can now create the Certificate Authority that will be used to identify and secure services:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Generate the CA Key
 openssl genrsa -out ${MIRROR_BASE_PATH}/pki/ca.key.pem 4096
 
@@ -923,13 +923,13 @@ update-ca-trust
 
 ## Copy the CA to the downloads folder in order to be easily downloaded by other nodes later
 cp ${MIRROR_BASE_PATH}/pki/ca.cert.pem $MIRROR_BASE_PATH/downloads/
-```
+{{< /code >}}
 
 ### Creating & Signing Certificates
 
 Now that the Certificate Authority is created, now we can create some SSL Certificates for our Container Registry and HAProxy services.  Since those are two separate services, we'll follow best practices and create separate certificate+key pairs - keep in mind a mature PKI is more robust than this in many other ways so it's not like we started entirely with best practices in mind...there'd be an Intermediate CA, Signing CA, etc...anywho, let's make some certificates.
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Generate Container Registry Server Key
 openssl genrsa -out $MIRROR_BASE_PATH/pki/server.key.pem 4096
 
@@ -950,11 +950,11 @@ openssl x509 -req -days 365 -in $MIRROR_BASE_PATH/pki/server.csr.pem \
 
 ## Verify the Certificate
 openssl x509 -text -in $MIRROR_BASE_PATH/pki/server.cert.pem
-```
+{{< /code >}}
 
 This Certificate will be used for the Container Image Registry - next let's create a Wildcard Certificate for use with HAProxy:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Generate the Wildcard Key
 openssl genrsa -out $MIRROR_BASE_PATH/pki/isolated-wildcard.key.pem 4096
 
@@ -980,7 +980,7 @@ openssl x509 -text -in $MIRROR_BASE_PATH/pki/isolated-wildcard.cert.pem
 cat $MIRROR_BASE_PATH/pki/isolated-wildcard.key.pem > $MIRROR_BASE_PATH/pki/isolated-wildcard.haproxy-bundle.pem
 cat $MIRROR_BASE_PATH/pki/isolated-wildcard.cert.pem >> $MIRROR_BASE_PATH/pki/isolated-wildcard.haproxy-bundle.pem
 cat $MIRROR_BASE_PATH/pki/ca.cert.pem >> $MIRROR_BASE_PATH/pki/isolated-wildcard.haproxy-bundle.pem
-```
+{{< /code >}}
 
 With those steps all of our needed x509 PKI is now created!
 
@@ -990,14 +990,14 @@ With those steps all of our needed x509 PKI is now created!
 
 To log into the Container Registry there needs to be some sort of authentication store - we'll create an HTPasswd file to be used as an authentication store for the Container Image Registry:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Change these ideally...
 MIRROR_CONTAINER_REGISTRY_USER="openshift-release-dev+admin"
 MIRROR_CONTAINER_REGISTRY_PASS="Passw0rd123"
 
 ## Create an HTPasswd file to log into the registry
 htpasswd -bBc ${MIRROR_BASE_PATH}/auth/htpasswd $MIRROR_CONTAINER_REGISTRY_USER $MIRROR_CONTAINER_REGISTRY_PASS
-```
+{{< /code >}}
 
 ---
 
@@ -1005,7 +1005,7 @@ htpasswd -bBc ${MIRROR_BASE_PATH}/auth/htpasswd $MIRROR_CONTAINER_REGISTRY_USER 
 
 ***Speaking of that darned Container Image Registry***, let's go ahead and deploy it:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 podman run --name mirror-registry --net host \
   -v ${MIRROR_BASE_PATH}/auth:/auth:z \
   -v ${MIRROR_BASE_PATH}/pki:/certs:z \
@@ -1018,13 +1018,13 @@ podman run --name mirror-registry --net host \
   -e "REGISTRY_HTTP_TLS_KEY=/certs/server.key.pem" \
   -e "REGISTRY_COMPATIBILITY_SCHEMA1_ENABLED=true" \
   quay.io/redhat-emea-ssa-team/registry:2
-```
+{{< /code >}}
 
 This registry runs on port 443 of the Mirror VM since it's using the container host network - otherwise it's mounting certificates, the HTPasswd file, and a directory for persistent storage, setting a few environmental variables to configure the registry.
 
 You can test the running registry with the following command:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Set a variable for the local registry
 LOCAL_REGISTRY="${MIRROR_VM_HOSTNAME}.${ISOLATED_NETWORK_DOMAIN}"
 ## Registry Credentials
@@ -1033,7 +1033,7 @@ MIRROR_CONTAINER_REGISTRY_PASS="Passw0rd123"
 
 ## Check the registry is able to be connected to
 curl -sSL -u ${MIRROR_CONTAINER_REGISTRY_USER}:${MIRROR_CONTAINER_REGISTRY_PASS} https://$LOCAL_REGISTRY/v2/_catalog
-```
+{{< /code >}}
 
 You should see something like this returned from the cURL request: `{"repositories":[]}`
 
@@ -1041,7 +1041,7 @@ You should see something like this returned from the cURL request: `{"repositori
 
 In order to pull or push container images to the registry we need to pass along some credentials - we just used the username and password pair when testing the registry with the cURL command but there's a better way that is more suited to use with different applications without piping credentials in a command that can be grep'd with a simple `history`.
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Set a variable for the local registry
 LOCAL_REGISTRY="${MIRROR_VM_HOSTNAME}.${ISOLATED_NETWORK_DOMAIN}"
 ## Registry Credentials
@@ -1050,7 +1050,7 @@ MIRROR_CONTAINER_REGISTRY_PASS="Passw0rd123"
 
 ## Create a container registry authentication file by authenticating to 
 podman login --authfile "${MIRROR_BASE_PATH}/auth/mirror-pull-secret.json" -u $MIRROR_CONTAINER_REGISTRY_USER -p $MIRROR_CONTAINER_REGISTRY_PASS $LOCAL_REGISTRY
-```
+{{< /code >}}
 
 With that we have a JSON-formatted Pull Secret for use with the local registry - but there's still another Pull Secret needed, a Red Hat Registry Pull Secret that will allow the pulling of container images from Red Hat.
 
@@ -1064,7 +1064,7 @@ Log in and scroll down to the bottom and you should see a Copy and Download butt
 
 The binary applications, `oc` in this case, need to be able to use both Pull Secrets to pull and then subsequently push.  To do so we need to combine the Mirror Registry and the Red Hat Registry Pull Secrets and you can do so pretty easily with `jq`:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Define some variables with where the pull secrets currently reside
 MIRROR_PULL_SECRET_PATH="${MIRROR_BASE_PATH}/auth/mirror-pull-secret.json"
 ## This is the path where you saved the Red Hat Pull Secret from the last step
@@ -1072,7 +1072,7 @@ RED_HAT_PULL_SECRET_PATH="${MIRROR_BASE_PATH}/auth/red-hat-pull-secret.json"
 
 ## Combine into a single minified Pull Secret file
 jq -cM -s '{"auths": ( .[0].auths + .[1].auths ) }' ${MIRROR_PULL_SECRET_PATH} ${RED_HAT_PULL_SECRET_PATH} > ${MIRROR_BASE_PATH}/auth/compiled-pull-secret.json
-```
+{{< /code >}}
 
 ---
 
@@ -1086,7 +1086,7 @@ Since we are matching the versions that the Red Hat-hosted Assisted Installer pr
 
 The following is a pretty large loop as it iterates over the queried OpenShift versions and will download the binaries, container images, Operator Catalog, and create some needed configuration.
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Set ONLY_MIRROR_DEFAULT_VERSION to true in order to only mirror the default version
 ONLY_MIRROR_DEFAULT_VERSION="true"
 
@@ -1269,7 +1269,7 @@ echo $COMPILED_OPENSHIFT_VERSIONS_COMMA_FIX > ${MIRROR_BASE_PATH}/ai-svc/openshi
 
 ## Save the snippet of the generated imageContentSources spec for install-config.yaml files
 grep -A6 'imageContentSources:' $LOG_FILE | head -n7 > ${MIRROR_BASE_PATH}/image_content_sources.yaml
-```
+{{< /code >}}
 
 ***whew*** that was a doozy...to recap this is what that loop does in case you're not fond of reading the comments:
 
@@ -1299,7 +1299,7 @@ At this point you could utilize the mirrored content to deploy OpenShift via IPI
 
 The Assisted Installer Service is just an amalgamation of containers and configuration.  We can use some of the similar processes and functions to mirror the containers needed - thankfully there isn't a version for each OpenShift release so this is much more straight forward.
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Set the path for our combined Pull Secret from the last step
 PULL_SECRET_PATH="${MIRROR_BASE_PATH}/auth/compiled-pull-secret.json"
 ## LOCAL_REGISTRY is the FQDN or other resolvable endpoint for the mirrored container registry
@@ -1343,7 +1343,7 @@ for IMAGE in assisted-installer-agent assisted-installer assisted-installer-cont
 do
   ${MIRROR_BASE_PATH}/downloads/tools/${LATEST_VERSION_FULL}/oc -a ${PULL_SECRET_PATH} image mirror quay.io/edge-infrastructure/$IMAGE:stable ${LOCAL_REGISTRY}/edge-infrastructure/$IMAGE:stable
 done
-```
+{{< /code >}}
 
 ---
 
@@ -1355,7 +1355,7 @@ Before you can `podman run` you must `podman walk` - or rather you need to creat
 
 OAS has an Nginx configuration and a service configuration file that is required to start the various containers.  The Nginx configuration is pretty straightforward, it's the service configuration file that can be tricky.
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Create the Nginx configuration file
 cat > $MIRROR_BASE_PATH/ai-svc/volumes/opt/nginx-ui.conf <<EOF
 server {
@@ -1420,13 +1420,13 @@ HW_VALIDATOR_REQUIREMENTS=[{"version":"default","master":{"cpu_cores":4,"ram_mib
 # Enabled for SNO Deployments
 ENABLE_SINGLE_NODE_DNSMASQ=true
 EOF
-```
+{{< /code >}}
 
 ### Modified install-config.yaml
 
 Those are the two key configuration files needed to deploy the OpenShift Assisted Installer Service however there are a few other configuration files that also come in handy, such as a modified `install-config.yaml` file and the HAProxy and Nginx configuration needed to mirror content over HTTPS.
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 MIRROR_PULL_SECRET_PATH="${MIRROR_BASE_PATH}/auth/mirror-pull-secret.json"
 
 ## Create an example install-config.yaml
@@ -1461,11 +1461,11 @@ additionalTrustBundle: |
   $(cat $MIRROR_BASE_PATH/pki/ca.cert.pem | sed 's/^/  /')
 $(cat ${MIRROR_BASE_PATH}/image_content_sources.yaml)
 EOF
-```
+{{< /code >}}
 
 That is just a template `install-config.yaml` file that should pull in most of the needed components such as the Mirror Container Registry Pull Secret, the CA Certificate as an `.additionalTrustBundle` addition to the spec so that it will validate the Mirror Registry's and HTTP Mirror's SSL certificates, and if everything was logged properly then the `.imageContentSources` spec that will tell OpenShift where to look for containers, which should look something like this:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 imageContentSources:
 - mirrors:
   - mirror-vm.isolated.local/ocp4/openshift4
@@ -1473,13 +1473,13 @@ imageContentSources:
 - mirrors:
   - mirror-vm.isolated.local/ocp4/openshift4
   source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
-```
+{{< /code >}}
 
 ### Nginx Server
 
 There are a few resources that will be needed to be pulled from an HTTP server by the Assisted Installer or a PXE server - to do this we'll deploy an Nginx server with some simple configuration:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 cat > $MIRROR_BASE_PATH/mirror-ingress/nginx/templates/default.conf.template <<EOF
 server {
     listen       8080;
@@ -1495,13 +1495,13 @@ server {
     }
 }
 EOF
-```
+{{< /code >}}
 
 ### HAProxy Reverse Proxy
 
 For conveinience we'll put the Nginx server and Assisted Installer behind an HAProxy with a wildcard SSL certificate to secure everything.
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Set some variables
 MIRROR_VM_ISOLATED_BRIDGE_IFACE_IP="192.168.50.7"
 ISOLATED_AI_SVC_NGINX_IP="192.168.50.14"
@@ -1583,7 +1583,7 @@ backend aiwebui
   http-request add-header X-Forwarded-Proto https if { ssl_fc }
   http-response set-header Strict-Transport-Security "max-age=16000000; includeSubDomains; preload;"
 EOF
-```
+{{< /code >}}
 
 This HAProxy configuration will front an endpoint for the Container Image Registry with passthrough SSL, edge-terminated SSL for the Nginx HTTP server and Assisted Installer services.
 
@@ -1595,7 +1595,7 @@ Now that all the assets are available locally and the configuration has been cre
 
 We'll be starting things with Podman - most containers will be run independantly except for the set of containers for the Assisted Installer Service which will be run together as a Pod:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Set some variables
 ## DEFAULT_VERSION was set after the mirroring loop was run
 DEFAULT_VERSION="4.9.9"
@@ -1706,7 +1706,7 @@ podman run -dt --pod $ISOLATED_AI_SVC_ENDPOINT --name $ISOLATED_AI_SVC_WEB_UI_HO
   --env-file $MIRROR_BASE_PATH/ai-svc/volumes/opt/onprem-environment \
   -v $MIRROR_BASE_PATH/ai-svc/volumes/opt/nginx-ui.conf:/opt/bitnami/nginx/conf/server_blocks/nginx.conf:z \
   $LOCAL_REGISTRY/ocpmetal/ocp-metal-ui:stable
-```
+{{< /code >}}
 
 At this point, if you created the GUI Bastion VM in the isolated network, you can use a web browser to navigate to the Assisted Installer Service Endpoint (https://assisted-installer.isolated.local/) to access the OAS Web UI and create clusters!
 
@@ -1726,7 +1726,7 @@ We have everything mirrored and running on this weird Mirror VM that lives in-be
 
 The bulk of the processes are still the same, you just need to package up a few things and unpack them properly...let's start with the process to package things up nice and right:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Set some variables
 PACKAGE_AND_COMPRESS_DESTINATION_PATH="/opt"
 ISOLATED_AI_SVC_API_HOSTNAME="ai-api"
@@ -1776,11 +1776,11 @@ split -b 1G ${PACKAGE_AND_COMPRESS_DESTINATION_PATH}/offline-openshift-bundle.ta
 ## Create an MD5 hash table for integrity verification
 md5sum ${PACKAGE_AND_COMPRESS_DESTINATION_PATH}/* > ${MIRROR_BASE_PATH}/offline-openshift-bundle.md5
 mv ${MIRROR_BASE_PATH}/offline-openshift-bundle.md5 ${PACKAGE_AND_COMPRESS_DESTINATION_PATH}/offline-openshift-bundle.md5
-```
+{{< /code >}}
 
 Now just move those files to the disconnected network and do the following to unpackage:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Set some variables
 ARCHIVE_SOURCE_DIR="/mnt/extData"
 TARGET_EXTRACTION_DIR="/opt/offline-ai"
@@ -1816,7 +1816,7 @@ podman import $TARGET_EXTRACTION_DIR/downloads/dns-container.tar
 ## ?????
 
 ## PROFIT!!!!1
-```
+{{< /code >}}
 
 ## Credits
 

@@ -42,7 +42,7 @@ In case you don't already have IDM/FreeIPA installed, here's a little cheat-shee
 - Set it with a hostname, something like `idm.example.com`
 - Give it a static IP as well the following DNS records for the different services:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 A:
   - name: idm.example.com
     value: 1.2.3.4
@@ -105,13 +105,13 @@ TXT:
   - name: _kerberos
     ttl: 6400
     value: "EXAMPLE.COM"
-```
+{{< /code >}}
 
 *By the way, that YAML structure representing the DNS records can actually be dropped right into a [Go-Zones](https://github.com/kenmoini/go-zones) configuration file, which will also automatically create the reverse IP PTR record from the defined A record.*
 
 With the networking in place you can go ahead and install IDM:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Register the system wit Subscription Manager
 subscription-manager register
 
@@ -178,7 +178,7 @@ ipa-server-install --unattended \
   --mkhomedir \
   --no-ntp \
   --no-dns
-```
+{{< /code >}}
 
 At this point, you should be able to access the Web UI at `https://idm.example.com` and can login as `admin / s0m3S3cur3P455`.
 
@@ -298,7 +298,7 @@ Everything is in the right place for RH IDM/FreeIPA to automount the NFS shares 
 
 The following commands need to be run on every host that will allow logging in via RH IDM/FreeIPA:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 # Make sure to run these as root!
 
 # Install a few packages
@@ -322,7 +322,7 @@ ipa-client-automount
 
 # Reboot the system
 systemctl reboot
-```
+{{< /code >}}
 
 Once the system reboots you should be able to log in with a user from RH IDM/FreeIPA and have the home directory from the QNAP NAS' NFS server automatically mount!
 

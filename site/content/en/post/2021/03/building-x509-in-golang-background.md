@@ -117,12 +117,12 @@ This Index DB is nothing fancy - it's just a tab-delimited file (`\t`) and has a
 
 This is an example index file:
 
-```text
+{{< code lang="text" >}}
 V	310316000000Z		01	unknown	/O=Example Labs/OU=Example Labs Cyber and Information Security/CN=Example Labs Root Certificate Authority
 V	240316000000Z		02	unknown	/O=Example Labs/OU=Example Labs Cyber and Information Security/CN=Example Labs Intermediate Certificate Authority
 R	240316000000Z	240318000000Z	03	unknown	/O=Example Labs/OU=Example Labs Cyber and Information Security/CN=Example Labs OpenVPN Server
 V	240318000000Z		04	unknown	/O=Example Labs/OU=Example Labs Cyber and Information Security/CN=Example Labs OpenVPN Server
-```
+{{< /code >}}
 
 This Index file is meant to be modified during the creation and revocation workflow and on a periodic basis to check for Expired Certificates and set a Valid certificate to an Expired certificate in the Index.
 

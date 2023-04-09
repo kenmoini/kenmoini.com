@@ -61,7 +61,7 @@ Sounds pretty easy eh?  Well, there are a few minor steps in some of those large
 
 ### func.encryption.go
 
-```go
+{{< code lang="go" line-numbers="true" >}}
 
 // passphraseToHash returns a hexadecimal string of an SHA1 checksumed passphrase
 func passphraseToHash(pass string) (string, []byte) {
@@ -102,7 +102,7 @@ func encryptBytes(bytesIn []byte, passphrase string) []byte {
 	// Seal will encrypt the file using the GCM mode, appending the nonce and tag (MAC value) to the final data, so we can use it to decrypt it later.
 	return gcm.Seal(nonce, nonce, bytesIn, nil)
 }
-```
+{{< /code >}}
 
 Now, something to note about the encryption function is that it returns a byte slice - to store this in a file or transmit to some external source you'd want to encode the encrypted bytes with Base64.
 
@@ -110,7 +110,7 @@ Now, something to note about the encryption function is that it returns a byte s
 
 Decrypting the files is basically the same process but just in reverse...if coming in from a Base64 encoded source, ensure to decode it to the byte slice first.
 
-```go
+{{< code lang="go" line-numbers="true" >}}
 // decryptBytes takes in a byte slice from a file and a passphrase then returns if the encrypted byte slice was decrypted, if so the plaintext contents, and any errors
 func decryptBytes(bytesIn []byte, passphrase string) (decrypted bool, plaintextBytes []byte, err error) {
 	// bytesIn must be decoded from base 64 first
@@ -144,7 +144,7 @@ func decryptBytes(bytesIn []byte, passphrase string) (decrypted bool, plaintextB
 	// successfully decrypted
 	return true, plaintextBytes, nil
 }
-```
+{{< /code >}}
 
 ## Helper Functions
 
@@ -152,7 +152,7 @@ Some helper functions that'll make the rest of the above code work...and then so
 
 ### func.file.go
 
-```go
+{{< code lang="go" line-numbers="true" >}}
 // ReadFileToBytes will return the contents of a file as a byte slice
 func ReadFileToBytes(path string) ([]byte, error) {
 	absolutePath, err := filepath.Abs(path)
@@ -201,18 +201,18 @@ func B64DecodeBytesToBytes(input []byte) ([]byte, error) {
 func B64DecodeStrToBytes(input string) ([]byte, error) {
 	return b64.StdEncoding.DecodeString(input)
 }
-```
+{{< /code >}}
 
 ### func.logging.go
 
-```go
+{{< code lang="go" line-numbers="true" >}}
 // check does error checking
 func check(e error) {
 	if e != nil {
 		log.Printf("error: %v", e)
 	}
 }
-```
+{{< /code >}}
 
 ## Next Steps
 

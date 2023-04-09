@@ -57,7 +57,7 @@ If you already have WSL installed, you can skip this section, or just do it anyw
 
 On the Windows system, via a Powershell terminal with Administrative permissions, run the following:
 
-```powershell
+{{< code lang="powershell" line-numbers="true" >}}
 # Enable WSL2
 dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 
@@ -67,7 +67,7 @@ dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /nores
 ## Make some directories
 mkdir C:\WSLDistros\
 mkdir C:\WSLDistros\UBI8\
-```
+{{< /code >}}
 
 Now, restart your computer and you should be able to run WSL2!
 
@@ -79,7 +79,7 @@ WSL takes in a base Linux filesystem, such as one that would be present in a con
 
 Run the following on a Linux system, you will need to be able to sudo or run as root:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Fedora/RHEL Install buildah
 sudo dnf install -y buildah
 
@@ -100,7 +100,7 @@ cd $MNTPNT
 
 ## Create a tar file of the container filesystem, outside of the mounted filesystem
 tar cvf /opt/ubi8-init-buildah-base.tar .
-```
+{{< /code >}}
 
 With that, you should now have a tar file of the container filesystem that you can use to create a WSL distribution.
 
@@ -114,7 +114,7 @@ Now you can create a WSL distribution out of the tar file you just created.
 
 On the Windows system, via a Powershell terminal with Administrative permissions, run the following - assuming the `ubi8-init-buildah-base.tar` file was transferred to the `C:\WSLDistros\` directory:
 
-```powershell
+{{< code lang="powershell" line-numbers="true" >}}
 ## Set the default version to WSL2
 wsl --set-default-version 2
 
@@ -126,7 +126,7 @@ wsl -d UBI8
 
 ## Optionally set it as a default
 wsl --set-default UBI8
-```
+{{< /code >}}
 
 The UBI 8 WSL distribution should now be available for use - however, there's not much on it, so let's get it configured and install some things that a developer might want to use.
 
@@ -140,7 +140,7 @@ You can connect to the WSL distribution via a Powershell terminal and by running
 
 Once inside the WSL distribution by one manner or another, run the following:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Download the configuration script
 curl -O https://raw.githubusercontent.com/kenmoini/wsl-helper/main/configure_ubi_wsl.sh
 
@@ -152,11 +152,11 @@ vi configure_ubi_wsl.sh
 
 ## Run the configuration script
 ./configure_ubi_wsl.sh
-```
+{{< /code >}}
 
 When editing the `configure_ubi_wsl.sh` script, make sure to edit the following lines at the top:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 CREATE_USER="true"
 NEW_USERNAME="wsluser"
 NEW_USER_PASSWORD="somePassw0rd"
@@ -170,7 +170,7 @@ INSTALL_NODEJS="true"
 INSTALL_ANSIBLE="true"
 INSTALL_OCP_BINARIES="true"
 INSTALL_PODMAN="true"
-```
+{{< /code >}}
 
 - You may want a different username, and hopefully a different password for your user in the WSL distribution.
 - You may or may not want to install ZSH, Golang, Python, PHP, NodeJS, Ansible, OCP binaries, and Podman - just set the related variables to true/false.
@@ -195,8 +195,8 @@ Here's what it looks like with a few other echo tests:
 
 In case you are one of those organizations that is looking to leverage something like this, you can export the built WSL distribution to a tar file that can then be imported on other Windows systems.
 
-```powershell
+{{< code lang="powershell" line-numbers="true" >}}
 wsl --export UBI8 C:\WSLDistros\built-UBI8.tar
-```
+{{< /code >}}
 
 And that `C:\WSLDistros\built-UBI8.tar` file can be imported into a new WSL distribution on other systems to be used at scale!  *One could even go so far as to automate all of these steps with Ansible...*

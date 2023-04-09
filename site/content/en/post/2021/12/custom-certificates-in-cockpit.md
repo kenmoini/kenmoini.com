@@ -29,13 +29,13 @@ One of the most frequent run-ins with these self-signed certificates is with ***
 
 Cockpit is installed by default in RHEL 8, all that you need to do is enable it:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 systemctl enable --now cockpit.socket
-```
+{{< /code >}}
 
 On systems where it's not installed you can install it with the following:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Debian/Ubuntu-based Systems
 apt install cockpit
 
@@ -44,7 +44,7 @@ dnf install cockpit
 
 ## Don't forget to enable the service
 systemctl enable --now cockpit.socket
-```
+{{< /code >}}
 
 With that you can access the server at the system's IP address at port `9090` in your web browser - but then you'll see something like this because of the self-signed certificates:
 
@@ -60,16 +60,16 @@ To get rid of the self-signed certificate "This is not secure" warning sign the 
 
 Cockpit looks for certificates in the `/etc/cockpit/ws-certs.d` directory, sorts them alphabetically, and uses the last one.  You'll likely see something like the following files already in that directory:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 $ ls /etc/cockpit/ws-certs.d
 0-self-signed-ca.pem  0-self-signed.cert
-```
+{{< /code >}}
 
 Those are the self-signed certificates and the authority that are generated automatically - remove them with `rm /etc/cockpit/ws-certs.d/0-self-signed*`
 
 There are two files needed, a certificate and the key.  The certificate will be the server certificate PEM block appended by the intermediate certificate chain - so for me I do the following:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Create the Certificate, Server + Intermediate Chain
 cat ~/wildcard.kemo.labs.cert.pem > /etc/cockpit/ws-certs.d/99-wildcard.kemo.labs.cert
 cat ~/wildcard.kemo.labs.ca-chain.pem >> /etc/cockpit/ws-certs.d/99-wildcard.kemo.labs.cert
@@ -82,7 +82,7 @@ chown root:cockpit-ws 99-wildcard.kemo.labs.*
 
 ## Restart Cockpit
 systemctl restart cockpit
-```
+{{< /code >}}
 
 With the files in place, proper permissions, and the service restarted you should now see the Cockpit login screen without any self-signed certificate warning screens!
 

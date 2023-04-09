@@ -47,7 +47,7 @@ This will assume you generated your site.manifest file and needed icons with the
 **/con.txt** - This is just a sample file that exists for a connection test because 
 
 **/sw.js** - This is the Service Worker, a lot of the brains behind the operation
-{{< highlight js >}}
+{{< code lang="js" line-numbers="true" >}}
 //===================================================================================
 // Setup
 // - Define the name you want for your cache (var CACHE)
@@ -240,7 +240,7 @@ var returnFromCache = function(request){
   });
 };
 
-{{< / highlight >}}
+{{< /code >}}
 
 **/wp-content/themes/THEME_NAME/global_templates/pwa_header.php** - This file is included across all of my various header.php files in my WordPress install.  Basically the idea is to load this across your site inside the _&lt;head&gt;_ tag.  It will load the icons you generated, set some additional manifest info, styles for an Add-to-Homescreen banner, and the needed JS to register/use the service worker and all the extras built on top of it
 
@@ -419,12 +419,12 @@ var returnFromCache = function(request){
   });
 
 </script>
-{{< / highlight >}}
+{{< /code >}}
 
 **nginx config** The configured site has a 404 directive to point to the /404.html file we have at our webroot
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 error_page 404 /404.html;
-{{< / highlight >}}
+{{< /code >}}
 
 Now what I have is the [Fierce Software](https://fiercesw.com) loading lickity-split, caching resources, providing offline guidance and fallbacks, an integrated 404 page, Add-to-Homescreen functionality, and efficient routing!  For some reason the Service Worker and Chrome kept returning extra responses for a while which is why some things are commented out in the _sw.js - checkResponse_ function - the PWABuilder code isn't quite correct...
 

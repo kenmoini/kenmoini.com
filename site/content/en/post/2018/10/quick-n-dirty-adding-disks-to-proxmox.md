@@ -46,43 +46,43 @@ What I’m looking for is that ***/dev/sda*** device.  Let’s work with that.
 
 Next, we’ll initialize the partition table, let’s use ***cfdisk*** for that...
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ cfdisk /dev/sda
-{{< /highlight >}}
+{{< /code >}}
 
 Navigate around...
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 > New -> Primary -> Specify size in MB
 > Write
 > Quit
-{{< /highlight >}}
+{{< /code >}}
 
 Great, next let’s create a Physical Volume from that partition.  It’ll ask if you want to wipe, press ***Y***...
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ pvcreate /dev/sda1
-{{< /highlight >}}
+{{< /code >}}
 
 {{< figure src="/images/posts/legacyUnsorted/Screenshot-from-2018-10-07-21-46-52.png" link="/images/posts/legacyUnsorted/Screenshot-from-2018-10-07-21-46-52.png" target="_blank" class="col-sm-12 text-center" >}}
 
 Next we’ll extend the ***pve*** Volume Group with the new Physical Volume…
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ vgextend pve /dev/sda1
-{{< /highlight >}}
+{{< /code >}}
 
 We’re almost there, next let’s extend the logical volume for the PVE Data mapper…we’re increasing it by 251.50GB, you can find that size by seeing how much is available with the ***vgs*** command
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ lvextend /dev/pve/data -L +251.50g
-{{< /highlight >}}
+{{< /code >}}
 
 And that’s it! now if we jump into Proxmox and check the Storage across the Datacenter we can see it’s increased!  Or we can run the command...
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ lvdisplay
-{{< /highlight >}}
+{{< /code >}}
 
 ## Rinse and Repeat
 
@@ -90,33 +90,33 @@ Now we’re on my next Proxmox node.  No, I’m not building a cluster and provi
 
 My next system is a Dell R710 with Proxmox freshly installed on an internal 128gb USB flash drive.  It has two RAID1+1hot-spare arrays that are about 418GB large each, they’re at */dev/sdb* and */dev/sdc*.  Let’s add them really quickly...
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ cfdisk /dev/sdb
-{{< /highlight >}}
+{{< /code >}}
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 > GPT
 > New -> Primary -> Specify size in MB
 > Write
 > Quit
-{{< /highlight >}}
+{{< /code >}}
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ cfdisk /dev/sdc
-{{< /highlight >}}
+{{< /code >}}
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 > GPT
 > New -> Primary -> Specify size in MB
 > Write
 > Quit
-{{< /highlight >}}
+{{< /code >}}
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ pvcreate /dev/sdb1 && pvcreate /dev/sdc1
 $ vgextend pve /dev/sdb1 && vgextend pve /dev/sdc1
 $ lvextend /dev/pve/data -L +851.49g
-{{< /highlight >}}
+{{< /code >}}
 
 And now we should have just about a terabyte of storage available to load VMs into...
 

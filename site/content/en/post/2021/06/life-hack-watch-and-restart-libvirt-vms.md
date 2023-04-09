@@ -48,7 +48,7 @@ So in my general deployment process (found here: https://github.com/kenmoini/ocp
 
 With that list of Libvirt VMs, or what are traditionally known as Libvirt Domains, I could loop through the names of the VMs and check to see if it has been shut down yet from the reboot, and if so start it back up again until all the OpenShift Nodes were back online - including the bootstrap VM!
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 #!/bin/bash
 
 #set -x
@@ -104,7 +104,7 @@ while [ $LOOP_ON = "true" ]; do
     sleep 10
   fi
 done
-```
+{{< /code >}}
 
 So long as the VM name formats and counts are accounted for in the loops, this script will watch the VMs via `virsh`, wait until they are shut down, and reboot the nodes manually so the rest of the OpenShift installation process can progress!
 

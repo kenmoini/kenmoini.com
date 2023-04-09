@@ -69,17 +69,17 @@ To do so, install Guestfish via your distribution's packaging manager something 
 
 With that installed we can probably run the next set of commands:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 wget https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/latest/latest/rhcos-qemu.x86_64.qcow2.gz
 gunzip rhcos-qemu.x86_64.qcow2.gz
 guestfish -a rhcos-qemu.x64_64.qcow2
-```
+{{< /code >}}
 
 Now you should be presented with the `><fs>` shell prompt.  In the background guestfish uses libvirt to create a temporary machine domain in order to manipulate the image - don't worry, it's not booted or anything and and doesn't take much on the resource front.
 
 At the `><fs>` shell run the following commands to start libvirt, display the available filesystems, and mount our target:
 
-```text
+{{< code lang="text" >}}
 ><fs> launch
 ><fs> list-filesystems
 /dev/sda1: ext4
@@ -96,7 +96,7 @@ loader.1
 lost+found
 ostree
 ><fs> vi /ignition.firstboot
-```
+{{< /code >}}
 
 So with that we:
 
@@ -108,9 +108,9 @@ So with that we:
 
 Now we need to load that file up with the desired arguements - my environment is multi-zoned with 3 DNS servers, with the first server also providing the Ignition Generation web app.  I set the Instances to have Static IPs in IBM Cloud and have RHCOS pull that assigned IP via DHCP.  With that, my `/ignition.firstboot` file looks like this:
 
-```text
+{{< code lang="text" >}}
 set ignition_network_kcmdline='rd.neednet=1 ip=dhcp nameserver=10.128.10.10 nameserver=10.128.20.10 nameserver=10.128.30.10 coreos.inst.ignition_url=http://10.128.10.10/ignition_generator'
-```
+{{< /code >}}
 
 This being `vi`, use the `i` key on your keyboard to enter `--INSERT--` mode, add those modifications, press `ESC` on your keyboard to exit `--INSERT--` mode, type `:wq` to write the file and quit.
 

@@ -53,8 +53,8 @@ For the purposes of this deployment, we'll setup 3 HA Control Planes nodes and 3
 
 So first thing we need are some nodes to deploy this on - since not everyone has a bunch of NUCs or bare metal hosts laying around, we'll do this via VMs on Libvirt.
 
-```bash
+{{< code lang="bash" command-line="true" >}}
 
-```
+{{< /code >}}
 
 > If you're asking yourself "Is there a better way to do this?" - to which the answer would be "Yes there is."  Check out the Ansible Automation that handles this for me in my lab at scale.

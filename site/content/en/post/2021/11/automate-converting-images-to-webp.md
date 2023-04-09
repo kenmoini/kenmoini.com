@@ -52,7 +52,7 @@ The WebP libraries are open-source and you can compile them yourself - Google's 
 
 Grab the latest version of the binaries and libraries and extract it - I store these binary packages in a `./bin/` directory in my site project folder:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Switch to project root
 cd $YOUR_PROJECT_ROOT_PATH
 
@@ -68,7 +68,7 @@ tar zxvf libwebp-1.2.1-linux-x86-64.tar.gz
 
 ## Clean up
 rm libwebp-1.2.1-linux-x86-64.tar.gz
-```
+{{< /code >}}
 
 A few of the notable binaries are:
 
@@ -82,7 +82,7 @@ A few of the notable binaries are:
 
 When converting from JPG/PNG to WebP you may notice that some EXIF encoded data such as camera orientation doesn't quite make it to the other side - you can erase this information from the original image which will provide the same resulting image in the original and converted files.
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Switch to project binary path
 cd $YOUR_PROJECT_ROOT_PATH/bin
 
@@ -94,7 +94,7 @@ tar zxvf Image-ExifTool-12.36.tar.gz
 
 ## Clean up
 rm Image-ExifTool-12.36.tar.gz
-```
+{{< /code >}}
 
 The pre-built binary will be located at `./Image-ExifTool-12.36/exiftool` with the sources and libraries available in other subdirectories as well.
 
@@ -104,7 +104,7 @@ The pre-built binary will be located at `./Image-ExifTool-12.36/exiftool` with t
 
 Now that we have the binaries available it's about as easy as just running them to convert files - we can batch that out to add to our automated build processes.
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 #!/bin/bash
 
 # Remove EXIF data from images
@@ -126,7 +126,7 @@ if [ ! -f "$webp_path" ]; then
   echo "Converting $0 to $webp_path";
   ./libwebp-1.2.1-linux-x86-64/bin/cwebp -metadata none -quiet -q 75 "$0" -o "$webp_path";
 fi;' {} \;
-```
+{{< /code >}}
 
 With that script saved, make sure to set the executable bit with `chmod a+x`.
 
@@ -142,7 +142,7 @@ Say your website uses Hugo and you deploy to a container - how do you include th
 
 This step is pretty easy - just drop it into your Containerfile before you build the Hugo static site content.
 
-```docker
+{{< code lang="docker" line-numbers="true" >}}
 FROM quay.io/polyglotsystems/golang-ubi AS builder
 
 WORKDIR /workspace
@@ -152,7 +152,7 @@ COPY . /workspace
 RUN cd /workspace/site \
  && /workspace/bin/convert_images_to_webp.sh /workspace/site/static/images/ \
  && /workspace/bin/hugo-linux-amd64
-```
+{{< /code >}}
 
 ### Modify Hugo Templates
 
@@ -162,7 +162,7 @@ Now that we have images cleaned and converted during the build process, we can w
 
 First we'll define a partial to be used as a general function - this will convert `<img>` elements to `<picture>` elements, store it in your Hugo site under `layouts/partials/func/ImageToPicture.html`:
 
-```html
+{{< code lang="html" line-numbers="true" >}}
 {{/*
   ImageToPicture
   Converts a what would have been an <img> tag to a <picture> tag.
@@ -194,7 +194,7 @@ First we'll define a partial to be used as a general function - this will conver
     <img srcset="{{ $destImgPath | safeURL }}" alt="{{ .alt }}" loading="lazy" decoding="async" />
   </picture>
 </div>
-```
+{{< /code >}}
 
 #### Hugo Markdown Render Hooks
 
@@ -202,11 +202,11 @@ Something that is decently new in Hugo are [Render Hooks](https://gohugo.io/gett
 
 Create a new file in your Hugo site under `layouts/_default/_markup/render-image.html`:
 
-```html
+{{< code lang="html" line-numbers="true" >}}
 {{- $m := (dict "src" .Destination "alt" .Text) -}}
 {{ partial "func/ImageToPicture" $m }}
 <!-- Adapted from https://pawelgrzybek.com/webp-and-avif-images-on-a-hugo-website/ -->
-```
+{{< /code >}}
 
 This Image Markdown Render Hook will convert what would have been a generated `<img>` tag from a `![My image alt text](http://example.com/img/prettyPicture.png)` into the relevent `<picture>` tag.
 
@@ -220,7 +220,7 @@ Well, override the template files that use `<img>` tags to use the same function
 
 Say you have header images for your blog content - mayb you'd need to create a `layouts/partials/page/hero.html` to override the default one provided by your theme with something like this:
 
-```html
+{{< code lang="html" line-numbers="true" >}}
 <!--  ...  -->
 
     {{ with .Params.hero }}
@@ -233,7 +233,7 @@ Say you have header images for your blog content - mayb you'd need to create a `
     {{ end }}
 
 <!--  ...  -->
-```
+{{< /code >}}
 
 Find the other places in your theme's HTML that use a normal `<img>` tag and override with something similar.
 

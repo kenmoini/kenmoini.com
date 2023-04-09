@@ -60,13 +60,13 @@ Essentially I’ll (finally) get to the short part of how to fix your Bluetooth 
 
 So you want to use your nice, new, BLE 4.1 headset with your RHEL/CentOS 7 system…that low energy stuff is a little, well…newer than what is set by default so we just need to add a switch to the Bluetooth service execution script to enable those “fresh” and “hot” low energy features...
 
-{{< highlight bash >}}
-$ sudo nano /lib/systemd/system/bluetooth.service
-{{< / highlight >}}
+{{< code lang="bash" command-line="true" >}}
+sudo nano /lib/systemd/system/bluetooth.service
+{{< /code >}}
 
 Enable the experimental features by adding –experimental to the ExecStart line, for example the configuration should look like:
 
-{{< highlight bash >}}
+{{< code lang="ini" line-numbers="true" >}}
 ...
 [Service]
 Type=dbus
@@ -74,34 +74,34 @@ BusName=org.bluez
 ExecStart=/usr/local/libexec/bluetooth/bluetoothd --experimental
 NotifyAccess=main
 ...
-{{< / highlight >}}
+{{< /code >}}
 
 Save the file and then run the following commands:
 
-{{< highlight bash >}}
-$ sudo systemctl daemon-reload
-$ sudo systemctl restart bluetooth
-{{< / highlight >}}
+{{< code lang="bash" command-line="true" >}}
+sudo systemctl daemon-reload
+sudo systemctl restart bluetooth
+{{< /code >}}
 
 ## Step 2 – Set Trust
 
 So you’ll find that some of the GUI tools might not coordinate a Bluetooth device pair/trust properly…it only has to manage between the service, BlueZ daemon, and Pulseaudio (!), what is so difficult about that?
 Let’s just take the headache out of it and load up bluetoothctl, list my devices, and set a manual trust. This is assuming you’ve at least paired the BT device with the GUI tools, but it might vibrate oddly or disconnect quickly after connecting. There are ways to setup pairing via bluetoothctl as well, but the help command and manpages will go into that for you.
 
-{{< highlight bash >}}
-$ sudo bluetoothctl
+{{< code lang="bash" command-line="true" output="3" >}}
+sudo bluetoothctl
 > devices
   Device XX:XX:XX:XX:XX:XX
 > trust XX:XX:XX:XX:XX:XX
-{{< / highlight >}}
+{{< /code >}}
 
 ## Step 3 – Create /etc/bluetooth/audio.conf
 
 So now we have it paired, trusted, and the newer BLE 4.1 features enabled. If your BT headset also includes a microphone for call functionality, you might find the headset auto-connecting to the lower quality HSP/HFP profile. We want that tasty, stereo sound from the A2DP profile. Let’s tell the BlueZ daemon to auto-connect to that A2DP sink.
 
-{{< highlight bash >}}
+{{< code lang="bash" command-line="true" >}}
 $ sudo echo "AutoConnect=true" > /etc/bluetooth/audio.conf
 $ sudo systemctl restart bluetooth.service
-{{< / highlight >}}
+{{< /code >}}
 
 Now, turn off and on your headset, it should auto-connect, and your Bluetooth 4.1 LE headphones should work all fine and dandy now with high(er) fidelity sound!

@@ -77,29 +77,29 @@ Before we proceed, let’s go along with the following understandings of your Li
 
 I’m starting with a fresh RHEL VM here, so the first thing I want to do is jump into root and set my hostname for my router, update packages, and install the ones we’ll need.
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ sudo -i
 $ hostnamectl set-hostname router.kemo.priv-int
 $ yum update -y
 $ yum install firewalld dnsmasq bind-utils
-{{< /highlight >}}
+{{< /code >}}
 
 Now that we’ve got everything set up, let’s jump right into configuring the network interface connections.  As I’m sure you all remember from your RHCSA exam prep, we’ll assign a connection to the eth1 interface to set up the static IP of the router on the LAN side and bring it up.  So assuming that your WAN on eth0 is already up (check with nmcli con show) and has a connection via DHCP, let’s make a connection for LAN/eth1 (my enp0s8)...
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ nmcli con add con-name lanSide-enp0s8 ifname enp0s8 type ethernet ip4 192.168.69.1/24 gw4 192.168.69.1
 $ nmcli con modify lanSide-enp0s8 ipv4.dns 192.168.69.1
-{{< /highlight >}}
+{{< /code >}}
 
 Before we bring up the connection, let’s set up dnsmasq.  dnsmasq will serve as both our DNS and DHCP servers which is really nice!  Go ahead and open /etc/dnsmasq.conf with your favorite editor...
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ vi /etc/dnsmasq.conf
-{{< /highlight >}}
+{{< /code >}}
 
 And add the following lines:
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 # Bind dnsmasq to only serving on the LAN interface
 interface=enp0s8
 bind-interfaces
@@ -118,34 +118,34 @@ domain=kemo.priv-int,192.168.69.0/24
 local=/kemo.priv-int/
 # Add domain name automatically
 expand-hosts
-{{< /highlight >}}
+{{< /code >}}
 
 Annnd go ahead and save that file.
 
 Now, on a RHEL/CentOS 7 machine, we have firewalld enabled by default so let’s make sure to enable those services.
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ firewall-cmd --add-service=dns --permanent
 $ firewall-cmd --add-service=dhcp --permanent
 $ firewall-cmd --add-service=ntp --permanent
 $ firewall-cmd --reload
-{{< /highlight >}}
+{{< /code >}}
 
 Next, we’ll need to tell the Linux kernel to forward packets by modifying the /etc/sysctl.conf file and add the following line:
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 net.ipv4.ip_forward=1
-{{< /highlight >}}
+{{< /code >}}
 
 It might already be in the file but commented out, so simply remove the pound/hashtag in front and that’ll do.  Still, need to enable it though:
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ echo 1 > /proc/sys/net/ipv4/ip_forward
-{{< /highlight >}}
+{{< /code >}}
 
 Yep, almost set so let’s just bring up the network interface connection for eth1, set some iptable NAT masquerading and save it, and enable dnsmasq...
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ iptables -t nat -A POSTROUTING -o enp0s3 -j MASQUERADE
 $ iptables -A FORWARD -i enp0s3 -o enp0s8 -m state --state RELATED,ESTABLISHED -j ACCEPT
 $ iptables -A FORWARD -i enp0s8 -o enp0s3 -j ACCEPT
@@ -153,15 +153,15 @@ $ firewall-cmd --permanent --direct --passthrough ipv4 -t nat -I POSTROUTING -o 
 $ iptables-save > /etc/iptables.ipv4.nat
 $ nmcli con up lanSide-enp0s8
 $ systemctl enable dnsmasq && systemctl start dnsmasq
-{{< /highlight >}}
+{{< /code >}}
 
 ## Step 2 – Connect Clients & Test
 
 So this part is pretty easy actually, you’ll just need to connect the clients/nodes to the same switch, or make a few other VMs in the same internal network.  Then you can check for DHCP leases with the following command:
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ tail -f /var/lib/dnsmasq/dnsmasq.leases
-{{< /highlight >}}
+{{< /code >}}
 
 And you should see the lease time, MAC address, associated IP, and client hostname listed for each connected client on this routed network!  We should be able to ping all those hostnames now too...
 
@@ -173,18 +173,18 @@ Here most people would choose to use NTPd which is perfectly fine.  However, RHE
 
 Essentially, we just need to modify the /etc/chrony.conf and set the following lines:
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 stratumweight 0
 local stratum 10
 allow 192.168.69.0/24
-{{< /highlight >}}
+{{< /code >}}
 
 After that, enable NTP synchronization and restart with:
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 timedatectl set-ntp 1
 systemctl restart chronyd
-{{< /highlight >}}
+{{< /code >}}
 
 And give that a moment to sync and you should have a fully functional network core based on simple Linux and a few packages!
 

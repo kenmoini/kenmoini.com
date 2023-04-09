@@ -64,7 +64,7 @@ This guide will show you how to swim in the wave pool with some steps into Servi
 
 First thing you're gonna need is to download a few components, Python (2.7), pip, Terraform, the Linode CLI, and some SSH application.  Honestly, I tried installing this from my Windows 10 desktop with Git Bash and it did not work at all.  Deployed it from my Linux laptop and boom worked right away.  So honestly, I'd just roll a Linux VM if you don't use it as your daily driver.  It'll also make interacting with the Kubernetes cluster that much easier.  For these purposes, I installed a fresh copy of Fedora 30 Workstation as a VM on my desktop, ensuring the network is set to Bridge Mode to my home router – NAT messes everything up with Terraform for some reason...  If you do the same then you can run the following commands to get it up to speed:
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ sudo yum update -y
 $ sudo yum install python2-pip wget curl
 $ sudo pip install linode-cli
@@ -72,7 +72,7 @@ $ wget https://releases.hashicorp.com/terraform/0.11.14/terraform_0.11.14_linux_
 $ chmod +x terraform
 $ sudo mv terraform /usr/bin/
 $ ssh-keygen -t rsa -b 4096
-{{< /highlight >}}
+{{< /code >}}
 
 What that does is:
 
@@ -86,9 +86,9 @@ Next you'll need to install kubeadm, kubelet, and kubectl – follow the instruc
 
 Now you'll need to create a **Personal Access Token** in the Linode Cloud Manager.  Head on over to https://cloud.linode.com/profile/tokens and create a new **Personal Access Token**.  Once you have that, the last step of setup is to paste it in when prompted by running the Linode CLI command:
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ linode-cli
-{{< /highlight >}}
+{{< /code >}}
 
 Enter your Personal Access Token and you'll be able to continue with the creation of the Kubernetes cluster.
 Once you enter your token, you'll be prompted for some preferences. First, you'll select your **Default Region**, then the **Default Type of Linode** to deploy – choose your region, the type I suggest is g6-standard-2.  The next question about **Default Image to Deploy** I'd suggest skipping.  You can reconfigure these defaults at any time by running ***linode-cli configure***.
@@ -97,9 +97,9 @@ Once you enter your token, you'll be prompted for some preferences. First, you'l
 
 This is actually pretty easy – most of the work so far is getting things set up to run this one command (replacing your-cluster-name with...well...):
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ linode-cli k8s-alpha create your-cluster-name
-{{< /highlight >}}
+{{< /code >}}
 
 The default configuration will use the SSH key we created earlier and spin up 4 new Linodes, 1 Kubernetes Master and 3 Kubernetes Application nodes, all at g6-standard-2 in your default region.  What will happen is a Terraform configuration will be generated and it will ask you to approve these actions – just type in “yes” then wait a few minutes.  Ok, actually you'll wait probably about 15-30 minutes for the cluster to spin up.  As of this writing it's not the latest and greatest Kubernetes version out, 1.15 but rather the cluster is set to install Kubernetes 1.13.6 which all in all isn't too bad as that's closer to what Red Hat OpenShift 3.11 is running right now.
 
@@ -109,11 +109,11 @@ The default configuration will use the SSH key we created earlier and spin up 4 
 
 Kubernetes is a platform – a platform that lets you build other platforms...ha.  Either way, the normal way you'll be interacting with the cluster is via the command line – this is because Kubernetes is intended to be heavily automated.  That's not fun though and we like Web UIs and Dashboards!  Once the cluster is spun up, run the following commands:
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ kubectl cluster-info
 $ kubectl get pods --all-namespaces
 $ kubectl proxy
-{{< /highlight >}}
+{{< /code >}}
 
 Those commands do the following:
 
@@ -139,7 +139,7 @@ kind: ServiceAccount
 metadata:
   name: YOUR-USER-NAME
   namespace: kube-system
-{{< /highlight >}}
+{{< /code >}}
 
 **add-cluster-admin-role.yaml**
 
@@ -156,20 +156,20 @@ subjects:
 - kind: ServiceAccount
   name: YOUR-USER-NAME
   namespace: kube-system
-{{< /highlight >}}
+{{< /code >}}
 
 Once you have those two files made, you can run them against your Kubernetes cluster by running the following commands:
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ kubectl apply -f create-user.yaml
 $ kubectl apply -f add-cluster-admin-role.yaml
-{{< /highlight >}}
+{{< /code >}}
 
 Something to make mention here is that we've just created a user with the cluster-admin role, which means they are as you can imagine, super-admin across the whole cluster and all namespaces. Be very careful with this user – but you'll notice we didn't apply a password. This is because we'll be using a Secret, specifically this user's Bearer Token which is another form of authentication that's tied to the user we just created. To find your user's Bearer Token run the following command, replacing YOUR-USER-NAME with whatever you chose earlier:
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep YOUR-USER-NAME | awk '{print $1}')
-{{< /highlight >}}
+{{< /code >}}
 
 That will spit out your Service Account's Bearer Token, which you can use to authenticate with the cluster via things like the Kubernetes Dashboard…go back to that link http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/ and paste in your Bearer Token and you should now be greeted with full access to your Kubernetes cluster via the Dashboard! Woohoo! FINALLY!  We can start doing Kubernetes, right?!  Wrong.
 
@@ -179,12 +179,12 @@ That will spit out your Service Account's Bearer Token, which you can use to aut
 
 Helm Charts are a great way to deploy a set of Kubernetes objects as a bundle and has mechanisms for management and upgrades – think of it as the Kubernetes package manager.  There are other technologies similar to this such as Kubernetes Operators, you can use either or both.  Here we'll set up Helm and Tiller.  Helm is the client-side portion while Tiller is deployed onto the Kubernetes cluster and runs the Helm Charts.  It's pretty easy to deploy – you can glance at the instructions here, find your specific release and unpack it into a PATH directory.  Assuming you're running Linux AMD64 as I am, here are the commands as of the writing of this guide:
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ wget https://get.helm.sh/helm-v2.14.1-linux-amd64.tar.gz
 $ tar zxvf helm-v2*.tar.gz
 $ sudo mv linux-amd64/helm /usr/local/bin/helm
 $ helm --help
-{{< /highlight >}}
+{{< /code >}}
 
 {{< figure src="/images/posts/legacyUnsorted/DmO3i5WWwAAUq4w.jpg" class="col-sm-12 text-center" >}}
 
@@ -211,17 +211,17 @@ subjects:
   - kind: ServiceAccount
     name: tiller
     namespace: kube-system
-{{< /highlight >}}
+{{< /code >}}
 
 Then apply the new Service Account to the cluster with the following command:
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ kubectl apply -f tiller-rbac-config.yaml
-{{< /highlight >}}
+{{< /code >}}
 
 We can't deploy Helm and Tiller yet to the cluster – we still need to create some SSL certs as by default Tiller is left to be used by anyone, yikes! Let's generate a few SSL certs – the following will be a series of commands though you'll need to answer a few questions in most of the commands to continue:
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ mkdir helm-tiller-certs && cd helm-tiller-certs
 $ echo subjectAltName=IP:127.0.0.1 > extfile.cnf
 $ openssl genrsa -out ./ca.key.pem 4096
@@ -235,7 +235,7 @@ $ openssl x509 -req -CA ca.cert.pem -CAkey ca.key.pem -CAcreateserial -in helm.c
 $ cp ca.cert.pem $(helm home)/ca.pem
 $ cp helm.cert.pem $(helm home)/cert.pem
 $ cp helm.key.pem $(helm home)/key.pem
-{{< /highlight >}}
+{{< /code >}}
 
 At this point, we should have generated a bunch of keys and certificates such as:
 
@@ -252,7 +252,7 @@ At this point, we should have generated a bunch of keys and certificates such as
 You can read more about the PKI process here: https://helm.sh/docs/using_helm/#generating-certificate-authorities-and-certificates
 Now, finally we can deploy Helm and Tiller to the Kubernetes cluster:
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ helm init \
 --override 'spec.template.spec.containers[0].command'='{/tiller,--storage=secret}' \
 --tiller-tls \
@@ -262,24 +262,24 @@ $ helm init \
 --tls-ca-cert=ca.cert.pem \
 --service-account=tiller \
 --history-max 200
-{{< /highlight >}}
+{{< /code >}}
 
 If all goes well, that should install the Tiller component on the Kubernetes cluster. To access Tiller you'll need to forward a port from the cluster to your local machine. You can test it with the following commands:
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ kubectl -n kube-system port-forward svc/tiller-deploy 44134:44134
 $ helm install stable/minio --tls --name my-minio
 $ helm list --tls
 $ helm delete my-minio --tls
-{{< /highlight >}}
+{{< /code >}}
 
 ## Ingress Controller
 
 There are a few different Ingress Controllers you can use such as a NodePort or Load Balancer, but for our purposes let's use an Nginx Ingress Controller as it's a little more flexible.  Also, when deploying a Load Balancer directly into Linode's NodeBalancer service, the charges start to stack up quickly.  Thankfully we can quickly deploy an Nginx Ingress Controller with a Helm Chart...
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ helm install stable/nginx-ingress --name nginx-ingress --set rbac.create=true --tls
-{{< /highlight >}}
+{{< /code >}}
 
 That will deploy an Nginx Ingress Controller which will create a Linode NodeBalancer pointing to your nodes. This is where things get kinda slick – we're only going to need one NodeBalancer as this Ingress Controller can route any domain we have pointing to it! Let's make sure to do that – this is the time that you'll add the desired DNS records.
 
@@ -301,9 +301,9 @@ Here are the general steps to do this One NodeBalancer + Wildcard DNS thing; you
 
 So one last thing you need to do is delete the ExternalDNS deployment in your Kubernetes cluster. As of this writing, the K8s cluster deployed with the linode-cli will try to provision DNS entries in Linode for every ingress route you publish on the cluster – Snoozeville, that takes too long. This can be bad since it'll create A records pointing the specific route directly to the external Kubernetes Worker Node IP address. We don't want this as it'll override the wildcards and any other DNS we set to the NodeBalancer. Go ahead and delete the ExternalDNS deployment with:
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ kubectl delete deployment -n kube-system external-dns
-{{< /highlight >}}
+{{< /code >}}
 
 ## On-Demand SSL Certificates for Routes
 
@@ -313,40 +313,40 @@ Once we've got DNS routing all our desired domains to the NodeBalancer in front 
 
 First, we need a service to route to…let's use the KUAR Demo application.
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.8/docs/tutorials/acme/quick-start/example/deployment.yaml
 $ kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.8/docs/tutorials/acme/quick-start/example/service.yaml
-{{< /highlight >}}
+{{< /code >}}
 
 So we've got a basic application and service on the cluster, let's install the cert-manager service [as described by the [documentation](https://github.com/jetstack/cert-manager/blob/master/docs/tutorials/acme/quick-start/index.rst)]:
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.8/deploy/manifests/00-crds.yaml
 $ kubectl create namespace cert-manager
 $ kubectl label namespace cert-manager certmanager.k8s.io/disable-validation=true
 $ helm repo add jetstack https://charts.jetstack.io
 $ helm repo update
 $ helm install --tls --name cert-manager --namespace cert-manager --version v0.8.1 jetstack/cert-manager
-{{< /highlight >}}
+{{< /code >}}
 
 Give that a few seconds and you should have cert-manager deployed. We still need to provide it some certificate Issuers – we'll use the trusty Let's Encrypt with their Staging and Production issuers. The next few lines will create new Kubernetes objects but will allow you to modify the YAML file before importing – you'll need to add your email address at the appropriate lines:
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ kubectl create --edit -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.8/docs/tutorials/acme/quick-start/example/staging-issuer.yaml
 $ kubectl create --edit -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.8/docs/tutorials/acme/quick-start/example/production-issuer.yaml
-{{< /highlight >}}
+{{< /code >}}
 
 Now you can use the staging Let's Encrypt issuer which isn't rate-limited and great for testing:
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ kubectl create --edit -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.8/docs/tutorials/acme/quick-start/example/ingress-tls.yaml
-{{< /highlight >}}
+{{< /code >}}
 
 Once you edit and deploy that you should have an SSL Certificate provided to that domain on that Ingress – it'll still an “invalid” self-signed cert but it should be issued directly to that domain. If so, then you can delete that ingress and deploy the final production issued SSL certificates with:
 
-{{< highlight bash >}}
+{{< code lang="bash" line-numbers="true" >}}
 $ kubectl create --edit -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.8/docs/tutorials/acme/quick-start/example/ingress-tls-final.yaml
-{{< /highlight >}}
+{{< /code >}}
 
 If all things so far have gone well you should now be able to access your KUAR Demo (kuard) service that's being exposed via an ingress with a valid SSL certificate now!
 

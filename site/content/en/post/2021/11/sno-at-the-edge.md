@@ -200,7 +200,7 @@ To set NMState configuration with the Assisted Installer service, you have to do
 
 Make sure to get the Cluster UUID from the Assisted Installer Service, it's part of the URL in the Address Bar of your browser:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ###############################################################################
 ## Change these in case you're using a self-hosted Assisted Installer service
 AI_SVC_ENDPOINT="https://api.openshift.com"
@@ -277,7 +277,7 @@ curl -H "Authorization: Bearer $AI_SVC_API_TOKEN" \
 ## Clean Up
 rm $NMSTATE_BODY
 rm $JSON_BODY
-```
+{{< /code >}}
 
 ***Note:*** Of course the IP and MAC Addresses have to match but also the logical NIC name, `ens3` in this case on Nutanix, needs to match or else the static networking will not take.
 

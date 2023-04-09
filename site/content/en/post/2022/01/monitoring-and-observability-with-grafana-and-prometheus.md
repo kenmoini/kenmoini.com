@@ -68,9 +68,9 @@ Before setting up the centralized metrics services, let's deploy Node Exporter t
 
 Make a few directories for our Ansible Automation files - this won't be the full set of normal directories since the logic isn't too complicated and the tasks and variables will be kept to a single Playbook:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 mkdir -p /opt/ansible-projects/node-exporter/files
-```
+{{< /code >}}
 
 ---
 
@@ -80,7 +80,7 @@ Next, define an Inventory file containing the RHEL hosts that will run the Node 
 
 ##### `/opt/ansible-projects/node-exporter/inventory`
 
-```ini
+{{< code lang="ini" line-numbers="true" >}}
 [nodeExporterHosts]
 raza ansible_host=192.168.42.40
 suki ansible_host=192.168.42.46
@@ -90,7 +90,7 @@ endurance ansible_host=192.168.42.49
 ansible_ssh_user=kemo
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 ansible_ssh_private_key_file=~/.ssh/MasterKemoKey.pem
-```
+{{< /code >}}
 
 ---
 
@@ -100,7 +100,7 @@ Ansible will be used to deploy a SystemD service to the different Linux hosts - 
 
 ##### `/opt/ansible-projects/node-exporter/files/node-exporter.service`
 
-```ini
+{{< code lang="ini" line-numbers="true" >}}
 [Unit]
 Description=Metrics Prometheus Node Exporter Container
 After=network-online.target
@@ -117,7 +117,7 @@ Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
-```
+{{< /code >}}
 
 ---
 
@@ -127,7 +127,7 @@ Now we need a small script that will store the logic to actually start and stop 
 
 ##### `/opt/ansible-projects/node-exporter/files/containerctl.sh`
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 #!/bin/bash
 
 ################################################################################### SERVICE VARIABLES
@@ -178,13 +178,13 @@ case $1 in
     ;;
 
 esac
-```
+{{< /code >}}
 
 ### Ansible Playbook
 
 Now we can create the Ansible Playbook that will perform some automation across our 3 defined inventory hosts:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 ---
 - name: Deploy Node Exporter to Linux Hosts
   hosts: nodeExporterHosts
@@ -266,7 +266,7 @@ Now we can create the Ansible Playbook that will perform some automation across 
         name: node-exporter
         state: restarted
         enabled: yes
-```
+{{< /code >}}
 
 
 
@@ -284,7 +284,7 @@ Now what needs to be done is setting up the central resources which involves a f
 
 There are a few directories that need to be made to support the different container configurations and volumes - make them with the following commands:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Create the secret directory
 mkdir -p /opt/service-containers/metrics/secrets
 
@@ -298,7 +298,7 @@ mkdir -p /opt/service-containers/metrics/volumes/grafana-provisioning/{dashboard
 mkdir -p /opt/service-containers/metrics/volumes/prom-config
 mkdir -p /opt/service-containers/metrics/volumes/prom-data
 mkdir -p /opt/service-containers/metrics/volumes/alertmanager-data
-```
+{{< /code >}}
 
 Now to load up those directories!
 
@@ -312,7 +312,7 @@ We'll use SystemD to control the ensemble of pods but the SystemD unit file look
 
 ##### `/opt/service-containers/metrics/podctl.sh`
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 #!/bin/bash
 
 ################################################################################### SERVICE VARIABLES
@@ -467,7 +467,7 @@ case $1 in
     ;;
 
 esac
-```
+{{< /code >}}
 
 What that script does is:
 
@@ -484,7 +484,7 @@ With the control script created, let's make the SystemD service unit file:
 
 ##### `/etc/systemd/system/metrics-ensemble.service`
 
-```ini
+{{< code lang="ini" line-numbers="true" >}}
 [Unit]
 Description=Metrics Ensemble
 After=network-online.target
@@ -500,7 +500,7 @@ ExecReload=/opt/service-containers/metrics/podctl.sh restart
 
 [Install]
 WantedBy=multi-user.target
-```
+{{< /code >}}
 
 With that unit file created make sure to reload SystemD: `systemctl daemon-reload`
 
@@ -514,7 +514,7 @@ Prometheus is the time-series database that scrapes and aggrigates all the diffe
 
 ##### `/opt/service-containers/metrics/volumes/prom-config/prometheus.yml`
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 global:
   scrape_interval: 10s
   scrape_timeout: 5s
@@ -535,7 +535,7 @@ scrape_configs:
   - targets: ['raza.kemo.labs:9100']
   - targets: ['suki.kemo.labs:9100']
   - targets: ['endurance.kemo.labs:9100']
-```
+{{< /code >}}
 
 A few key parts of that YAML document are:
 
@@ -551,9 +551,9 @@ You can find other Prometheus configuration options by [reading more here](https
 
 Instead of passing the default user password into env vars plaintext we can store the value in a file that will be read when the container starts - the init script defined above already has it defined and will look for the password in `/opt/service-containers/secrets/grafana-admin-password`
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 echo "someR3allyS3cur3Pa55" > /opt/service-containers/metrics/secrets/grafana-admin-password
-```
+{{< /code >}}
 
 ---
 
@@ -563,7 +563,7 @@ Since this ensemble uses a PostgreSQL DB for configuration persistence we need t
 
 ##### `/opt/service-containers/metrics/volumes/grafana-config/grafana.ini`
 
-```ini
+{{< code lang="ini" line-numbers="true" >}}
 # default section
 instance_name = grafana
 
@@ -577,7 +577,7 @@ host = 127.0.0.1:5432
 name = grafana
 user = metrics
 password = observability
-```
+{{< /code >}}
 
 *The database connection details are defined as environment variables passed to the PostgreSQL container in the above init script.*
 
@@ -589,7 +589,7 @@ Next we'll define what Data Sources Grafana will use - in this case it's simply 
 
 ##### `/opt/service-containers/metrics/volumes/grafana-provisioning/datsources/datasource.yml`
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 apiVersion: 1
 datasources:
 - name: Prometheus
@@ -598,7 +598,7 @@ datasources:
   isDefault: true
   access: proxy
   editable: true
-```
+{{< /code >}}
 
 Different options exist for different Data Sources, to learn more about the available configuration options, [read more here](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources).
 
@@ -610,7 +610,7 @@ Grafana needs to know what sources to pull Dashboards from during automatic prov
 
 ##### `/opt/service-containers/metrics/volumes/grafana-provisioning/dashboards/all.yml`
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 apiVersion: 1
 providers:
 - name: dashboards
@@ -620,7 +620,7 @@ providers:
   options:
     path: /opt/bitnami/grafana/conf/provisioning
     foldersFromFilesStructure: true
-```
+{{< /code >}}
 
 There are various options that can be set for Dashboards during the Provisioning process, [read more here](https://grafana.com/docs/grafana/latest/administration/provisioning/#dashboards).
 
@@ -630,7 +630,7 @@ There are various options that can be set for Dashboards during the Provisioning
 
 Before getting to far and smashing that *Start* button, a few permissions need to be set in order for the different containers to access (or not access) mounted file systems:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Set the permissions so the container can access the filesystem
 
 ## Bitnami containers classically run as 1001:1001 - set that for Grafana n Co
@@ -648,7 +648,7 @@ chmod a+x /opt/service-containers/metrics/podctl.sh
 
 ## Reload SystemD in case it wasn't done before
 systemctl daemon-reload
-```
+{{< /code >}}
 
 ***Note:*** If you still get *Permission Denied* errors from the container logs it might be AppArmor/SELinux...I have SELinux disabled because I'm a lazy bastard.
 
@@ -658,7 +658,7 @@ systemctl daemon-reload
 
 With everything in place, it's time to start things up!  And it's more or less a push-button operation now - before having SystemD start the containers, test it by calling the init script manually:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Do a start test of the init script
 /opt/service-containers/metrics/podctl.sh start
 
@@ -667,13 +667,13 @@ With everything in place, it's time to start things up!  And it's more or less a
 
 ## Do a stop test of the init script
 /opt/service-containers/metrics/podctl.sh stop
-```
+{{< /code >}}
 
 If everything started/restarted/stopped without errors then enable and start the SystemD service!
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 systemctl enable --now metrics-ensemble
-```
+{{< /code >}}
 
 From here you can access the Grafana WebUI from Port 3000 - or if you can setup an [Ingress with HAProxy](/post/2021/10/homelab-haproxy-ingress-with-letsencrypt/) and access something like https://grafana.example.com/ secured by a wildcard certificate on standard ports.
 
@@ -699,12 +699,12 @@ Since we're going to pull in Linux system information, the Dashboard for this ar
 
 You can download the latest version with the following:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 mkdir -p /opt/service-containers/metrics/grafana-provisioning/dashboards/Lab\ Infrastructure/
 cd /opt/service-containers/metrics/grafana-provisioning/dashboards/Lab\ Infrastructure/
 
 wget -O node-exporter-full.json https://grafana.com/api/dashboards/1860/revisions/latest/download 
-```
+{{< /code >}}
 
 With that Dashboard located to be mounted by the container, Grafana will automatically load it and store it in a ***Lab Infrastructure*** folder logically in the Dashboard browser.
 

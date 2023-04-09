@@ -50,13 +50,13 @@ Podman Desktop still relies on WSL2 to run containers - this operates with the `
 
 On your Windows system, via a Powershell terminal with Administrative permissions, run the following:
 
-```powershell
+{{< code lang="powershell" line-numbers="true" >}}
 # Enable WSL2
 dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 
 # Enable VM Platform for WSL2
 dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
-```
+{{< /code >}}
 
 ### Podman Windows Binary
 

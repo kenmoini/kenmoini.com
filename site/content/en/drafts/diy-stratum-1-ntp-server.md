@@ -81,7 +81,7 @@ So this should be pretty general for setting up a Raspberry Pi, you'll image Ras
 
 There are a few ways to do most of that and this is some of how I did it:
 
-```bash
+{{< code lang="bash" command-line="true" >}}
 ############################################ Set password for pi user
 passwd pi
 
@@ -125,4 +125,4 @@ raspi-config
 
 ############################################ Reboot
 reboot
-```
+{{< /code >}}

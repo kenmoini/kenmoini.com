@@ -38,7 +38,7 @@ If you don't already have an OpenVPN server you could do something like:
 2. Set `vpn.example.com` and `vpn-ca.example.com` A Record DNS entries pointing to that VPS
 3. Run the following to set up an OpenVPN server:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Update
 sudo dnf update -y
 
@@ -62,7 +62,7 @@ ansible-playbook -i inventory configure.yaml
 ## Create linux users for the OpenVPN Clients
 useradd -s /bin/false -G openvpn -M vpnUser1
 passwd vpnUser1
-```
+{{< /code >}}
 
 ---
 
@@ -78,7 +78,7 @@ I love putting things in containers but honestly it's just so much easier in a V
 
 Just some basic steps, updates and whatnot to get Deluge going as a [SystemD Service](https://deluge.readthedocs.io/en/latest/how-to/systemd-service.html):
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Switch to root
 sudo -i
 
@@ -173,7 +173,7 @@ systemctl enable --now deluge-web
 
 ## Reboot
 systemctl reboot
-```
+{{< /code >}}
 
 Once the server has rebooted you should be able to access the Deluge Web UI at the IP of that VM at port 8112.
 
@@ -185,7 +185,7 @@ For this set up we'll be routing all traffic on this Deluge VM through the OpenV
 
 On the same Deluge VM, download the Client OpenVPN config file and set up a SystemD Client Service:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Download the OpenVPN config file from wherever you have it - scp it over, etc
 wget -O /etc/openvpn/client/client.conf https://vpn.example.com/openvpn-base-client-config.ovpn
 
@@ -207,7 +207,7 @@ systemctl status openvpn-client@client
 
 ## The following result should match your VPN Server IP Address once connected
 curl ipinfo.io/ip
-```
+{{< /code >}}
 
 ---
 
@@ -221,7 +221,7 @@ The following assumes:
 - The Remote OpenVPN Server has a public IP of ***12.34.56.78***
 - The tunnel interface is ***tun0***
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Allow traffic all around the local subnet
 ufw allow in to 192.168.1.0/24
 ufw allow out to 192.168.1.0/24
@@ -248,7 +248,7 @@ systemctl stop openvpn-client@client.service
 ping 1.1.1.1
 systemctl start openvpn-client@client.service
 ping 1.1.1.1
-```
+{{< /code >}}
 
 ---
 

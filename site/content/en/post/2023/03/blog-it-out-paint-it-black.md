@@ -79,7 +79,7 @@ Now that we have a theme in mind, if you looked at the documention, you'll see a
 
 In the root of your repo, you'll want to run a couple commands to clone down the theme repo - there are other options to include the theme, however this is the easiest and once you've got this licked you can go back and figure out Git Submodules or Hugo Modules.
 
-```bash
+{{< code lang="bash" command-line="true" output="1,3-4,6-7,9-10" >}}
 ## Add the theme to your site
 git clone https://github.com/panr/hugo-theme-terminal.git src/themes/hugo-theme-terminal
 
@@ -89,8 +89,9 @@ rm -rf src/themes/hugo-theme-terminal/.git/
 ## Add the theme to your repo
 git add src/themes/hugo-theme-terminal/
 
+## Commit the changes to the local repo
 git commit -m "add terminal theme base"
-```
+{{< /code >}}
 
 ***Notice that we didn't do a `git push` here*** - you still can, nothing stopping you, but this is a great chance to see how you can commit multiple times *and then push*.
 
@@ -102,7 +103,7 @@ Now that you have the theme files available to Hugo, you can just set a bit of c
 
 One of the nice features a mature theme like terminal has is that it has example site content to quickly see the theme as intended - and to adapt to your own content easily:
 
-```bash
+{{< code lang="bash" command-line="true" output="1,3-4,6-7,9-10" >}}
 ## Copy over the example content from the theme
 cp -r src/themes/hugo-theme-terminal/exampleSite/* src/
 
@@ -114,9 +115,8 @@ cat src/config.toml
 
 ## Add it to our git commit log
 git add src/
-
 git commit -m "add exampleSite data from theme to site"
-```
+{{< /code >}}
 
 ***Notice how we didn't push that time either!***
 
@@ -126,7 +126,7 @@ git commit -m "add exampleSite data from theme to site"
 
 Your Hugo site can be configured with either a TOML or YAML configuration file - because I don't like TOML, I've gone ahead and converted it to YAML for you:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 baseurl: https://example.com/
 languageCode: en-us
 theme: hugo-theme-terminal
@@ -163,12 +163,13 @@ languages:
         - identifier: showcase
           name: Showcase
           url: /showcase
-```
+{{< /code >}}
 
 You can save that in `src/config.yml`.  Don't forget to add it to your git commmit log too - an all-in-one copy/paste bit would look like this:
 
-```bash
+{{< code lang="bash" command-line="true" output="1-2,40-41,43-44,46-47" >}}
 ## Create the config.yml file
+
 cat > src/config.yml <<EOF
 baseurl: https://example.com/
 languageCode: en-us
@@ -216,7 +217,7 @@ git rm src/config.toml
 
 ## Commit both those changes
 git commit -m "convert config to yaml format from toml"
-```
+{{< /code >}}
 
 ***Notice how we didn't push that time either - and we removed something from the previous commit!***
 
@@ -232,7 +233,7 @@ Ok, so I try to keep DRY as often as possible, *not a big fan of the beach*.  No
 
 If you're running things in GitHub Actions or on your Macbook, you need the right binaries - to make that easy we just detect architecture:
 
-```bash
+{{< code lang="bash" command-line="true" output="1,3-4" >}}
 ## Create a hack directory
 mkdir hack
 
@@ -251,13 +252,13 @@ TARGET_ARCH=\$PLATFORM_ARCH
 if [[ "\$PLATFORM_TYPE" == "darwin" ]] && [[ "\$PLATFORM_ARCH" == "arm64" ]]; then TARGET_ARCH="universal"; fi
 echo "Target architecture: \$TARGET_ARCH"
 EOF
-```
+{{< /code >}}
 
 ### Download Binary Script
 
 We've done this in the last article, it's just nice to have in a script to quickly run in new environments:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Create a Hugo downloader, building on the arch detection helper script
 cat > ./hack/download-hugo.sh <<EOF
 #!/bin/bash
@@ -291,13 +292,13 @@ mv hugo \${SCRIPT_DIR}/../bin/hugo-\${PLATFORM_TYPE}-\${TARGET_ARCH}
 cd \$SCRIPT_DIR
 rm -rf /tmp/hugobin
 EOF
-```
+{{< /code >}}
 
 ### Local Server Helper
 
 There are a number of flags to pass to the server when running it locally - we can make this common task much easier:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Create a simple local dev server script
 cat > ./hack/run-dev.sh <<EOF
 #!/bin/bash
@@ -316,7 +317,7 @@ source \${SCRIPT_DIR}/partial-arch.sh
 ## --baseURL optionally tells it what URL to use instead of localhost
 \${SCRIPT_DIR}/../bin/hugo-\${PLATFORM_TYPE}-\${TARGET_ARCH} server -s src/ -p 1313 --bind 0.0.0.0 --config config.yml
 EOF
-```
+{{< /code >}}
 
 ---
 
@@ -324,7 +325,7 @@ EOF
 
 Now that we have some simple scripts in place, we can make them executable, add them to git, commit them, and now we'll push all the commits in one go!
 
-```bash
+{{< code lang="bash" terminal="true" output="1,3-4,6,8" >}}
 ## Set the executable bits
 chmod a+x ./hack/*
 
@@ -334,7 +335,7 @@ git add ./hack/
 git commit -m "add helper scripts"
 
 git push
-```
+{{< /code >}}
 
 Now our repo should look something like this:
 
@@ -350,10 +351,10 @@ Ok, so now we get to see it in action, *right*?!
 
 In your terminal, you can run the following command to start a local dev server:
 
-```bash
+{{< code lang="bash" terminal="true" output="1" >}}
 # Start the local development server
 ./hack/run-dev.sh
-```
+{{< /code >}}
 
 Starting a local server is now just a short script invocation thanks to those helper scripts - load your browser and point it to http://localhost:1313/ and you should see something like this:
 

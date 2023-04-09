@@ -34,10 +34,10 @@ Now you could go about this in a number of different ways and your ability or su
 
 This could all depend on your hypervisor as well, so it's outside of the scope of this document - something for Libvirt though would look like this:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 virt-install --name=raza-ocp-app-3-m40 --vcpus ${AN_VCPUS} --memory=${AN_RAM} --cdrom=${OCP_AI_ISO_PATH} --disk size=120,path=${VM_PATH}/raza-ocp-app-3.qcow2 --os-variant=rhel8.3 --autostart --noautoconsole --events on_reboot=restart --host-device=pci_0000_41_00_0
 virt-install --name=raza-ocp-app-2-quadro --vcpus ${AN_VCPUS} --memory=${AN_RAM} --cdrom=${OCP_AI_ISO_PATH} --disk size=120,path=${VM_PATH}/raza-ocp-app-2.qcow2 --os-variant=rhel8.3 --autostart --noautoconsole --events on_reboot=restart --host-device=pci_0000_81_00_0 --host-device=pci_0000_81_00_1 --host-device=pci_0000_81_00_2 --host-device=pci_0000_81_00_3
-```
+{{< /code >}}
 
 Note: This requires [IOMMU enabled in your BIOS and all that fun stuff](https://kenmoini.com/blog/pci-passthrough-with-libvirt/).
 
@@ -59,14 +59,14 @@ Next is a super fucking round-about way of having to do things...but here goes..
 
 Now we have to wrap that into a YAML file, assuming that PEM file is located at `123abc_certificates/export/entitlement_certificates/1234567890.pem`:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 cp 123abc_certificates/export/entitlement_certificates/1234567890.pem rhsm.cert.pem
 
 wget https://raw.githubusercontent.com/openshift-psap/blog-artifacts/master/how-to-use-entitled-builds-with-ubi/0003-cluster-wide-machineconfigs.yaml.template
 sed  "s/BASE64_ENCODED_PEM_FILE/$(base64 -w 0 rhsm.cert.pem)/g" 0003-cluster-wide-machineconfigs.yaml.template > 0003-cluster-wide-machineconfigs.yaml
 
 oc create -f 0003-cluster-wide-machineconfigs.yaml
-```
+{{< /code >}}
 
 With this containers on the OpenShift cluster can now use authenticated pull requests to the Red Hat Registry automatically.
 
@@ -100,8 +100,8 @@ In the `gpu-operator-resources` project, find one of the `nvidia-driver-daemonse
 
 Click into the **Terminal** tab and run the command `nvidia-smi` to test, you should get something like this:
 
-```
-sh-4.4# nvidia-smi 
+{{< code lang="bash" command-line="true" output="2-" >}}
+sudo nvidia-smi 
 Sun Mar 14 06:44:39 2021       
 +-----------------------------------------------------------------------------+
 | NVIDIA-SMI 460.32.03    Driver Version: 460.32.03    CUDA Version: 11.2     |
@@ -122,5 +122,4 @@ Sun Mar 14 06:44:39 2021
 |=============================================================================|
 |  No running processes found                                                 |
 +-----------------------------------------------------------------------------+
-sh-4.4#
-```
+{{< /code >}}

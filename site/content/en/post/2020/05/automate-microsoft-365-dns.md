@@ -40,7 +40,7 @@ Thankfully, I have already kinda automated some of this before, just not en mass
 
 So there are a number of tools you could use to automate DNS records - Ansible, Terraform, etc, but sometimes a good ol' Bash script works just fine.
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 #!/bin/bash
 
 ## Configure DigitalOcean DNS via API requests
@@ -240,7 +240,7 @@ else
   echo -e "Domain does not exist in DigitalOcean DNS, exiting...\n"
   exit 1
 fi
-```
+{{< /code >}}
 
 ***[See this Gist for the latest version](https://gist.github.com/kenmoini/d8926c433ba8ba5dd1341b7d50040aa3)***
 
@@ -250,7 +250,7 @@ The functions in the script have a few safety precautions so you don't totally F
 
 ### Anywho, how about a few examples, like how to automate all the DNS records required for deploying Microsoft 365 to a domain?
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 #/bin/bash
 
 DO_DOMAINS=("example.com" "example.net" "example.org" "example.us")
@@ -274,7 +274,7 @@ for d in ${DO_DOMAINS[@]}; do
     ./do_dns_worker.sh -d $d -t "SRV" -r "_sipfederationtls._tcp" --ip "sipfed.online.lync.com." --priority 100 --weight 1 --port 5061 --force
 
 done
-```
+{{< /code >}}
 
 ***[See this Gist for the latest version](https://gist.github.com/kenmoini/d8926c433ba8ba5dd1341b7d50040aa3)***
 

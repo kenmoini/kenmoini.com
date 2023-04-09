@@ -108,7 +108,7 @@ Once you've logged into the hypervisor host, and then logged into the CVM applia
 
 Just run an assorted spin on the following commands:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 # Create a cluster, redundancy_factor=1 basically means single-node
 cluster -s "CVM_IP_HERE" --redundancy_factor=1 create
 
@@ -126,7 +126,7 @@ ncli cluster edit-params external-data-services-ip-address="DATA_SERVICES_IP_HER
 
 # Start the cluster
 cluster start
-```
+{{< /code >}}
 
 With the cluster created and started, you can finally get out of the terminal and launch Prism, which is the primary WebUI for Nutanix's stack - think of like vCenter or RHV Manager.
 

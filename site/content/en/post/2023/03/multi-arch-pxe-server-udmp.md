@@ -126,7 +126,7 @@ Then goto https://access.redhat.com and click on **Downloads** at the top, downl
 
 Since I'll be creating this VM on a Libvirt host, I'll store the Kickstart file in `/opt/pxe.ks.cfg` for ease:
 
-```text
+{{< code lang="text" >}}
 #version=RHEL9
 
 ###############################################################
@@ -193,13 +193,13 @@ curl
 %addon com_redhat_kdump --enable --reserve-mb='auto'
 
 %end
-```
+{{< /code >}}
 
 ### Creating the VM
 
 If you're not doing this on Libvirt, then of course skip this step - if you are, here's a handy-dandy bit of Bash you can spray and pray:
 
-```bash
+{{< code lang="bash" command-line="true" output="1,4-5,11-12,14-15,23-24" >}}
 # Set the RHEL ISO Path
 RHEL_ISO_PATH="/opt/rhel9.1-x86_64.iso"
 KICKSTART_PATH="/opt/pxe.ks.cfg"
@@ -225,7 +225,7 @@ sudo virt-install --connect="qemu:///system" --name=${VM_NAME} \
 
 # Make the VM auto start when the host starts
 sudo virsh autostart ${VM_NAME} --enable
-```
+{{< /code >}}
 
 You should then be able to view it in something like Cockpit with the `cockpit-machines` package installed, and see the installation automatically progress - once it does you'll need to boot the VM to continue.
 
@@ -249,19 +249,19 @@ Assuming you have a GitHub account, you should [Fork that repository](https://gi
 
 Now that you have your own fork, Clone it down to your local editor/terminal, or wherever you'll be running the Ansible automation - and yes it should work fine with Tower/Controller.
 
-```bash
+{{< code lang="bash" command-line="true" output="1,3-4" >}}
 # Clone YOUR fork of the repo down
 git clone git@github.com:YOUR_USERNAME/ansible-pxe-server.git
 
 # Open in VSCode?
 code ansible-pxe-server
-```
+{{< /code >}}
 
 ### Modifying Inventory
 
 First thing you'll probably want to do is set the Ansible Inventory to target your PXE server - if you chose to run the Playbook on the PXE server itself, thus connecting locally, your `inventory` file may look like this:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 all:
   hosts:
     pxe.example.com:
@@ -269,11 +269,11 @@ all:
       ansible_ssh_user: yourUser
       ansible_ssh_private_key_file: ~/.ssh/id_rsa
       ansible_python_interpreter: "{{ ansible_playbook_python }}"
-```
+{{< /code >}}
 
 Or, if you're connecting to a remote host, just modify the target as needed in the default `inventory` file:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 all:
   hosts:
     pxe.kemo.labs:
@@ -281,13 +281,13 @@ all:
       ansible_connection: ssh
       ansible_ssh_user: kemo
       ansible_ssh_private_key_file: ~/.ssh/MasterKemoKey
-```
+{{< /code >}}
 
 ### Modifying Variables - Service Configuration
 
 You'll need to provide some variables to this Playbook in order for it to work - most of them are commented at the top of the Playbook, but the important ones you need to override can be put in a separate variable file and provided at runtime.  Here's the list you should probably pay attention to at a minimum:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 ###################################
 # General Configuration
 
@@ -329,7 +329,7 @@ ntp_server_ip: 192.168.42.48
 
 vsftpd_banner_message: Welcome to Kemo Labs FTP service.
 pxe_menu_x86_bios_title: Kemo Labs PXE Boot x86_64 BIOS
-```
+{{< /code >}}
 
 ***Notice how we basically just copied the DHCP configuration from the UDMP?***
 
@@ -341,7 +341,7 @@ Once the service configuration has been determined, we can start to get distros 
 
 The distribution list is provided as a list of dictionaries, so something like this might be what you want to work around:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 # Root-level distros var
 distros:
 
@@ -495,7 +495,7 @@ distros:
       - text-install
       - rescue-install
 
-```
+{{< /code >}}
 
 You can store those variables in another separate file perhaps, like `pxe-distros.yml`.  Maintain that list, update it when needed, and re-run the automation to drop in the files and modify the needed menus!
 
@@ -503,13 +503,13 @@ You can store those variables in another separate file perhaps, like `pxe-distro
 
 At this point you should everything lined up and ready to go!  Run the automation with something like the following:
 
-```bash
+{{< code lang="bash" command-line="true" >}}
 ansible-playbook \
  -i inventory \
  -e @pxe-svc-cfg.yml \
  -e @pxe-distros.yml \
  deploy.yml
-```
+{{< /code >}}
 
 Depending on how many distros it has to mirror, after a little while the automation should finish and you should be able to perform a few tests such as:
 

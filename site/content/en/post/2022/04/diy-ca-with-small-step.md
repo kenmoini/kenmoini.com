@@ -103,7 +103,7 @@ During installation or afterwards, make sure to set a hostname and a static IP -
 
 Once the VM is created and the basic networking is in place, the next series of steps will be some one-time setup to get the instance configured with everything needed:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Do a system update
 dnf update -y
 
@@ -149,7 +149,7 @@ chmod a+x step*/bin/*
 
 ## Copy the binaries to somewhere in your $PATH
 cp step*/bin/* /usr/local/bin/
-```
+{{< /code >}}
 
 With that you'll have some basics set up like the FirewallD, Cockpit Web UI which can be useful, and finally the Step and Step CA CLI binaries.
 
@@ -159,15 +159,15 @@ With that you'll have some basics set up like the FirewallD, Cockpit Web UI whic
 
 Now that the system is setup and we have the binaries in place, we can create the Certificate Authorities
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Initialize Step CA with an SSH Provisioner and save the output to a log file
 step ca init --ssh --deployment-type=standalone  2>&1 | tee -a /root/.step-ca.init
-```
+{{< /code >}}
 
 Answer the following prompts with a name for the PKI chain, the DNS name(s) and IP(s) that the CA server will run at, the port the CA server will listen on, and your email.  You can also provide a password for the Root CA Key, or let it generate one - I suggest letting it generate a random and secure password.  The output should look something like this:
 
-```output
-[root@step-ca ~]# step ca init --ssh --deployment-type=standalone  2>&1 | tee -a /root/.step-ca.init
+{{< code lang="bash" command-line="true" output="2-" >}}
+step ca init --ssh --deployment-type=standalone  2>&1 | tee -a /root/.step-ca.init
 What would you like to name your new PKI?
 ✔ (e.g. Smallstep): Kemo Labs SmallStep
 What DNS names or IP addresses would you like to add to your new CA?
@@ -207,11 +207,11 @@ FEEDBACK 😍 🍻
   good or bad at feedback@smallstep.com or join GitHub Discussions
   https://github.com/smallstep/certificates/discussions and our Discord 
   https://u.step.sm/discord.
-```
+{{< /code >}}
 
 Since the output was saved to a log file at `/root/.step-ca.init` you can grab the password with the following:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 STEP_CA_ROOT_PW=$(cat /root/.step-ca.init | grep 'Password' | cut -d ' ' -f 3 | head -n 1 | tr -d '[:space:]')
 echo $STEP_CA_ROOT_PW
 
@@ -220,7 +220,7 @@ echo ${STEP_CA_ROOT_PW%?}
 
 ## Save the password to a file
 echo ${STEP_CA_ROOT_PW%?} > /root/.step/.ca-pw
-```
+{{< /code >}}
 
 The Root CA Password needs to be saved to a file so that you can run the CA Server Service, which we'll make next...
 
@@ -228,7 +228,7 @@ The Root CA Password needs to be saved to a file so that you can run the CA Serv
 
 Everything is better with SystemD.  Create a service unit file that will handle starting/stopping/restarting the Step CA Server:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 cat > /etc/systemd/system/step-ca-server.service <<EOF
 [Unit]
 Description=step-ca-server
@@ -255,7 +255,7 @@ systemctl daemon-reload
 
 # Run the CA Server
 systemctl enable --now step-ca-server
-```
+{{< /code >}}
 
 You can test the server to see if it is running of course with a `systemctl status step-ca-server` but also with a `curl -k https://localhost:443` which should return a 404 error, which is good in this case.
 
@@ -263,7 +263,7 @@ You can test the server to see if it is running of course with a `systemctl stat
 
 Currently the Step CA server isn't providing ACME services, so let's enable that as well as normal x509 PKI services by enabling the [Provisioners](https://smallstep.com/docs/step-ca/provisioners):
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Add the ACME Provisioner to the Step CA Server
 step ca provisioner add acme --type ACME --claims '{"maxTLSCertDuration": "4320h", "defaultTLSCertDuration": "744h"}'
 
@@ -278,13 +278,13 @@ jq '.authority.provisioners[[.authority.provisioners[] | .type=="JWK"] | index(t
 
 ## Restart the service
 systemctl restart step-ca-server
-```
+{{< /code >}}
 
 ### Add the Root CA to the local system's Trusted Root Store
 
 Go ahead and test the ACME server with a `curl -k https://localhost:443/acme/acme/directory` and you should see some JSON-formatted feedback.  Note that the `-k` option is used in that cURL because the Root CA we generated isn't part of the local system's Trusted Root Store - you can add it in two different ways:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Add the Root CA to the local system trusted root store easily with the step CLI
 step certificate install /root/.step/certs/root_ca.crt
 
@@ -293,7 +293,7 @@ cp /root/.step/certs/root_ca.crt /etc/pki/ca-trust/source/anchors/
 
 ## Update the system trust bundles
 update-ca-trust
-```
+{{< /code >}}
 
 Now you should be able to do a `curl https://localhost:443/acme/acme/directory` and get a response without a warning about an untrusted certificate!
 
@@ -309,7 +309,7 @@ Note that this is only applied to the trusted root store for the local system - 
 
 In case you just need a Certificate for a web service right now, you can use the `step` CLI to generate one signed by the Intermediate CA - here are a few examples:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Create a certificate to secure the www.example.com service
 step ca certificate www.example.com web-svc.crt web-svc.key
 
@@ -324,7 +324,7 @@ step ca certificate www.example.com web-svc.crt web-svc.key --not-after=8760h
 
 ## Validate the certificate - take a note of the dates
 step certificate inspect web-svc.crt --short
-```
+{{< /code >}}
 
 Select the provisioner you want, the JWK provisioner is fine - enter the CA password(s), it may be prompted twice, once for the Root CA and once for the Intermediate CA.  Following the prompts you should now have two new files, a `web-svc.crt` file and a `web-svc.key` file.  The Certificate file will also have the Intermediate CA Certificate appended to the end with the issued Server Certificate block at the top of the file - so long as the Root CA Certificate is part of the trusted root store then the chain can be validated.
 
@@ -336,7 +336,7 @@ You may be used to getting certificates via an ACME client like [Certbot](https:
 
 Beforehand, you'll need to download the Root CA Certificate in order to the system requesting the certificate via certbot.  The Root CA Certificate is located on the Step CA VM at `/root/.step/certs/root_ca.crt` and can be freely shared with the public - but not the key!  The key is kept private and secret...I suggest hosting the Root CA Certificate somewhere like on GitHub where it can easily be downloaded by clients who need to add it to their trusted root stores.
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Add the downloaded Root CA Certificate to the system trusted root
 cp /path/to/step_root_ca.crt /etc/pki/ca-trust/source/anchors/
 
@@ -352,15 +352,15 @@ python3 -m pip install certbot
 sudo REQUESTS_CA_BUNDLE=/path/to/step_root_ca.crt \
     certbot certonly -n --standalone -d server.example.com \
     --server https://step-ca.example.com/acme/acme/directory
-```
+{{< /code >}}
 
 Now you should be able to find the requested certificate and key under `/etc/letsencrypt/live/server.example.com/` which can be passed onto an Apache/HAProxy/Nginx/etc server to secure communication over SSL!
 
 The certificates can be automatically renewed as well, and even better you can add the following to your root user's crontab in order to never think about needing to renew:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 */15 * * * * root REQUESTS_CA_BUNDLE=/path/to/step_root_ca.crt certbot -q renew
-```
+{{< /code >}}
 
 ---
 

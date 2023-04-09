@@ -49,7 +49,7 @@ This is actually decently straight-forward to get installed, slightly confusing 
 
 First, let's start with a RHEL 8.x system - once you've got yourself booted into that system, let's run the following script to get it rolling:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 #!/bin/bash
 
 export SYSTEM_HOSTNAME="bamboo"
@@ -89,7 +89,7 @@ mv kubectl /usr/local/bin/kubectl
 
 # Start the Bamboo Server
 /opt/atlassian-bamboo-${BAMBOO_VERSION}/bin/start-bamboo.sh
-```
+{{< /code >}}
 
 Give it a couple seconds and it should start up - then point your browser to `http://$SYSTEM_HOSTNAME:8085/` and proceed from there.
 
@@ -111,7 +111,7 @@ Before Bamboo can really be usable, you need an SCM - because we're masochists, 
 
 Here's how to Bash things together:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 #!/bin/bash
 
 export SYSTEM_HOSTNAME="bitbucket"
@@ -141,7 +141,7 @@ chmod +x atlassian-bitbucket-${BITBUCKET_VERSION}-x64.bin
 
 # Run the installer with the default values (-q)
 atlassian-bitbucket-${BITBUCKET_VERSION}-x64.bin -q
-```
+{{< /code >}}
 
 Next you can open your browser to http://$SYSTEM_HOSTNAME:7990 - the trial license for BitBucket is a little more straightforward from the installation, however when it prompts you to install on the target server it will try to redirect you back to the set up and if you don't have SSL set up on it already then it'll fail the redirect...just copy and paste the license into the Setup form.
 

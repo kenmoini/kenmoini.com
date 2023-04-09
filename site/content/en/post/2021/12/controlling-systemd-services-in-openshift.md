@@ -31,9 +31,9 @@ authors:
 
 Evidently, if you deploy the Nutanix CSI Operator on Red Hat's OpenShift Container Platform the StorageClass can ***claim*** PVs and PVCs but when it comes to ***binding*** the storage to a running container you'll run into a very interesting error when viewing the Pod Events stream:
 
-```text
+{{< code lang="text" >}}
 MountVolume.SetUp failed for volume "pvc-a139d12a-036a-490c-bc2d-214e8da078e3" : rpc error: code = Internal desc = iscsi/lvm failure, last err seen: iscsi: failed to sendtargets to portal 192.168.42.58:3260 output: Failed to connect to bus: No data available iscsiadm: can not connect to iSCSI daemon (111)! iscsiadm: Cannot perform discovery. Initiatorname required. iscsiadm: Could not perform SendTargets discovery: could not connect to iscsid , err exit status 20
-```
+{{< /code >}}
 
 Basically, what that means is that the iSCSId service isn't running on the Red Hat CoreOS hosts.
 
@@ -51,7 +51,7 @@ A **MachineConfig** and the [Machine Config Operator](https://docs.openshift.com
 
 So this instance, when you need to simply add the MachineConfig to enable the iSCSId SystemD service all you need is something like this:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 apiVersion: machineconfiguration.openshift.io/v1
 kind: MachineConfig
 metadata:
@@ -66,7 +66,7 @@ spec:
       units:
       - enabled: true
         name: iscsid.service
-```
+{{< /code >}}
 
 You don't need to specify that the service is started/stopped, just enabled - the nodes will reboot with the newly assembled configuration specifications so whatever state they have on start up is what is used.
 
@@ -74,18 +74,18 @@ This can easily be used to enable or disable other SystemD services as well with
 
 Once the MachineConfig is applied to your OpenShift cluster you'll notice that the nodes will be cordoned off, which is a sort of taint that will disable scheduling of any new workloads on that node - then it will drain the node of any application workloads and reboot.  You can see this by running something like:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 oc get nodes
-```
+{{< /code >}}
 
 ...which would look something like this:
 
-```text
+{{< code lang="text" >}}
 NAME    STATUS                        ROLES    AGE   VERSION
 app-1   Ready                         worker   12h   v1.22.3+4dd1b5a
 app-2   Ready                         worker   12h   v1.22.3+4dd1b5a
 app-3   NotReady,SchedulingDisabled   worker   12h   v1.22.3+4dd1b5a
 ...
-```
+{{< /code >}}
 
 The application nodes will transition between Ready/SchedulingDisabled, NotReady/SchedulingDisabled, Ready/SchedulingDisabled, and Ready states as they reboot to apply the new configuration.

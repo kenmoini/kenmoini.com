@@ -40,7 +40,7 @@ This process is done anytime your AWS credentials change.
 
 In your RHPDS/RHOE email you will receive some credentials to access AWS that should look like this:
 
-```text
+{{< code lang="text" >}}
 
 Here is some important information about your environment:
 
@@ -56,11 +56,11 @@ The default region is set to us-east-2
 
  Web Console Access: https://268094075838.signin.aws.amazon.com/console 
  Web Console Credentials: you@redhat.com-0583 / s0mePa2s
-```
+{{< /code >}}
 
 What you're looking for is the `AWS_ACCESS_KEY_ID` and the `AWS_SECRET_ACCESS_KEY` - assuming you're using a Mac or Linux terminal do the following:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ### NOTE!  The following commands will overwrite your ~/.aws/credentials file... backup with `cp ~/.aws/credentials ~/.aws/credentials.bak-$(date +%s)`
 
 ## Substitute your keys from the email...
@@ -72,7 +72,7 @@ cat > ~/.aws/credentials << EOF
 aws_access_key_id     = AKI...
 aws_secret_access_key = 2ny...
 EOF
-```
+{{< /code >}}
 
 ---
 
@@ -92,7 +92,7 @@ More than likely you'll need to deploy OpenShift for these workshops - if so the
 
 All together now...
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Set some vars
 DEV_DIR="$HOME/tmp-ocp-dev"
 OCP_VER="4.8"
@@ -118,7 +118,7 @@ chmod a+x openshift-install oc kubectl
 
 ## Create the OpenShift install-config.yaml file
 ./openshift-install create install-config --dir=ocp
-```
+{{< /code >}}
 
 ### RHPDS Notes:
 
@@ -129,7 +129,7 @@ chmod a+x openshift-install oc kubectl
 
 You can template a similar install-config.yaml file - there are example configurations for different sized nodes:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 apiVersion: v1
 baseDomain: 0583.sandbox502.opentlc.com
 compute:
@@ -166,7 +166,7 @@ publish: External
 pullSecret: '{"auths": ...'
 sshKey: |
   ssh-rsa AAAAB3NzaC1yc2E...
-```
+{{< /code >}}
 
 > Next, deploy the cluster - it should take about 30 minutes: `./openshift-install create cluster --dir=ocp`
 
@@ -182,7 +182,7 @@ Most workshops have a scalable number of users in a `userN` or `studentN` format
 
 ### Creating HTPasswd Manually
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Set some vars
 DEV_DIR="$HOME/tmp-ocp-dev"
 
@@ -191,11 +191,11 @@ htpasswd -c -B -b ${DEV_DIR}/ocp-users.htpasswd opentlc-mgr r3dh4t123!
 
 # Add additional users
 htpasswd -b ${DEV_DIR}/ocp-users.htpasswd user1 openshift
-```
+{{< /code >}}
 
 ### Creating HTPasswd With Bash
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 #!/bin/bash
 
 export HTPASSWD_FILE=${HTPASSWD_FILE:="$HOME/tmp-ocp-dev/ocp-users.htpasswd"}
@@ -222,13 +222,13 @@ do
   echo "  Adding ${BULK_USERNAME} to ${HTPASSWD_FILE}..."
   htpasswd -b $HTPASSWD_FILE ${BULK_USERNAME} ${BULK_USER_PASSWORD} >/dev/null 2>&1
 done
-```
+{{< /code >}}
 
 ### Setting the IdP
 
 With the HTPasswd file created you can now apply it to the cluster:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Set some vars
 DEV_DIR="$HOME/tmp-ocp-dev"
 
@@ -256,19 +256,19 @@ oc get OAuth cluster -o yaml > ~/oauth-cluster.yaml.bak-$(date +%s)
 
 ## Apply the new config
 oc apply -f ${DEV_DIR}/htpasswd-oauth-idp.yaml
-```
+{{< /code >}}
 
 ### Cluster Permissions
 
 Likely the users also need some permissions - maybe `opentlc-mgr` needs `cluster-admin`...
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Add the cluster role to the opentlc-mgr user
 oc adm policy add-cluster-role-to-user cluster-admin opentlc-mgr
 
 ## Remove the kubeadmin user if you feel comfortable doing so - this is ideally done before a workshop, after testing that `opentlc-mgr` has cluster-admin access
 oc delete secrets kubeadmin -n kube-system
-```
+{{< /code >}}
 
 ---
 
@@ -287,7 +287,7 @@ If it's not in the agnosticD repo then you may find it in other orgs/repos. A Go
 
 Once you found your source, clone it down to your local terminal - where you set up the AWS Credentials file in the previous step.
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Set some vars
 DEV_DIR="$HOME/tmp-ocp-dev"
 
@@ -301,7 +301,7 @@ git clone https://github.com/redhat-cop/agnosticd
 cd agnosticd
 
 cd ansible/roles_ocp_workloads/ocp4_workload_servicemesh_workshop/
-```
+{{< /code >}}
 
 From this directory you can find a few key Tasks:
 
@@ -331,7 +331,7 @@ For workshop workloads you'll need an `ACTION` variable that is either `create` 
 
 Create a new Playbook as follows:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 ---
 - name: Deploy workshop
   connection: local
@@ -377,15 +377,15 @@ Create a new Playbook as follows:
   tasks:
   - name: Kick off the deployment
     include_tasks: tasks/main.yml
-```
+{{< /code >}}
 
 The variables will likely be a little different depending on what workshop/workload you are deploying.
 
 Run the Bootstrap Playbook:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ansible-playbook bootstrap.yaml
-```
+{{< /code >}}
 
 ---
 
@@ -393,11 +393,9 @@ ansible-playbook bootstrap.yaml
 
 Mature AgnosticD role often have uninstallation Tasks that can clear out the deployments, reverting to something close to the prior state of the cluster.  Not all items may be removed from a cluster, some CRDs could be left behind by lazy Operators, Helm Charts, etc.
 
-```bash
-
-
+{{< code lang="bash" line-numbers="true" >}}
 ansible-playbook -e ACTION=destroy bootstrap.yaml
-```
+{{< /code >}}
 
 ---
 
@@ -405,13 +403,13 @@ ansible-playbook -e ACTION=destroy bootstrap.yaml
 
 If you have kept the installation directory used by the openshift-install binary then you can easily delete all the cluster resources:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Set some vars
 DEV_DIR="$HOME/tmp-ocp-dev"
 
 cd $DEV_DIR
 
 ./openshift-install destroy cluster --dir=ocp
-```
+{{< /code >}}
 
 If you don't have the install-config files still available then if you deployed via RHPDS/RHOE you can destroy your whole sub-account.

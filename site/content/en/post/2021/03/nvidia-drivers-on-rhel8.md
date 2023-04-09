@@ -58,19 +58,19 @@ Note that even though I'm using two cards and there are two kinds of drivers, I'
 
 Before you start to run the driver installs there are a few packages that the installers will need:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 sudo dnf groupinstall "Server with GUI" "base-x" "Legacy X Window System Compatibility" "Development Tools"
 sudo dnf install -y elfutils-libelf-devel gcc make kernel-headers kernel-devel acpid libglvnd-glx libglvnd-opengl libglvnd-devel pkgconfig kmod
-```
+{{< /code >}}
 
 ### 3. Set Text-Mode
 
 Before installing the drivers, let's make sure we're in text-mode:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 sudo systemctl set-default multi-user.target
 sudo systemctl isolate multi-user.target
-```
+{{< /code >}}
 
 *You can switch this back to a GUI later with:* `systemctl set-default graphical.target`
 
@@ -78,17 +78,17 @@ sudo systemctl isolate multi-user.target
 
 Now simply run the installations - for me it was:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 sudo ./NVIDIA-Linux-x86_64-460.32.03.run
-```
+{{< /code >}}
 
 ### 5. Reboot
 
 Of course...
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 sudo systemctl reboot
-```
+{{< /code >}}
 
 With this now you've got NVidia drivers installed on RHEL 8 - test by running `sudo nvidia-smi`
 

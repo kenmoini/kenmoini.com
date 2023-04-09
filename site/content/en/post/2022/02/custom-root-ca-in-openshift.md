@@ -49,13 +49,13 @@ So this is an interesting trip down a number of different technologies - the goa
 
 So on a traditional Linux system, you would take your Root CA, copy it to a path on the file system, and then run a program which would update the system Root CA Trust Bundle and Java Keystore - along the lines of something like this:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Copy your Root CA to the sources path
 cp root-ca.pem /etc/pki/ca-trust/source/anchors/
 
 ## Update the Root CA Trust Bundles
 update-ca-trust
-```
+{{< /code >}}
 
 From this point applications that use Certificates signed by that Root CA can be verified system-wide just as any other root could be such as ones signed by DigiCert, Let's Encrypt, Microsoft, etc - assuming that any other Intermediate CA Certificates are passed along with the client/server/user certificates.
 
@@ -83,17 +83,17 @@ So instead of embedding the Root CA Bundles inside of the container during the b
 
 Say you've run the commands above to add the Root CA to your system Root CA Bundles - you could then create a set of ConfigMaps like so:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Create a ConfigMap YAML file for/from the PEM-encoded Root CA bundle
 oc create configmap tls-ca-bundle-pem --from-file=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem -o yaml --dry-run=client > cfgmap-tls-ca-bundle-pem.yml
 
 ## Create a ConfigMap YAML file for/from the Java Keystore
 oc create configmap jks-ca-certs --from-file=/etc/pki/ca-trust/extracted/java/cacerts -o yaml --dry-run=client > cfgmap-jks-ca-certs.yml
-```
+{{< /code >}}
 
 With that you could then add some Volumes and VolumeMounts to a Deployment similarly to this:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 kind: Deployment
 apiVersion: apps/v1
 metadata:
@@ -138,7 +138,7 @@ spec:
               - key: cacerts
                 path: cacerts
             name: jks-ca-certs
-```
+{{< /code >}}
 
 This is a pretty simple way to distribute a custom Root CA Bundles and deploy it in a Kubernetes-native way - now, keep in mind this is needed to be done for any Pod-type object, and each Namespace needs to have those same ConfigMaps, Volume, and VolumeMounts defined.
 
@@ -170,7 +170,7 @@ The Red Hat Community of Practice which is comprised of a set of elite architect
 
 You can apply the PodPreset Operator to a Kubernetes/OpenShift cluster with the following:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Authenticate to a Kubernetes/OpenShift cluster, KUBECONFIG sorta stuff yeah?
 
 ## Clone down the repo
@@ -184,11 +184,11 @@ make deploy IMG=quay.io/redhat-cop/podpreset-webhook:latest
 
 ## Check to make sure the Operator is applied and the PodPreset CRD is available
 oc get crd/podpresets.redhatcop.redhat.io
-```
+{{< /code >}}
 
 Once that Operator is deployed you can use a PodPreset such as the following:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 apiVersion: redhatcop.redhat.io/v1alpha1
 kind: PodPreset
 metadata:
@@ -217,11 +217,11 @@ spec:
             path: cacerts
         name: jks-ca-certs
       name: jks-ca-certs
-```
+{{< /code >}}
 
 With that, your Deployments simply need to have Pods that match the label selector `inject-pki: "yes"` - working off the previous example, it'd look like this:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 kind: Deployment
 apiVersion: apps/v1
 metadata:
@@ -240,7 +240,7 @@ spec:
     spec:
       containers:
       # ...
-```
+{{< /code >}}
 
 So that's great - at this point you would just need to:
 
@@ -263,7 +263,7 @@ You can read the full details of how this Root CA bundle is created and distribu
 
 It breaks down to creating/modifying a ConfigMap called `user-ca-bundle` in the `openshift-config` Namespace with a `.data['ca-bundle.crt']` entry, similar to below if you were adding 3 new Root CAs:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 apiVersion: v1
 data:
   ca-bundle.crt: |
@@ -285,11 +285,11 @@ kind: ConfigMap
 metadata:
   name: user-ca-bundle
   namespace: openshift-config
-```
+{{< /code >}}
 
 Once that ConfigMap is applied, you would modify the cluster's Proxy configuration and provide the `user-ca-bundle` ConfigMap name:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 apiVersion: config.openshift.io/v1
 kind: Proxy
 metadata:
@@ -297,7 +297,7 @@ metadata:
 spec:
   trustedCA:
     name: user-ca-bundle
-```
+{{< /code >}}
 
 ***Warning!*** Don't apply that Proxy Cluster Config YAML to the cluster all willy nilly - access it with `oc edit proxy/cluster` or via the Web UI in **Administration > Cluster Settings > Configuration > Proxy > YAML**.
 
@@ -305,7 +305,7 @@ Once those two objects are available/modified, the whole cluster will reload as 
 
 From here the OpenShift cluster can automatically sync the build Root CA bundle in PEM format to an empty ConfigMap that has been given an annotation as such:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -313,7 +313,7 @@ metadata:
   labels:
     config.openshift.io/inject-trusted-cabundle: 'true'
 data: {}
-```
+{{< /code >}}
 
 Even though this ConfigMap is empty, once applied you'll find the `.data['ca-bundle.crt']` data automatically added and it will be kept synced as Root CAs are updated centrally in the `user-ca-bundle` ConfigMap in the `openshift-config` Namespace!
 
@@ -327,7 +327,7 @@ Keep in mind - this is just for automatic syncing of Root CA Bundles in PEM form
 
 Reflector is a really fantastic project that can automatically sync ConfigMaps and Secrets across Namespaces in a Kubernetes cluster - the easiest way to deploy it is via Helm:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Add emberstack repo 
 helm repo add emberstack https://emberstack.github.io/helm-charts
 
@@ -343,11 +343,11 @@ helm upgrade --install reflector emberstack/reflector --namespace reflector
 ## Add SCC to SA RBAC
 oc adm policy add-scc-to-user privileged -z default -n reflector
 oc adm policy add-scc-to-user privileged -z reflector -n reflector
-```
+{{< /code >}}
 
 Now that Reflector is installed, you can create a Namespace, something like `pki-resources` that holds those ConfigMaps centrally:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Create a new Project
 oc new-project pki-resources
 
@@ -356,11 +356,11 @@ oc create configmap tls-ca-bundle-pem --from-file=/etc/pki/ca-trust/extracted/pe
 
 ## Create a ConfigMap YAML file for/from the Java Keystore
 oc create configmap jks-ca-certs --from-file=/etc/pki/ca-trust/extracted/java/cacerts
-```
+{{< /code >}}
 
 With those ConfigMaps created in the `pki-resources` Namespace, all you need to do is annotate them to be mirrored into other Namespaces:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Add annotations for enabling reflection
 oc annotate configmap tls-ca-bundle-pem reflector.v1.k8s.emberstack.com/reflection-allowed="true"
 oc annotate configmap jks-ca-certs reflector.v1.k8s.emberstack.com/reflection-allowed="true"
@@ -372,7 +372,7 @@ oc annotate configmap jks-ca-certs reflector.v1.k8s.emberstack.com/reflection-al
 ## Add annotations for enabling auto reflection
 oc annotate configmap tls-ca-bundle-pem reflector.v1.k8s.emberstack.com/reflection-auto-enabled="true"
 oc annotate configmap jks-ca-certs reflector.v1.k8s.emberstack.com/reflection-auto-enabled="true"
-```
+{{< /code >}}
 
 You can read more about Reflector and its options here: https://github.com/emberstack/kubernetes-reflector
 
@@ -398,7 +398,7 @@ Note that Reflector and the PodPreset Operator are community projects and not su
 
 ***Next***, create a Namespace for the central store of PKI assets and create that annotated ConfigMap:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Create a new project for PKI assets
 oc new-project pki-resources
 
@@ -412,18 +412,18 @@ metadata:
     config.openshift.io/inject-trusted-cabundle: 'true'
 data: {}
 EOF
-```
+{{< /code >}}
 
 ***Add*** the Java Keystore ConfigMap - this will need to be manually managed since the cluster doesn't sync a JKS like it does a PEM bundle:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Assuming your Root CAs are part of the system root trust bundle...
 oc create configmap jks-ca-certs --from-file=/etc/pki/ca-trust/extracted/java/cacerts
-```
+{{< /code >}}
 
 ***Deploy*** [Reflector](#reflector) and the [PodPreset Operator](#4-podpreset-operator) as shown above - then, label the two ConfigMaps for reflection across all Namespaces:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Add annotations for enabling reflection
 oc annotate configmap trusted-ca reflector.v1.k8s.emberstack.com/reflection-allowed="true"
 oc annotate configmap jks-ca-certs reflector.v1.k8s.emberstack.com/reflection-allowed="true"
@@ -435,13 +435,13 @@ oc annotate configmap jks-ca-certs reflector.v1.k8s.emberstack.com/reflection-al
 ## Add annotations for enabling auto reflection
 oc annotate configmap trusted-ca reflector.v1.k8s.emberstack.com/reflection-auto-enabled="true"
 oc annotate configmap jks-ca-certs reflector.v1.k8s.emberstack.com/reflection-auto-enabled="true"
-```
+{{< /code >}}
 
 We should now have PEM and JKS ConfigMaps available in every Namespace, and the only thing we have to manage now is labeling workloads and using a PodPreset targeting those labels - the PodPreset needs to be deployed manually or via a pipeline to any Namespace that needs it.  Reflector only works with certain object types like Secrets and ConfigMaps.
 
 To use the ConfigMaps as set above, the PodPreset would look like this:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 apiVersion: redhatcop.redhat.io/v1alpha1
 kind: PodPreset
 metadata:
@@ -470,11 +470,11 @@ spec:
             path: cacerts
         name: jks-ca-certs
       name: jks-ca-certs
-```
+{{< /code >}}
 
 Label the workloads you need with that `inject-pki: "yes"` selector and you're off to the races!  Something like this maybe:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 kind: Deployment
 apiVersion: apps/v1
 metadata:
@@ -500,7 +500,7 @@ spec:
             - '--'
           args:
             - while true; do sleep 30; done;
-```
+{{< /code >}}
 
 With that combination we get:
 

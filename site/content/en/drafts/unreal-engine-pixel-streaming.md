@@ -81,7 +81,7 @@ Before actually installing the NVidia drivers, you have to unload Nouveau and pr
 
 Next you can install the repos needed to download the NVidia drivers and CUDA packages to build the Unreal Engine.
 
-```bash
+{{< code lang="bash" command-line="true" output="" >}}
 # Add the NVidia Container Toolkit Repo
 curl -s -L https://nvidia.github.io/nvidia-docker/rhel8.3/nvidia-docker.repo | sudo tee /etc/yum.repos.d/nvidia-docker.repo
 
@@ -95,4 +95,4 @@ sudo dnf config-manager --add-repo https://developer.download.nvidia.com/compute
 sudo dnf clean all
 sudo dnf -y module install nvidia-driver:latest-dkms
 sudo dnf -y install cuda nvidia-container-toolkit
-```
+{{< /code >}}

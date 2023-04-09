@@ -52,9 +52,7 @@ If this is your first time doing something with Git on your local terminal there
 
 The following should work for most Linux/Mac terminals - let's start by installing Git and `jq` cause we'll need that later:
 
-```bash
-################# Local Git Setup
-
+{{< code lang="bash" cmd="true" output="1,3-4,6-7,9-10" >}}
 ## Install git and jq - Mac
 brew install git jq
 
@@ -67,15 +65,13 @@ apt install -y git jq
 ## Configure the local git user
 git config --global user.name "YOUR NAME"
 git config --global user.email "YOU@hotmail.com"
-```
+{{< /code >}}
 
 ### Creating an SSH Keypair
 
 That should take care of installing the Git client and configuring your local user - next let's make an SSH keypair to use to authenticate to Git services like GitHub:
 
-```bash
-################# SSH Key Generation
-
+{{< code lang="bash" cmd="true" output="1,4-9" >}}
 ## Create the SSH folders if you don't already have them created (safe to re-run)
 mkdir -p $HOME/.ssh
 chmod 700 $HOME/.ssh
@@ -86,7 +82,7 @@ chmod 700 $HOME/.ssh
 ## - As a specific file (-f ~/.ssh/git_id_rsa)
 ## - Without a password (-N '')
 ssh-keygen -t rsa -b 4096 -f ~/.ssh/git_id_rsa -N ''
-```
+{{< /code >}}
 
 That will create an SSH Private Key at `~/.ssh/git_id_rsa` and a SSH Public Key at `~/.ssh/git_id.rsa.pub` - notice the `.pub` at the end of the Public Key.  This Public key is safe to share - your Private key must be kept safe and private.
 
@@ -94,7 +90,7 @@ That will create an SSH Private Key at `~/.ssh/git_id_rsa` and a SSH Public Key 
 
 Next, let's make sure SSH and thus Git uses the key when authenticating to GitHub:
 
-```bash
+{{< code lang="bash" cmd="true" output="1,9-10" >}}
 ## Configure OpenSSH to use the key when connecting to github.com
 cat >> ~/.ssh/config <<EOF
 Host github.com
@@ -106,7 +102,7 @@ EOF
 
 ## Read out the SSH Public Key
 cat ~/.ssh/git_id_rsa.pub
-```
+{{< /code >}}
 
 The SSH **Public Key** `~/.ssh/git_id_rsa.pub` is safe to share - the **Private Key** `~/.ssh/git_id_rsa` needs to be kept safe guarded.
 
@@ -150,7 +146,7 @@ In your newly created repository, you should see a **green Code button** - click
 
 You'll now clone down that repo to your local system via the Terminal:
 
-```bash
+{{< code lang="bash" cmd="true" output="1,3-4,7-8,10-11" >}}
 # Change into your home directory
 cd ~
 
@@ -163,7 +159,7 @@ git clone git@github.com:YOUR_USER_NAME/YOUR_REPO_NAME.git
 
 # Enter the cloned repository directory
 cd YOUR_REPO_NAME
-```
+{{< /code >}}
 
 ---
 
@@ -171,7 +167,7 @@ cd YOUR_REPO_NAME
 
 Now that we have the repo cloned locally what we want to do next is create a directory to store binaries like Hugo.  The reason why we'll keep a copy of the Hugo binary in our repository is that the updates with Hugo can sometimes break things, and it's handy to have when building in different environments with consistency.
 
-```bash
+{{< code lang="bash" cmd="true" output="1,3-4,6-7,9-10,12-13,16-17,19-20,22-23,25-26,28-30,32-33,35-36,38-39,41,43" >}}
 # Make a bin directory
 mkdir bin
 
@@ -216,7 +212,7 @@ git add bin/
 git commit -m "add hugo binary"
 
 git push -u origin main
-```
+{{< /code >}}
 
 With that you should now have the Hugo binary added to your GitHub repository - navigate to it and it should now look a little like this:
 
@@ -230,7 +226,7 @@ With that you should now have the Hugo binary added to your GitHub repository - 
 
 Now that Hugo is available, let's create the boilerplate structure.  We'll segment this into a `src` subdirectory in our repository.
 
-```bash
+{{< code lang="bash" cmd="true" output="1,3-4,6,8" >}}
 # Create the Hugo site in the src directory
 ./bin/hugo new site src
 
@@ -240,7 +236,7 @@ git add src
 git commit -m "add base blog boilerplate files"
 
 git push
-```
+{{< /code >}}
 
 Point your browser back to your repository on GitHub, or hit the refresh/reload button, and you should now see the new `src` subdirectory added and it should look something like this:
 

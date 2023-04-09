@@ -43,7 +43,7 @@ Key Pairs are important as they're the fundamental crytographic component of PKI
 
 ### func.keys.go
 
-```go
+{{< code lang="go" line-numbers="true" >}}
 // generateRSAKeypair returns a private RSA key pair object
 func generateRSAKeypair(keySize int) (*rsa.PrivateKey, *rsa.PublicKey, error) {
 	if keySize == 0 {
@@ -127,7 +127,7 @@ func pemEncodeRSAPublicKey(caPubKey *rsa.PublicKey) *bytes.Buffer {
 	})
 	return caPubKeyPEM
 }
-```
+{{< /code >}}
 
 ## Helper functions
 
@@ -135,7 +135,7 @@ Here are some additional functions that are in support of these Key Pair functio
 
 ### func.file.go
 
-```go
+{{< code lang="go" line-numbers="true" >}}
 // FileExists checks if a file exists and returns a boolean or an erro
 func FileExists(fileName string) (bool, error) {
 	if _, err := os.Stat(fileName); err == nil {
@@ -150,13 +150,13 @@ func FileExists(fileName string) (bool, error) {
 		return false, err
 	}
 }
-```
+{{< /code >}}
 
 ## Add Key Pair Generation to CreateNewCA function
 
 Now we can add the key pair generation functions after the file system creation steps:
 
-```go
+{{< code lang="go" line-numbers="true" >}}
 // CreateNewCA was initially defined in one of the previous articles...
 func CreateNewCA(certificateID string) (bool, []string, error) {
 
@@ -207,7 +207,7 @@ func CreateNewCA(certificateID string) (bool, []string, error) {
     
     return true, []string{"CA Created!"}, nil
 }
-```
+{{< /code >}}
 
 ## Next Steps
 

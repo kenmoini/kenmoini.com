@@ -69,7 +69,7 @@ Once the cluster is deployed, just use the Marketplace 1-click Apps to deploy th
 
 From here you can jump into the Kubernetes Dashboard with the big button in the DigitalOcean panel - or if you prefer working with the CLI, you can pull your cluster's kubeconfig with a [DigitalOcean Personal Acess Token](https://cloud.digitalocean.com/account/api/tokens) and the following:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 # Authenticate with doctl
 doctl auth init
 
@@ -78,7 +78,7 @@ doctl kubernetes cluster kubeconfig save $DO_CLUSTER_ID
 
 # Test server conneciton
 kubectl cluster-info
-```
+{{< /code >}}
 
 ---
 
@@ -94,7 +94,7 @@ The problem with that is that the traditional ingress-nginx manifest sets up a D
 
 And this is the mainfest to do just that!
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 ---
 apiVersion: v1
 kind: Namespace
@@ -827,7 +827,7 @@ spec:
         # env:
         # - name: DEBUG
         #   value: "true"
-```
+{{< /code >}}
 
 Give it a few minutes and you should see a Load Balancer spin up in your DigitalOcean account.
 
@@ -843,7 +843,7 @@ Now, Let's Encrypt issues certificates for 3 months at a time, which means not o
 
 To deploy cert-manager we'll use Helm - assuming you already have the Helm binary installed:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Add the Jetstack repo
 helm repo add jetstack https://charts.jetstack.io
 
@@ -852,19 +852,19 @@ helm repo update
 
 ## Install cert-manager
 helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.6.0 --set installCRDs=true
-```
+{{< /code >}}
 
 Now that cert-manager is installed, let's make a ClusterIssuer since namespaced Issuers are dumb for a non-multi-tenant or multi-provider environment.
 
 To do so, first you need to make a Secret with a [DigitalOcean Personal Access Token](https://cloud.digitalocean.com/account/api/tokens) for the cert-manager ClusterIssuer to use - you can do so with the following:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 kubectl create secret generic do-dns-pat --from-literal=access-token=YOUR_DO_PAT_TOKEN
-```
+{{< /code >}}
 
 With that you can `kubectl apply` the following ClusterIssuer:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
@@ -881,7 +881,7 @@ spec:
           tokenSecretRef:
             name: do-dns-pat
             key: access-token
-```
+{{< /code >}}
 
 ---
 
@@ -889,7 +889,7 @@ spec:
 
 With everything in place now, we can start to deploy workloads and exposing them to the internet - but which will we expose first?  Why not Grafana?  It is running already in the cluster from our Monitoring stack deployed earlier after all...
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 kind: Ingress
 apiVersion: extensions/v1beta1
 metadata:
@@ -917,7 +917,7 @@ spec:
             backend:
               serviceName: kube-prometheus-stack-grafana
               servicePort: 80
-```
+{{< /code >}}
 
 A few things to pay attention to:
 

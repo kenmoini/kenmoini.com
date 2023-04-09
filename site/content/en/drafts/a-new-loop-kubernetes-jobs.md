@@ -65,7 +65,7 @@ There is a challenge in procuring status for the overall progress through Ansibl
 
 First thing we need to do is build the script that's running in the Kubernetes Job so we can map out the additional container requirements - this is likely going to be Bash so let's see what we need to do:
 
-```bash
+{{< code lang="bash" command-line="true" >}}
 #!/bin/bash
 
 ## Needed configmaps:
@@ -169,7 +169,7 @@ if [ $? == 0 ]; then
 else
   echo "No limits found..."
 fi
-```
+{{< /code >}}
 
 With all that we'll need to do a few things to make that script work:
 
@@ -181,13 +181,13 @@ With all that we'll need to do a few things to make that script work:
 
 ### Create Jobs Project
 
-```bash
+{{< code lang="bash" command-line="true" >}}
 ./oc new-project workshop-user-jobs
-```
+{{< /code >}}
 
 ### Create Jobs SA
 
-```bash
+{{< code lang="bash" command-line="true" >}}
 cat > user-job-robot-sa.yaml << EOF
 ---
 apiVersion: v1
@@ -202,11 +202,11 @@ EOF
 
 ## Add cluster-admin role to it
 ./oc adm policy add-cluster-role-to-user cluster-admin -z user-job-robot -n workshop-user-jobs
-```
+{{< /code >}}
 
 ### Job Template
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -232,12 +232,12 @@ spec:
           name: user1-job-data
       restartPolicy: Never
   backoffLimit: 1
-```
+{{< /code >}}
 
 
 ### ConfigMap
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -245,12 +245,12 @@ metadata:
 data:
   user: "user1"
   bootstrap.sh: base64EncodedData==
-```
+{{< /code >}}
 
 
 ## CMD Testing Pod
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 apiVersion: v1
 kind: Pod
 metadata:
@@ -263,4 +263,4 @@ spec:
     - name: ubi
       image: 'registry.access.redhat.com/ubi8/ubi-minimal:8.5-204'
       command: ['sh', '-c', 'echo "Hello, Kubernetes!"']
-```
+{{< /code >}}

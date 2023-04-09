@@ -178,7 +178,7 @@ You could log in via the terminal on the host, but normally you'd want to use an
 
 Now that you're SSH'd into the CVM, you can run a few commands to create the cluster, making sure to change the IPs out:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 # Create a cluster, redundancy_factor=1 basically means single-node
 cluster -s "192.168.42.57" --redundancy_factor=1 create
 
@@ -197,7 +197,7 @@ ncli cluster edit-params external-data-services-ip-address="192.168.42.59"
 
 # Start the cluster in case it is not already started after creation
 cluster start
-```
+{{< /code >}}
 
 {{< imgSet cols="3" name="cluster-creation" >}}
 {{< imgItem src="/images/posts/2021/10/putty-cvm-create-cluster.png" alt="Create a cluster" >}}

@@ -51,7 +51,7 @@ So my challenge is to download a Subscription Manifest to the Ansible Tower node
 2. Create a Subscription Allocation with Ansible Automation Platform subscriptions attached to it - take note of the Subscription Allocation UUID
 3. Use the following Playbook:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 ---
 - name: Obtain Red Hat Subscription Manifest package for Ansible Tower server
     hosts: localhost
@@ -118,7 +118,7 @@ So my challenge is to download a Subscription Manifest to the Ansible Tower node
           tower_username: "{{ tower_username }}"
           tower_password: "{{ tower_password }}"
           validate_certs: false
-```
+{{< /code >}}
 
 You may need to install the `ansible.tower` collection from the Red Hat Automation Hub: https://cloud.redhat.com/ansible/automation-hub/repo/published/ansible/tower
 

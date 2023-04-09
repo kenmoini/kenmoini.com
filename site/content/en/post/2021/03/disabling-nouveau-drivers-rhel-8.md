@@ -40,18 +40,18 @@ Edit the `/etc/default/grub` file and append the following to the `GRUB_CMDLINE_
 
 The line should look something like this:
 
-```text
+{{< code lang="text" >}}
 GRUB_CMDLINE_LINUX="crashkernel=auto resume=/dev/mapper/rhel-swap rd.lvm.lv=rhel/root rd.lvm.lv=rhel/swap rhgb quiet modprobe.blacklist=nouveau"
-```
+{{< /code >}}
 
 ### 2. Create Modprobe Denylist dynamic config
 
 Run the following command which will add another play to deny Nouveau's kernel module from loading:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 echo "blacklist nouveau" > /etc/modprobe.d/denylist.conf
 echo "options nouveau modeset=0" >> /etc/modprobe.d/denylist.conf
-```
+{{< /code >}}
 
 *One of these days we'll get better language adopted in core Linux systems...*
 
@@ -59,9 +59,9 @@ echo "options nouveau modeset=0" >> /etc/modprobe.d/denylist.conf
 
 To avoid driver issues with X being loaded, let's just set the boot target level to text mode instead of a graphical login:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 sudo systemctl set-default multi-user.target
-```
+{{< /code >}}
 
 *You can switch this back to a GUI later with:* `systemctl set-default graphical.target`
 
@@ -69,9 +69,9 @@ sudo systemctl set-default multi-user.target
 
 Run the following to rebuild your initramfs:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 sudo dracut --force
-```
+{{< /code >}}
 
 ### 5. Rebuild GRUB
 
@@ -86,8 +86,8 @@ Rebuild the GRUB2 configuration file by running the `grub2-mkconfig -o` command 
 
 And finally...
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 sudo systemctl reboot
-```
+{{< /code >}}
 
 At this point you can continue to install NVidia drivers!

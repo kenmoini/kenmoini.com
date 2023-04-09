@@ -69,13 +69,13 @@ I've recently been making an effort to not make such shitty and poorly enabled/m
 
 First thing I did was supply the Containerfile *(fuck Dockerfile, all my homies hate Dockerfile)* with a few new ARGs - an ARG for GOLANG_VERSION, SYSTEM_OS and SYSTEM_ARCH to support different build configurations.
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 FROM registry.access.redhat.com/ubi8/ubi:latest
 
 ARG GOLANG_VERSION=1.16.2
 ARG SYSTEM_ARCH=amd64
 ARG SYSTEM_OS=linux
-```
+{{< /code >}}
 
 ***Fun fact:***  ARG is the only thing that can be defined before a FROM and is often used to variate the container base image...I supplied all the ARGs at the top of the Containerfile and found out that after a FROM the previous layer's ARGs are no longer available - so to make this work I just shifted the ARGs to below the FROM declaration.
 
@@ -85,7 +85,7 @@ Nothing is too fancy about this container image, which is good - that means it s
 
 We're updating the base image layer, [Red Hat's Universal Base Image](https://catalog.redhat.com/software/container-stacks/detail/5ec53f50ef29fd35586d9a56), with the latest packages, needed packages, and set some environmental properties.
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 # Basic Updates
 RUN dnf update -y \
   && dnf install -y wget curl gnupg make git \
@@ -99,19 +99,19 @@ RUN mkdir -p /opt/{app-root,app-src}/ \
 
 ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/app-root/bin:/opt/app-root/go/bin
 ENV GOPATH=/opt/app-root/go
-```
+{{< /code >}}
 
 ## 4. Installing Golang
 
 This is pretty easy - download the file, extract, put it where it needs to go, check to see if it worked, clean up.
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 RUN curl -sSLk https://golang.org/dl/go${GOLANG_VERSION}.${SYSTEM_OS}-${SYSTEM_ARCH}.tar.gz -o /tmp/golang.tar.gz \
  && tar -C /opt/app-root -xzf /tmp/golang.tar.gz \
  && go version
 
 RUN rm -rf /var/log/*
-```
+{{< /code >}}
 
 And that's that!  Now onto the automation...
 
@@ -131,7 +131,7 @@ This is pretty easy - Dependabot is a service provided by GitHub that will annoy
 
 Make sure the `./.github/dependabot.yml` looks something like this:
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 # See GitHub's docs for more information on this file:
 # https://docs.github.com/en/free-pro-team@latest/github/administering-a-repository/configuration-options-for-dependency-updates
 version: 2
@@ -142,7 +142,7 @@ updates:
     schedule:
       # Check for updates to GitHub Actions every weekday
       interval: "daily"
-```
+{{< /code >}}
 
 ## Required Secrets
 
@@ -160,7 +160,7 @@ It'll run on any push or tag, just in case - and it'll also run on the 1st and t
 
 We're just cURL'ing the latest version and creating a tag with that version number.
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 name: Sync with Golang Version
 on:
   push:
@@ -192,7 +192,7 @@ jobs:
       with:
         github_token: ${{ secrets.GHUB_TOKEN }}
         custom_tag: ${{ steps.golang_version.outputs.GOLANG_VERSION }}
-```
+{{< /code >}}
 
 Now that we've automated Tag creation, we can automate Release automation based on any Version Tag we create - this allows us to push additional hotfix container patches on top of a Golang version x.y.z.AA just by pushing that Tag.
 
@@ -200,7 +200,7 @@ Now that we've automated Tag creation, we can automate Release automation based 
 
 Our next Action will create a GitHub Release anytime a Tag matching `v*` is created/pushed - stuff this in a file called something like `./.github/workflows/create-release.yml`
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 name: Create a new Release on Tag creation
 
 on:
@@ -219,7 +219,7 @@ jobs:
       with:
         token: ${{ secrets.GHUB_TOKEN }}
 
-```
+{{< /code >}}
 
 That one is extremely simple, eh?  Now for the real meat and potatoes...
 
@@ -229,7 +229,7 @@ This last GitHub Action will create the actual container image and push it to ou
 
 It won't operate when the README is updated though, 
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 name: Build Golang UBI Container
 on:
   push:
@@ -304,7 +304,7 @@ jobs:
           GOLANG_VERSION=${{ steps.golang_version.outputs.GOLANG_VERSION }}
           SYSTEM_OS=linux
           SYSTEM_ARCH=amd64
-```
+{{< /code >}}
 
 Note that this will use the latest version of Golang for every build - if you want to sync to the Tag reference then swap the `GOLANG_VERSION` build-arg with `${{ steps.git_build_info.outputs.SOURCE_TAG }}`.  That may require additional logic in the Containerfile in order to compensate for the empty string when a tag isn't the trigger - or trigger the build based only of the versioned tags.
 
@@ -312,8 +312,8 @@ There's some additional modifications you could do, such as building for differe
 
 You could even extend this automation workflow to other container image layers - if you have a downstream project that consumes this container image, maybe you add additional builder packages like NPM to this Golang builder, and you want to sync when there is a new version of this container image, you would just query something like this:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 curl -s https://api.github.com/repos/PolyglotSystems/golang-ubi8/releases/latest | grep "tag_name" | cut -d ':' -f 2,3 | tr -d \",
-```
+{{< /code >}}
 
 > ***With a little Push, you should now have releases of the Golang base image automated to sync with the versions of Golang itself!***

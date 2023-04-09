@@ -79,7 +79,7 @@ What we'll do is create a few files:
 
 #### ***credentials.tf***
 
-```terraform
+{{< code lang="terraform" line-numbers="true" >}}
 variable "vsphere_user" {
   type    = string
   default = "administrator@vmware.example.com"
@@ -92,13 +92,13 @@ variable "vsphere_server" {
   type    = string
   default = "vcenter1.vmware.example.com"
 }
-```
+{{< /code >}}
 
 Of course, substitute the needed credentials in that file to connect to your own vCenter instance.
 
 #### ***version.tf***
 
-```terraform
+{{< code lang="terraform" line-numbers="true" >}}
 terraform {
   required_providers {
     vsphere = {
@@ -117,13 +117,13 @@ provider "vsphere" {
   # If you have a self-signed cert
   allow_unverified_ssl = true
 }
-```
+{{< /code >}}
 
 The `version.tf` file should require no modification unless you want to verify SSL certificates.
 
 #### ***variables.tf***
 
-```terraform
+{{< code lang="terraform" line-numbers="true" >}}
 variable "generationDir" {
   type    = string
   default = "./.generated"
@@ -270,7 +270,7 @@ variable "k8s_orchestrator_network_config" {
     orchestrator_2_server_id = ""
   }
 }
-```
+{{< /code >}}
 
 - You'll need to set some variables here in the `variables.tf` file - changing primarily the `vmware_` prefixed variables to match your your environment.
 - The `cluster_name` and `domain` variables set things as far as FQDN bases, so your cluster API will be located at `api.cluster_name.domain:6443`
@@ -280,7 +280,7 @@ variable "k8s_orchestrator_network_config" {
 
 #### ***global_data.tf***
 
-```terraform
+{{< code lang="terraform" line-numbers="true" >}}
 #############################################################################
 ## Gather data, need IDs
 data "vsphere_datacenter" "dc" {
@@ -302,13 +302,13 @@ data "vsphere_host" "host" {
   name          = var.vmware_ova_host
   datacenter_id = data.vsphere_datacenter.dc.id
 }
-```
+{{< /code >}}
 
 A cool thing about Terraform is you can chop up and organize your script in anyway you'd like - this file is used to separate global data sources that are expected at initialization.
 
 ### ***template/template_ignition.yaml***
 
-```yaml
+{{< code lang="yaml" line-numbers="true" >}}
 variant: fcos
 version: 1.2.0
 passwd:
@@ -331,13 +331,13 @@ storage:
       mode: 420
       contents:
         inline: "${cluster_name}-template"
-```
+{{< /code >}}
 
 This is the Ignition YAML template for the Template VM that is generated and passed to `fcct` - I won't paste in the YAML for the others since it pretty just just has a different hostname, or includes a `count` var.  You can find all the other Ignition YAML files on the Git repo linked above/below.
 
 #### ***main.tf***
 
-```terraform
+{{< code lang="terraform" line-numbers="true" >}}
 #############################################################################
 ## Generate new cluster SSH Keys
 resource "tls_private_key" "cluster_new_key" {
@@ -604,7 +604,7 @@ resource "vsphere_virtual_machine" "orchestratorVMs" {
   tags   = [vsphere_tag.tag.id]
   folder = vsphere_folder.vm_folder.path
 }
-```
+{{< /code >}}
 
 This is where the rubber meets the road, we compose the infrastructure and set up a few things like:
 
@@ -627,7 +627,7 @@ Now before we go `terraform apply`'ing all over the place, let's tap out a few s
 
 #### ***vars.sh***
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 #!/bin/bash
 
 FCOS_VERSION="33.20201201.3.0"
@@ -635,13 +635,13 @@ FCOS_VERSION="33.20201201.3.0"
 ## DO NOT EDIT PAST THIS LINE!
 
 export TF_VAR_fcos_version=$FCOS_VERSION
-```
+{{< /code >}}
 
 A simple vars file, this sets FCOS version to download that is then passed to the next script which downloads the OVA, and an export set to override the value in the executed Terraform plan.
 
 #### ***scripts/pull-assets.sh***
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 #!/bin/bash
 
 FCOS_VERSION=${1}
@@ -651,13 +651,13 @@ mkdir -p /tmp/.k8s-deployer/cache/
 if [ ! -f /tmp/.k8s-deployer/cache/fedora-coreos-${FCOS_VERSION}-vmware.x86_64.ova ]; then
   curl -L -o /tmp/.k8s-deployer/cache/fedora-coreos-${FCOS_VERSION}-vmware.x86_64.ova https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/${FCOS_VERSION}/x86_64/fedora-coreos-${FCOS_VERSION}-vmware.x86_64.ova
 fi
-```
+{{< /code >}}
 
 All this file does is pull in the FCOS OVA to a local cache so it's not downloaded every time this is run.  It's trigger by this next script...
 
 #### ***deploy.sh***
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 #!/bin/bash
 
 ## set -x	## Uncomment for debugging
@@ -721,7 +721,7 @@ else
   echo "There seem to be issues with planning out the terraform deployment"
   echo ""
 fi
-```
+{{< /code >}}
 
 A simple bootstrapping script, checks to make sure everything we need is there on the host that will be applying the Terraform plans.
 

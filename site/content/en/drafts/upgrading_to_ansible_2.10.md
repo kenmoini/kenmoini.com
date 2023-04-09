@@ -11,15 +11,15 @@ authors:
   - Ken Moini
 ---
 
-```bash
+{{< code lang="bash" command-line="true" output="" >}}
 pip3 uninstall ansible
-```
+{{< /code >}}
 
-```bash
+{{< code lang="bash" command-line="true" output="" >}}
 pip3 install ansible-base
-```
+{{< /code >}}
 
-```bash
+{{< code lang="bash" command-line="true" output="" >}}
 pip3 install argcomplete
 
 register-python-argcomplete ansible | sudo tee /etc/bash_completion.d/python-ansible
@@ -35,9 +35,9 @@ register-python-argcomplete ansible-vault | sudo tee /etc/bash_completion.d/pyth
 sudo chmod +x /etc/bash_completion.d/python-ansible*
 
 source /etc/bash_completion.d/python-ansible*
-```
+{{< /code >}}
 
-```bash
+{{< code lang="bash" command-line="true" output="" >}}
 pip3 install ovirt-engine-sdk-python
 pip3 install boto
 pip3 install openstacksdk
@@ -45,4 +45,4 @@ pip3 install openstacksdk
 ansible-galaxy collection install ovirt.ovirt
 ansible-galaxy collection install amazon.aws
 ansible-galaxy collection install openstack.cloud
-```
+{{< /code >}}

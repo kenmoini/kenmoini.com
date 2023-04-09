@@ -53,7 +53,7 @@ Since I'm running RHEL on this physical host I need to install Libvirt and get i
 
 First step is to install the KVM/Libvirt hypervisor:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Check if you have virtualization enabled
 VIRT_TEST=$(cat /proc/cpuinfo | egrep "vmx|svm" | wc -l)
 if [[ $VIRT_TEST -eq 0 ]]; then
@@ -75,7 +75,7 @@ systemctl enable --now cockpit.socket
 
 ## Enable Libvirt
 systemctl enable --now libvirtd
-```
+{{< /code >}}
 
 ### Creating a Bridged Network Interface
 
@@ -83,7 +83,7 @@ The default network that comes with Libvirt is a NAT'd network - this is fine fo
 
 My network is `192.168.42.0/24` and I'll assign a static IP to the bridge interface - change the values to match your network:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Create a bridge from the hypervisor's physical network interface, assuming a name of bridge0
 nmcli con add type bridge con-name bridge0 ifname bridge0
 
@@ -106,7 +106,7 @@ nmcli con up bridge0
 
 ## Delete the old physical connection
 nmcli con delete enp0s1
-```
+{{< /code >}}
 
 ### Creating a Libvirt Bridged Network
 
@@ -114,21 +114,21 @@ With Libvirt installed and a bridged NIC in place we can create the Libvirt brid
 
 ***/var/lib/libvirt/bridged-network.xml***
 
-```xml
+{{< code lang="xml" line-numbers="true" >}}
 <network>
   <name>bridge0</name>
   <forward mode="bridge"/>
   <bridge name="bridge0"/>
 </network>
-```
+{{< /code >}}
 
 With that XML file created, just add it to Libvirt with the following couple of commands:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 virsh net-define /var/lib/libvirt/bridged-network.xml
 virsh net-start bridge0
 virsh net-autostart bridge0
-```
+{{< /code >}}
 
 ---
 
@@ -140,16 +140,16 @@ With the hypervisor and network set up it's time to make a Windows VM on Libvirt
 
 Windows doesn't come with the VirtIO device drivers built-in so we'll need to load them and the easiest way to do that is via an ISO - grab it from here: https://github.com/virtio-win/virtio-win-pkg-scripts/blob/master/README.md
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 cd /var/lib/libvirt/images
 wget https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso -O virtio-win.iso
-```
+{{< /code >}}
 
 ### Mapping PCIe Devices
 
 This Windows VM will be provided a whole Radeon RX 580 via PCIe pass-through - to do this we first need to find what device address it uses.  This device address won't change unless you physically relocate the PCIe devices on the motherboard.
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## List the PCIe devices, pipe to grep and match some word of the device you're using
 [root@suki ~]# lspci | grep 'RX'
 21:00.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI] Ellesmere [Radeon RX 470/480/570/570X/580/580X/590] (rev e7)
@@ -159,11 +159,11 @@ This Windows VM will be provided a whole Radeon RX 580 via PCIe pass-through - t
 [kemo@suki ~]$ lspci | grep AS
 05:00.0 USB controller: ASMedia Technology Inc. ASM2142 USB 3.1 Host Controller
 0a:00.0 USB controller: ASMedia Technology Inc. ASM2142 USB 3.1 Host Controller
-```
+{{< /code >}}
 
 The numbers needed are the ones at the start of the lines, `21:00.0`, `21:00.1`, `05:00.0`, and `0a:00.a` - convert the colon and period to underscores and you can detach them from the host:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 # Detatch Devices from host
 ## GPU
 virsh nodedev-detach pci_0000_21_00_0
@@ -171,7 +171,7 @@ virsh nodedev-detach pci_0000_21_00_1
 ## PCIe USB Controller Card
 virsh nodedev-detach pci_0000_05_00_0
 virsh nodedev-detach pci_0000_0a_00_0
-```
+{{< /code >}}
 
 ### Creating the VM
 
@@ -195,7 +195,7 @@ Now that the hypervisor is setup, devices for PCIe passthrough are detached from
 - Specify the VM varient and type (Windows in this case)
 - And just a non-destruction reboot event
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 # Build VM
 virt-install --name=vroom \
  --vcpus "sockets=1,cores=6,threads=1" \
@@ -214,7 +214,7 @@ virt-install --name=vroom \
  --controller type=scsi,model=virtio-scsi \
  --os-variant=win10 --os-type=windows \
  --events on_reboot=restart
-```
+{{< /code >}}
 
 From this point, head to ***Cockpit*** at port `9090` *(you're using Cockpit, right?)*, dive into the ***Virtual Machines*** application, and you can complete the installation via the VNC there - or do so from the physical keyboard/monitor/mouse connected to the system and passed through via the GPU and PCIe USB card:
 

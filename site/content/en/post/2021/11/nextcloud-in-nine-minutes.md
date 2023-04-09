@@ -46,7 +46,7 @@ Make sure to configure the VM with a static IP, which is really easy to do durin
 
 Just some basic steps, updates and whatnot:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Switch to root
 sudo -i
 
@@ -62,7 +62,7 @@ apt install -y nfs-common
 
 ## Reboot
 systemctl reboot
-```
+{{< /code >}}
 
 You may also need to set some file/user/group permissions to access certain data served by NextCloud - data is accessed by the `www-data` user/group which will need read (and write maybe) access to the files being served by NextCloud.
 
@@ -72,7 +72,7 @@ You may also need to set some file/user/group permissions to access certain data
 
 Before installing NextCloud attach the NFS storage to the VM host - assuming you have the ACLs and exports in place for the host to access the data:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 NFS_HOST="deep-thought.kemo.labs"
 NFS_SHARE="/nextcloud"
 MOUNT_PATH="/mnt/nextcloud_data"
@@ -92,7 +92,7 @@ mount -a
 
 ## Test the mount
 ls -al ${MOUNT_PATH}
-```
+{{< /code >}}
 
 Note that you can't mount NFS directories inside of a NextCloud Data Directory - you can mount an NFS store, then configure NextCloud to use a folder in that mounted path as the base Data Directory in the `config/config.php` file.  NextCloud acts funny with NFS...
 
@@ -102,7 +102,7 @@ Note that you can't mount NFS directories inside of a NextCloud Data Directory -
 
 There are a few ways to do so - the Snap is a pain, just do it the old fashioned way with the Production Installation Script:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Switch to root
 sudo -i
 
@@ -114,7 +114,7 @@ chmod a+x nextcloud_install_production.sh
 
 ## Run the script
 ./nextcloud_install_production.sh
-```
+{{< /code >}}
 
 {{< imgSet cols="4" name="nextcloud-installer" >}}
 {{< imgItem src="/images/posts/2021/11/production-nextcloud-installer.png" alt="Say hello to the text user interface of the NextCloud installer!" >}}
@@ -142,7 +142,7 @@ Before starting we'll need to set a little configuration - this is done via a `/
 - Redefine log rotation and timezone
 - Redefine the dataDirectory (where files are stored)
 
-```php
+{{< code lang="php" line-numbers="true" >}}
 
 // ...
 // =============================================
@@ -197,7 +197,7 @@ Before starting we'll need to set a little configuration - this is done via a `/
 
   'datadirectory' => '/mnt/nextcloud_data/data',
 // ...
-```
+{{< /code >}}
 
 Changes are automatically picked up and used without further intervention.
 
@@ -207,7 +207,7 @@ Changes are automatically picked up and used without further intervention.
 
 The automation can sometimes fail when setting the Apache HTTPd Virtual Hosts files - reset them with a quick combo of:
 
-```bash
+{{< code lang="bash" line-numbers="true" >}}
 ## Disable all VirtualHosts
 a2dissite *.conf
 
@@ -216,7 +216,7 @@ a2dismod ssl
 
 ## Enable HTTP VirtualHost
 a2ensite nextcloud_http_domain_self_signed.conf
-```
+{{< /code >}}
 
 This allows for positioning the Nextcloud server behind an [HAProxy Reverse Proxy](https://kenmoini.com/post/2021/10/homelab-haproxy-ingress-with-letsencrypt/) for instance.
 
