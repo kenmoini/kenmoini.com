@@ -1,0 +1,29 @@
+{{ $pag := $.Paginator }}
+{{ if gt $pag.TotalPages 1 }}
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        {{ if $pag.HasPrev }}
+        <li class="page-item"><a href="{{ $pag.Prev.URL }}" rel="prev" class="page-link page-prev">&lt;</a></li>
+        {{ end }}
+        {{ range $pag.Pagers }}
+
+        {{ $postLimit := 5 }}
+        {{ $preLimit := sub $pag.PageNumber 2 }}
+        {{ if ge $pag.PageNumber 4 }}{{ $postLimit = add $pag.PageNumber 2 }}{{ end }}
+
+        {{ if and (ge .PageNumber $preLimit) (le .PageNumber $postLimit) }}
+        {{ if eq . $pag }}
+        <li class="page-item active"><span class="page-link">{{ .PageNumber }}</span></li>
+        {{ else }}
+        <li class="page-item"><a href="{{ .URL }}" class="page-link">{{ .PageNumber }}</a></li>
+        {{ end }}
+        {{ end }}
+
+        {{ end }}
+
+        {{ if $pag.HasNext }}
+        <li class="page-item"><a href="{{ $pag.Next.URL }}" rel="next" class="page-link page-next">&gt;</a></li>
+        {{ end }}
+    </ul>
+</nav>
+{{ end }}
