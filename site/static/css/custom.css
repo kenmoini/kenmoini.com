@@ -250,6 +250,11 @@ h4 code, h5 code {
 	user-select: none;
 }
 
+ul.pagination {
+  max-width: fit-content;
+  margin: 90px auto 0 !important;
+}
+
 .pagination .page-item {
   flex: 1;
 }
