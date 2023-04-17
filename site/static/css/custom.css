@@ -251,10 +251,12 @@ h4 code, h5 code {
 }
 
 ul.pagination {
-  max-width: fit-content;
+  max-width: 640px !important;
   margin: 90px auto 0 !important;
 }
-
+li.page-item.active {
+  font-weight: bold;
+}
 .pagination .page-item {
   flex: 1;
 }
