@@ -51,7 +51,7 @@ The ecosystem and user experience is so well knit, and as far as tools go they'r
 
 ## Jiving to The New System Blues
 
-The best, yet worst part of any new system is setting it back up - there are endless possiblities, a fresh slate to paint upon, but with a crippling feeling that you'll forget to configure or install something that you need.
+The best, yet worst part of any new system is setting it up - there are endless possiblities, a fresh slate to paint upon, but with a crippling feeling that you'll forget to configure or install something that you need.  *Same sorta feeling you get when packing or checking out from a hotel room*.
 
 I like having the same user experience on each system, and one of the reasons I use Git and a Remote SSH interface via VS Code is that I like to be able to immediately pick up my work from where I last left off - no matter what system I'm using.
 
@@ -71,7 +71,7 @@ From there I **smash that Update button** and make sure to get the latest OS and
 
 Next I **unpin all the useless apps from the Dock** like Numbers, Pages, whatever the hell Freeform is, and all the other things I never use.
 
-After making some room, I'll load up the App Store and download all my previously purchased and downloaded applications like Apple Remote Desktop, Microsoft Remote Desktop, and Flow, my focus/Pomodoro timer app.
+After making some room, I'll load up the App Store and **download all my previously purchased and downloaded applications** like Apple Remote Desktop, Microsoft Remote Desktop, and Flow, my focus/Pomodoro timer app.
 
 ---
 
@@ -107,9 +107,11 @@ Not too bad really - Office just takes logging into, and adding the system to a 
 
 If you're an experienced Mac user, you may have noticed the absense of Homebrew, everyone's favorite package manager!
 
-Honestly, I don't think it's the best - it's great, don't get me wrong, but there are some things it shouldn't manage the installs and update for, namely apps that have their own built-in self-update proceedures.  That's why I installed my browsers, VSCode, 1Password, etc with MacApps, they don't need a package manager just a quick way to get installed and that's exactly what it does.  For things like `git` and `wget` however, those things certainly benefit from a package manager like Homebrew.
+Honestly, I don't think it's the best - it's great, don't get me wrong, but there are some things it shouldn't manage the installs and update for, namely apps that have their own built-in self-update proceedures.
 
-And as far as a terminal-based package manager like Homebrew goes, there's also some terminal settings that I like to apply - aliases, binaries, environmental variables, so on.  This is all done **[via Git in a repo called dotfile](https://github.com/kenmoini/dotfiles)**, and synced across all my systems with a few simple commands...also has the benefit of installing Homebrew and all the normal things I need installed with it.
+That's why I installed my browsers, VSCode, 1Password, etc with MacApps, they don't need a package manager just a quick way to get installed and that's exactly what it does.  For things like `git` and `wget` however, those things certainly benefit from a terminal-based package manager like Homebrew.
+
+And as far as terminal goes, there's also some terminal settings that I like to apply - aliases, binaries, environmental variables, so on.  This is all done **[via Git in a repo called dotfile](https://github.com/kenmoini/dotfiles)**, and synced across all my systems with a few simple commands...also has the benefit of installing Homebrew and all the normal things I need installed with it.
 
 ```bash
 # Clone the repo into the right place
@@ -133,6 +135,8 @@ At this point I've got things installed like Golang, hidden files and scroll bar
 
 Synced "dotfiles" are not a new concept, and it's something I delayed on for a while but with multiple systems or for frequent reformat/reinstalls, it's incredibly valuable.
 
+Since I use ZSH across all my systems, my dotfile repo also works on my Linux OSes - and those are configured usually in Git as well and automated with Ansible.
+
 ---
 
 ## What about the games?!
@@ -142,5 +146,7 @@ Yes yes, I didn't install Steam or Discord, even though it'd be two clicks on Ma
 Plus, each system is going to have a slightly different purpose - I do a lot of programming and writing, so this is mostly just my core apps and things.  My Mac Studios and MacBook Pro have Adobe Photoshop, DaVinci Resolve, and Handbrake installed since they're more goaled to media production.
 
 The last thing to is clean up after everything, unmount the DMG images, move the stuff from the Downloads folder to the Trash, and empty the bin.
+
+---
 
 > Then it's time to get to work
