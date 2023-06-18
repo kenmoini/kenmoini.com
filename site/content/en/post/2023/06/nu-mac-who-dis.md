@@ -63,7 +63,9 @@ Since it seems like I'll probably end up buying a few more of these Arm systems 
 
 First thing's first: you of course get through **the Out of the Box Setup Wizard** as quickly as possible - or at least I do so I can launch iCloud and sync down my images and **set my profile picture** to something proper...
 
-INSERT_IMAGE_HERE
+{{< imgSet cols="1" name="avatar" >}}
+{{< imgItem src="/images/posts/2023/06/awesome-avatar.jpg" alt="The coolest I've ever looked" >}}
+{{< /imgSet >}}
 
 From there I **smash that Update button** and make sure to get the latest OS and core apps installed.
 
