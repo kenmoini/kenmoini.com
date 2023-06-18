@@ -47,6 +47,8 @@ Now I have:
 
 The ecosystem and user experience is so well knit, and as far as tools go they're great for my productivity.
 
+---
+
 ## Jiving to The New System Blues
 
 The best, yet worst part of any new system is setting it back up - there are endless possiblities, a fresh slate to paint upon, but with a crippling feeling that you'll forget to configure or install something that you need.
@@ -54,6 +56,8 @@ The best, yet worst part of any new system is setting it back up - there are end
 I like having the same user experience on each system, and one of the reasons I use Git and a Remote SSH interface via VS Code is that I like to be able to immediately pick up my work from where I last left off - no matter what system I'm using.
 
 Since it seems like I'll probably end up buying a few more of these Arm systems over the next few years, I've decided to write up the way that I make them feel like home, and I can go from the box to a useful system in less than an hour.
+
+---
 
 ## New System Smell
 
@@ -67,6 +71,8 @@ Next I **unpin all the useless apps from the Dock** like Numbers, Pages, whateve
 
 After making some room, I'll load up the App Store and download all my previously purchased and downloaded applications like Apple Remote Desktop, Microsoft Remote Desktop, and Flow, my focus/Pomodoro timer app.
 
+---
+
 ## Software Shotgun
 
 Now that the system is truely a clean slate with some of the Mac-based basics, I use the **[Ninite for Mac called MacApps](https://macapps.link/en/)** to quickly install a few core applications such as Firefox, Chrome, VSCode, Postman, Unarchiver, 1Password, Cyberduck, Viscosity, and VLC...and it all just takes a single command:
@@ -79,6 +85,8 @@ Once that's installed I **log into 1Password** to access my password vault, use 
 
 The next step is to **sync my VSCode settings**, and I do that with my linked GitHub account so again, just have to log in and enter 2FA via my already logged in 1Password browser session.  All my VSCode extentions and settings sync down, then I just **grab my SSH Keys from** - you guessed it, 1Password, which means I can more or less start working as I would on any other system...a few notes on that later.
 
+---
+
 ## Bespoke Button Presses
 
 There are a few apps that I can't so simply download and install, a few more manual button pushes to get there - my standard list now is:
@@ -90,6 +98,8 @@ There are a few apps that I can't so simply download and install, a few more man
 - [ZeroTier](https://www.zerotier.com/download/) because I like having another way to VPN back into my labs
 
 Not too bad really - Office just takes logging into, and adding the system to a ZeroTier network is a simple log in and copy/paste/approval process as well.
+
+---
 
 ## Dot Files & Homebrew
 
@@ -120,6 +130,8 @@ git clone https://github.com/kenmoini/dotfiles.git ~/.dotfiles
 At this point I've got things installed like Golang, hidden files and scroll bars always shown, my shell configured, and more.
 
 Synced "dotfiles" are not a new concept, and it's something I delayed on for a while but with multiple systems or for frequent reformat/reinstalls, it's incredibly valuable.
+
+---
 
 ## What about the games?!
 
