@@ -15,6 +15,8 @@ tags:
   - aap
   - aap2
   - automation
+  - tower
+  - controller
   - secrets
   - credentials
   - nutanix
