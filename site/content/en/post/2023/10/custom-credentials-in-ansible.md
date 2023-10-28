@@ -30,6 +30,8 @@ Yeah, I know, I've been *slacking*.  What can I say, life has been busy.
 
 Anywho - I'm back at it like a crack addict, and for my first rock I'll be going over creating custom Credential Types in Ansible Automation Platform 2!  *Ooooh!  Ahhhh!  Spoopy.*
 
+---
+
 ## Why custom Credential Types?
 
 Well simply put, Ansible doesn't come with many credential types for integrating with various systems - you kind of have to make them.  It's not hard, just a bit of a pain in the ass to remember how to do it every time you need to.
@@ -37,6 +39,8 @@ Well simply put, Ansible doesn't come with many credential types for integrating
 In case you need to integrate with an external system such as in this instance - Nutanix Prism - you can make your own Credential Type, then use that to create a Credential to securely store authentication details in Ansible Tower/Controller.
 
 Of course you could just store the credentials as vaulted variables, but that becomes a pain to manage with different Inventories - and it's kind of an anti-pattern when providing Automation-as-a-Service.
+
+---
 
 ## Creating a Credential Type
 
@@ -112,6 +116,5 @@ With the Credential Type created, you can create a Credential of that...type.  Y
 2. Click the big blue "Add" button.
 3. Give your Credential a **Name**, maybe even a **Description** and **Organization**
 4. From the **Credential Type** drop down select the newly minted Credential Type - you'll see the Input Configuration defined specification displayed as a handy-dandy form!
-
 
 > Happy Automating!
