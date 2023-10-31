@@ -90,12 +90,14 @@ required:
 ---
 env:
   NUTANIX_HOSTNAME: '{{ nutanix_host }}'
+  NUTANIX_HOST: '{{ nutanix_host }}'
   NUTANIX_PORT: '{{ nutanix_port }}'
   NUTANIX_USERNAME: '{{ nutanix_username }}'
   NUTANIX_PASSWORD: '{{ nutanix_password }}'
   VALIDATE_CERTS: '{{ nutanix_validate_certs }}'
 extra_vars:
   nutanix_host: '{{ nutanix_host }}'
+  nutanix_hostname: '{{ nutanix_host }}'
   nutanix_port: '{{ nutanix_port }}'
   nutanix_username: '{{ nutanix_username }}'
   nutanix_password: '{{ nutanix_password }}'
