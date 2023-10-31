@@ -89,8 +89,8 @@ required:
 ```yaml=
 ---
 env:
-  NUTANIX_HOSTNAME: '{{ nutanix_host }}'
   NUTANIX_HOST: '{{ nutanix_host }}'
+  NUTANIX_HOSTNAME: '{{ nutanix_host }}'
   NUTANIX_PORT: '{{ nutanix_port }}'
   NUTANIX_USERNAME: '{{ nutanix_username }}'
   NUTANIX_PASSWORD: '{{ nutanix_password }}'
@@ -104,7 +104,7 @@ extra_vars:
   validate_certs: '{{ nutanix_validate_certs }}'
 ```
 
-7. Click **Save** to create the new Credential Type
+1. Click **Save** to create the new Credential Type
 
 Well - that's it!  Now you can go about using your new Credential Type.
 
