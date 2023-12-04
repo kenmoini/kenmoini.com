@@ -26,7 +26,7 @@ Ask anyone and they'll tell you that I love MetalLB - I use it profusely.  Where
 
 I use it with my Kubernetes clusters to expose services such as DNS so I don't have to use NodePorts and weird firewall forwarding.  I have customers who use it with their OpenShift clusters to expose things like databases and even other Ingresses.
 
-Today I'm going to show you how to do just that - we'll deploy the MetalLB Operator, and then the NGINX Ingress Operator and get them to sing a little song together.
+Today I'm going to show you how to do just that - we'll deploy the MetalLB Operator, and then the NGINX Ingress Operator and get them to sing a little song together.  *As an added bonus, we'll even set up Cert-Manager with some automated TLS goodness!*
 
 ---
 
@@ -43,8 +43,8 @@ First thing's first, we need to make a few Namespace - or Projects when working 
 ```bash
 oc create ns metallb-system
 oc create ns nginx-ingress
-oc create ns workload-test
 oc create ns cert-manager-operator
+oc create ns workload-test
 ```
 
 #### Via YAML Manifests
@@ -64,12 +64,12 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: workload-test
+  name: cert-manager-operator
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: cert-manager-operator
+  name: workload-test
 ```
 
 ---
@@ -81,8 +81,13 @@ Now in order for NGINX Ingress to operate properly in OpenShift, you need to cre
 #### Via the CLI
 
 ```bash
+# Create the SecurityContextConstraint for NGINX Ingress
 oc apply -f https://raw.githubusercontent.com/kenmoini/ocp-metallb-nginx-ingress/main/nginx-ingress/operator/base/scc.yml
+
+# Create the ClusteRole that allows use of the SCC
 oc apply -f https://raw.githubusercontent.com/kenmoini/ocp-metallb-nginx-ingress/main/nginx-ingress/operator/base/clusterrole.yml
+
+# Create the RoleBinding that allows the NGINX Ingress ServiceAccount to use the SCC via the ClusterRole
 oc apply -n nginx-ingress -f https://raw.githubusercontent.com/kenmoini/ocp-metallb-nginx-ingress/main/nginx-ingress/operator/base/clusterrolebinding.yml
 ```
 
@@ -174,8 +179,13 @@ There are a few assets that would be needed such as a Subscription and OperatorG
 #### Via the CLI
 
 ```bash
+# Install the MetalLB Operator
 oc apply -k github.com/kenmoini/ocp-metallb-nginx-ingress/metallb/operator/base/
+
+# Install the NGINX Ingress Operator
 oc apply -k github.com/kenmoini/ocp-metallb-nginx-ingress/nginx-ingress/operator/base/
+
+# Install the Cert-Manager Operator
 oc apply -k github.com/kenmoini/ocp-metallb-nginx-ingress/cert-manager/operator/overlays/stable-v1/
 ```
 
@@ -280,6 +290,7 @@ First off, deploy the MetalLB CR to instantiate the Operator.
 #### Via the CLI
 
 ```bash
+# Instantiate the MetalLB System
 oc apply -k github.com/kenmoini/ocp-metallb-nginx-ingress/metallb/instance/overlays/default/
 ```
 
@@ -350,6 +361,9 @@ spec:
     - 192.168.70.0/24
   autoAssign: false
   protocol: layer2
+```
+
+```yaml
 ---
 kind: L2Advertisement
 apiVersion: metallb.io/v1beta1
@@ -357,10 +371,10 @@ metadata:
   name: lab-l2-adv
 spec:
   ipAddressPools:
-    - lab-pool
+    - lab-pool # Must match the name of the IPAddressPool
 ```
 
-> Note that the IPAddressPool has the `.spec.autoAssign` value set to `false` - this is a good practice otherwise you may find random LoadBalancer type Services on the cluster consuming IPs that you want to use for other things.
+#### *Note that the IPAddressPool has the `.spec.autoAssign` value set to `false` - this is a good practice otherwise you may find random LoadBalancer type Services on the cluster consuming IPs that you want to use for other things.*
 
 Once you have your IPAddressPools set up, you can start to provision LoadBalancer-type Services - let's do that with our Test Workload.
 
@@ -380,6 +394,7 @@ oc apply -n workload-test -f https://raw.githubusercontent.com/kenmoini/ocp-meta
 # Edit the Service annotation to match an IP in your IPAddressPool
 oc edit -n workload-test service httpd
 ```
+
 #### Via YAML Manifests
 
 ```yaml
@@ -410,6 +425,9 @@ spec:
           image: registry.access.redhat.com/ubi8/httpd-24@sha256:b72f2fd69dbc32d273bebb2da30734c9bc8d9acfd210200e9ad5e69d8b089372
           ports:
             - containerPort: 8080
+```
+
+```yaml
 ---
 apiVersion: v1
 kind: Service
@@ -593,6 +611,8 @@ However, in order for those DNS records to be forwarded to the right workload yo
 
 Now that we have the NGINX Ingress controller deployed, we can create an Ingress object that points to our workload and exposes the application.  To do this we'll create a ClusterIP type of Service:
 
+#### *Note: If you did the `oc apply -f` above to create the Workload Test Service from my GitHub repo then this service was already created as well - there are two Services in that file, one LoadBalancer type and one ClusterIP type, the latter of which is used with the Ingress.*
+
 ```yaml
 ---
 apiVersion: v1
@@ -609,8 +629,6 @@ spec:
       targetPort: 8080
   type: ClusterIP
 ```
-
-> Note: If you did the `oc apply -f` above to create the Workload Test Service from my GitHub repo then this service was already created as well - there are two Services in that file, one LoadBalancer type and one ClusterIP type, the latter of which is used with the Ingress.
 
 Now that we have a ClusterIP service created, we can create an Ingress that points to it and defines the URI we want to access the application from:
 
@@ -640,6 +658,8 @@ spec:
 
 With that created you should now be able to navigate in your browser (or do a `curl`) to `http://hello-everyone.test.kemo.labs` - or rather, whatever you changed that `host` line to that works in your environment.
 
+---
+
 > Huzzah!  MetalLB with NGINX Ingress!  We're done, right?
 
 Well, we could stop here but where's the fun in that?  Why not take it up a notch by adding some Cert-Manager goodness for automated TLS certificates!
@@ -653,6 +673,7 @@ Since we previously installed the Cert-Manager operator, setting it up is pretty
 #### Via the CLI
 
 ```bash
+# Deploy a base configuration that should work most everywhere
 oc apply -k github.com/kenmoini/ocp-metallb-nginx-ingress/cert-manager/instance/overlays/default/
 
 # or, an example using an Outbound Proxy
