@@ -374,7 +374,7 @@ spec:
     - lab-pool # Must match the name of the IPAddressPool
 ```
 
-#### *Note that the IPAddressPool has the `.spec.autoAssign` value set to `false` - this is a good practice otherwise you may find random LoadBalancer type Services on the cluster consuming IPs that you want to use for other things.*
+**Note:** *The IPAddressPool has the `.spec.autoAssign` value set to `false` - this is a good practice otherwise you may find random LoadBalancer type Services on the cluster consuming IPs that you want to use for other things.*
 
 Once you have your IPAddressPools set up, you can start to provision LoadBalancer-type Services - let's do that with our Test Workload.
 
@@ -457,7 +457,7 @@ Next we can provision one of these LoadBalancer IPs to be used with NGINX Ingres
 
 With the NGINX Ingress Operator installed, next we'll create the NGINXIngress CR that holds the configuration of the IngressController deployment.  This allows entry into the cluster to workloads defined by an Ingress object similarly to how Routes work natively in OpenShift.
 
-Note that you'll need to be able to set some DNS records for your intended workloads' Ingress objects.  These could be one-off records or a Wildcard record similar to the application wildcard used by the default Routes in OpenShift.
+**Note:** *You'll need to be able to set some DNS records for your intended workloads' Ingress objects.  These could be one-off records or a Wildcard record similar to the application wildcard used by the default Routes in OpenShift.*
 
 Either way they'll need to point to the IP of the LoadBalancer type Service created by the NGINX Ingress Controller in the next step.
 
@@ -611,7 +611,7 @@ However, in order for those DNS records to be forwarded to the right workload yo
 
 Now that we have the NGINX Ingress controller deployed, we can create an Ingress object that points to our workload and exposes the application.  To do this we'll create a ClusterIP type of Service:
 
-#### *Note: If you did the `oc apply -f` above to create the Workload Test Service from my GitHub repo then this service was already created as well - there are two Services in that file, one LoadBalancer type and one ClusterIP type, the latter of which is used with the Ingress.*
+**Note:** *If you did the `oc apply -f` above to create the Workload Test Service from my GitHub repo then this service was already created as well - there are two Services in that file, one LoadBalancer type and one ClusterIP type, the latter of which is used with the Ingress.*
 
 ```yaml
 ---
