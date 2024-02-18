@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kenmoini-com
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  labels:
+    app: kenmoini-com
+    app.kubernetes.io/name: kenmoini-com
+    app.kubernetes.io/part-of: kenmoini-com
+spec:
+  selector:
+    matchLabels:
+      app: kenmoini-com
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: kenmoini-com
+    spec:
+      terminationGracePeriodSeconds: 30
+      imagePullSecrets:
+        - name: ghcr-pull-secret
+      containers:
+        - name: kenmoini-com
+          imagePullPolicy: Always
+          image: ghcr.io/kenmoini/kenmoini.com:PATCH_ME
+          ports:
+            - containerPort: 8080
+              name: web
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "1024Mi"
+              cpu: "1000m"

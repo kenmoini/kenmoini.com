@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - bin/**
+      - site/**
+      - Containerfile
 jobs:
   # Build the container
   build-container:
@@ -42,10 +46,10 @@ jobs:
         username: "${{ secrets.REGISTRY_USERNAME }}"
         password: "${{ secrets.REGISTRY_TOKEN }}"
 
-    - name: Install doctl
-      uses: digitalocean/action-doctl@v2
-      with:
-        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #- name: Install doctl
+    #  uses: digitalocean/action-doctl@v2
+    #  with:
+    #    token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
     - name: Build and push
       uses: docker/build-push-action@v4
@@ -56,11 +60,30 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
-    - name: Save DigitalOcean kubeconfig with short-lived credentials
-      run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.DO_CLUSTER_ID }}
-    
-    - name: Update deployment file
-      run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|:latest|:'${TAG}'|' $GITHUB_WORKSPACE/deploy/k8s/02-deployment.yaml
+    - name: pass environment
+      uses: appleboy/ssh-action@v1.0.3
+      env:
+        KUBECONFIG: "~/.kube/config"
+        GIT_SHA: ${{ github.sha }}
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        envs: KUBECONFIG,GIT_SHA
+        script: |
+          cd /opt/kenmoini.com/deploy/k3s
+          git pull
+          cp overlays/image-patch/kustomization.yml overlays/image-patch/kustomization.yml.bak
+          TAG=$(echo $GIT_SHA | head -c7) && sed -i 's|PATCH_ME|:'${TAG}'|' overlays/image-patch/kustomization.yml
+          kubectl apply -k overlays/image-patch
+          mv overlays/image-patch/kustomization.yml.bak overlays/image-patch/kustomization.yml
 
-    - name: Deploy to DigitalOcean Kubernetes
-      run: kubectl apply -f $GITHUB_WORKSPACE/deploy/k8s/
+    #- name: Save DigitalOcean kubeconfig with short-lived credentials
+    #  run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.DO_CLUSTER_ID }}
+    
+    #- name: Update deployment file
+    #  run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|:latest|:'${TAG}'|' $GITHUB_WORKSPACE/deploy/k8s/02-deployment.yaml
+
+    #- name: Deploy to DigitalOcean Kubernetes
+    #  run: kubectl apply -f $GITHUB_WORKSPACE/deploy/k8s/

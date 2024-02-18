@@ -1,0 +1,28 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: www-kenmoini-com-ingress
+  labels:
+    app: kenmoini-com
+    app.kubernetes.io/name: www-kenmoini-com-ingress
+    app.kubernetes.io/part-of: kenmoini-com
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+    cert-manager.io/cluster-issuer: "le-prod-http"
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - www.kenmoini.com
+      secretName: kenmoini-com-www-tls
+  rules:
+    - host: www.kenmoini.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kenmoini-com-svc
+                port:
+                  number: 8080
