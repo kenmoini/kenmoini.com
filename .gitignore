@@ -3,3 +3,5 @@ site/public/**
 site/resources/
 site/resources/**
 .@__thumb
+.vscode
+.vscode/**
