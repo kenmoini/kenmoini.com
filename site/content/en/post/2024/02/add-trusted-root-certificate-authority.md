@@ -195,7 +195,7 @@ This is honestly the weirdest workflow of them all - you have to do things is a 
 {{< imgSet cols="4" name="ios" >}}
 {{< imgItem src="/images/posts/2024/02/ios-download-crt.png" alt="Download the crt file to your device somehow, such as hosting on GitHub" >}}
 {{< imgItem src="/images/posts/2024/02/ios-download-prompt.png" alt="May also need to tap the Download prompt at the bottom of your browser" >}}
-{{< imgItem src="/images/posts/2024/02/ios-open-in.png" alt=Following the Download prompt, there may be an Open in... prompt"" >}}
+{{< imgItem src="/images/posts/2024/02/ios-open-in.png" alt="Following the Download prompt, there may be an Open in... prompt" >}}
 {{< imgItem src="/images/posts/2024/02/ios-save-to-files.png" alt="Select the 'Save to Files' option when downloading/opening" >}}
 {{< imgItem src="/images/posts/2024/02/ios-files-view.png" alt="Open the Files app and navigate to where you saved the Certificate on the iPhone - tap on it" >}}
 {{< imgItem src="/images/posts/2024/02/ios-add-to-iphone.png" alt="Tap 'iPhone' when prompted which device to install the Certificate to" >}}
