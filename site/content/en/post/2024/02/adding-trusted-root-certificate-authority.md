@@ -47,7 +47,7 @@ This article is a bit of an easy low intensity workout: what happens when you ha
 
 This is something you have to solve for at every level of PKI management, from a simple self-signed certificate to a complex chain.
 
-Say you roll your own self-signed certificate - or self-signed Certificate Authority chain.
+Say you roll your own self-signed certificate - or your service generates its own self-signed certificate.  Maybe you create a complex self-signed Certificate Authority chain, or use something like [StepCA](https://kenmoini.com/post/2022/04/diy-ca-with-small-step/) that makes a Root and Intermediate Certificate Authority set.
 
 You go sign some certificates, configure your services to use them - but the clients are still showing an `ERR_CERT_AUTHORITY_INVALID` error!  Something that looks like this maybe:
 
