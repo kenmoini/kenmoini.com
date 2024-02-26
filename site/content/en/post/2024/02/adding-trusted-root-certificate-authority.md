@@ -35,7 +35,7 @@ authors:
 
 > The only kind of authority I recognize is a Certificate Authority
 
-I need to get the blogging muscle working out more - *honestly, I need to work out more in general*.
+I need to get the blogging muscle working out more - *honestly, I need to workout more in general*.
 
 This article is a bit of an easy low intensity workout: what happens when you have a custom CA chain and you'd like to not get those pesky "SSL Certificate Not Valid" errors with `curl` or Chrome then this article is for you!
 
