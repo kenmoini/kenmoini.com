@@ -269,6 +269,7 @@ li.page-item.active {
 .slideshow-holder {
   justify-content: center;
   display: flex;
+  margin: 0 auto 2rem;
 }
 
 /* https://www.w3schools.com/howto/howto_js_slideshow.asp */
