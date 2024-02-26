@@ -49,7 +49,11 @@ This is something you have to solve for at every level of PKI management, from a
 
 Say you roll your own self-signed certificate - or self-signed Certificate Authority chain.
 
-You go sign some certificates, configure your services to use them - but the clients are still showing an `ERR_CERT_AUTHORITY_INVALID` error!
+You go sign some certificates, configure your services to use them - but the clients are still showing an `ERR_CERT_AUTHORITY_INVALID` error!  Something that looks like this maybe:
+
+{{< imgSet cols="1" name="ssl-error" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/insecure-site.jpg" alt="I've gotten really good at skrt-skrt'ing past these warning pages" >}}
+{{< /imgSet >}}
 
 This is because while the connection is encrypted, your client can't be sure you're not being Man-in-the-Middle'd because it can't validate the identity of the other side.
 
