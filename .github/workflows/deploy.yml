@@ -82,7 +82,7 @@ jobs:
           cd /opt/kenmoini.com/deploy/k3s
           git pull || true
           cp overlays/image-patch/kustomization.yml overlays/image-patch/kustomization.yml.bak
-          TAG=$(echo $GIT_SHA | head -c7) && sed -i 's|PATCH_ME|:'${TAG}'|' overlays/image-patch/kustomization.yml
+          TAG=$(echo $GIT_SHA | head -c7) && sed -i 's|PATCH_ME|'${TAG}'|' overlays/image-patch/kustomization.yml
           export KUBECONFIG="/home/cicd/.kube/config"
           kubectl apply -k overlays/image-patch
           mv overlays/image-patch/kustomization.yml.bak overlays/image-patch/kustomization.yml
