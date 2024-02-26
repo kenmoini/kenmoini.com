@@ -266,17 +266,28 @@ li.page-item.active {
   min-width: fit-content;
 }
 
+.slideshow-holder {
+  justify-content: center;
+  display: flex;
+}
+
 /* https://www.w3schools.com/howto/howto_js_slideshow.asp */
 /* Slideshow container */
 .slideshow-container {
-  max-width: 100%;
+  max-width: 944px;
+  max-height: 420px;
   position: relative;
   margin: auto;
+  display: inline-block;
 }
 
 /* Hide the images by default */
 .slideshow-container .mySlides {
   display: none;
+  max-height: 420px;
+}
+.slideshow-container img {
+  max-height: 420px;
 }
 
 /* Next & previous buttons */
@@ -293,6 +304,7 @@ li.page-item.active {
   transition: 0.6s ease;
   border-radius: 0 3px 3px 0;
   user-select: none;
+  opacity: 0.25;
 }
 
 /* Position the "next button" to the right */
@@ -304,6 +316,7 @@ li.page-item.active {
 /* On hover, add a black background color with a little bit see-through */
 .slideshow-container .prev:hover, .slideshow-container .next:hover {
   background-color: rgba(0,0,0,0.8);
+  opacity: 1;
 }
 
 /* Caption text */
@@ -315,6 +328,117 @@ li.page-item.active {
   bottom: 8px;
   width: 100%;
   text-align: center;
+  display: none;
+  background-color: rgba(0,0,0,0.6);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 888px;
+  margin: 0 auto;
+}
+.row.wide {
+  max-width: 944px;
+}
+.row .column {
+  margin: 0 10px;
+  padding: 0;
+  /*
+  flex: 1;
+  max-width: 100%;
+  */
+}
+
+/* each col is 8.3333333333% */
+.col-1 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 8.33%;
+  flex: 0 0 8.33%;
+  max-width: calc(8.33% - 20px);
+}
+
+.col-2 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 16.66%;
+  flex: 0 0 16.66%;
+  max-width: calc(16.66% - 20px);
+}
+
+.col-3 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 25%;
+  flex: 0 0 25%;
+  max-width: calc(25% - 20px);
+}
+
+.col-4 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 33.33%;
+  flex: 0 0 33.33%;
+  max-width: calc(33.33% - 20px);
+}
+
+.col-5 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 41.66%;
+  flex: 0 0 41.66%;
+  max-width: calc(41.66% - 20px);
+}
+
+.col-6 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 50%;
+  flex: 0 0 50%;
+  max-width: calc(50% - 20px);
+}
+
+.col-7 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 58.33%;
+  flex: 0 0 58.33%;
+  max-width: calc(58.33% - 20px);
+}
+
+.col-8 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 66.66%;
+  flex: 0 0 66.66%;
+  max-width: calc(66.66% - 20px);
+}
+
+.col-9 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 75%;
+  flex: 0 0 75%;
+  max-width: calc(75% - 20px);
+}
+
+.col-10 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 83.33%;
+  flex: 0 0 83.33%;
+  max-width: calc(83.33% - 20px);
+}
+
+.col-11 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 91.66%;
+  flex: 0 0 91.66%;
+  max-width: calc(91.66% - 20px);
+}
+
+.col-12 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 100%;
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+
+.slideshow-container .mySlides:hover .text {
+  display: block;
 }
 
 /* Number text (1/3 etc) */
