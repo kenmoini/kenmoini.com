@@ -129,12 +129,12 @@ From this point, it will be imported into the System Keychain, but not trusted y
 11. Close the modal - enter your password again.
 
 {{< imgSet cols="3" name="mac-gui" >}}
-{{< imgItem src="/images/posts/2024/02/mac-keychain-access-screen.png" alt="Open the Keychain Access app" >}}
-{{< imgItem src="/images/posts/2024/02/mac-unlock-keychain.png" alt="Unlock the System Keychain" >}}
-{{< imgItem src="/images/posts/2024/02/mac-imported-untrusted.png" alt="Use the File menu to Import the Certificate" >}}
-{{< imgItem src="/images/posts/2024/02/mac-imported-untrusted-right-click.png" alt="Right click on the Certificate, select 'Get Info...'" >}}
-{{< imgItem src="/images/posts/2024/02/mac-trust-settings.png" alt="Toggle the Always Trust settings" >}}
-{{< imgItem src="/images/posts/2024/02/mac-trusted-cert.png" alt="Enjoy your newly trusted Root CA" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/mac-keychain-access-screen.png" alt="Open the Keychain Access app" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/mac-unlock-keychain.png" alt="Unlock the System Keychain" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/mac-imported-untrusted.png" alt="Use the File menu to Import the Certificate" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/mac-imported-untrusted-right-click.png" alt="Right click on the Certificate, select 'Get Info...'" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/mac-trust-settings.png" alt="Toggle the Always Trust settings" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/mac-trusted-cert.png" alt="Enjoy your newly trusted Root CA" >}}
 {{< /imgSet >}}
 
 Now you should be able to relaunch your browser/terminal and have nice and validated secure connections!
@@ -167,13 +167,13 @@ Next up, everyone's favorite side-piece: Windows.  Windows can install a variety
 9. Once back at the Certificate Import Wizard **click "Next" and "Finish"**
 
 {{< imgSet cols="3" name="windows-gui" >}}
-{{< imgItem src="/images/posts/2024/02/windows-downloaded-cert.png" alt="Find the certificate file in Windows Explorer, open it" >}}
-{{< imgItem src="/images/posts/2024/02/windows-open-cert.png" alt="Click 'Yes' in the pop up when it asks you if you want to do what you want to do..." >}}
-{{< imgItem src="/images/posts/2024/02/windows-cert-untrusted-details.png" alt="Click the 'Import Certificate...' button" >}}
-{{< imgItem src="/images/posts/2024/02/windows-cert-local-computer.png" alt="Select 'Local Machine' for the Store Location" >}}
-{{< imgItem src="/images/posts/2024/02/windows-cert-uat.png" alt="Annoying UAC prompt" >}}
-{{< imgItem src="/images/posts/2024/02/windows-cert-selected-store.png" alt="Place it in the 'Trusted Root Certification Authorities' Store" >}}
-{{< imgItem src="/images/posts/2024/02/windows-cert-finish-import.png" alt="Finish the import" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/windows-downloaded-cert.png" alt="Find the certificate file in Windows Explorer, open it" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/windows-open-cert.png" alt="Click 'Yes' in the pop up when it asks you if you want to do what you want to do..." >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/windows-cert-untrusted-details.png" alt="Click the 'Import Certificate...' button" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/windows-cert-local-computer.png" alt="Select 'Local Machine' for the Store Location" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/windows-cert-uat.png" alt="Annoying UAC prompt" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/windows-cert-selected-store.png" alt="Place it in the 'Trusted Root Certification Authorities' Store" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/windows-cert-finish-import.png" alt="Finish the import" >}}
 {{< /imgSet >}}
 
 ---
@@ -202,19 +202,19 @@ This is honestly the weirdest workflow of them all - you have to do things is a 
 8. **Flip the toggle** for the Root CA that was just installed and click "Continue"
 
 {{< imgSet cols="4" name="ios" >}}
-{{< imgItem src="/images/posts/2024/02/ios-download-crt.png" alt="Download the crt file to your device somehow, such as hosting on GitHub" >}}
-{{< imgItem src="/images/posts/2024/02/ios-download-prompt.png" alt="May also need to tap the Download prompt at the bottom of your browser" >}}
-{{< imgItem src="/images/posts/2024/02/ios-open-in.png" alt="Following the Download prompt, there may be an Open in... prompt" >}}
-{{< imgItem src="/images/posts/2024/02/ios-save-to-files.png" alt="Select the 'Save to Files' option when downloading/opening" >}}
-{{< imgItem src="/images/posts/2024/02/ios-files-view.png" alt="Open the Files app and navigate to where you saved the Certificate on the iPhone - tap on it" >}}
-{{< imgItem src="/images/posts/2024/02/ios-add-to-iphone.png" alt="Tap 'iPhone' when prompted which device to install the Certificate to" >}}
-{{< imgItem src="/images/posts/2024/02/ios-profile-downloaded.png" alt="Close the Profile Downloaded pop up when prompted" >}}
-{{< imgItem src="/images/posts/2024/02/ios-settings-view-profile-downloaded.png" alt="Open the Settings app - click on the Profile Downloaded button at the top" >}}
-{{< imgItem src="/images/posts/2024/02/ios-profile-not-verified.png" alt="In the Install Profile card that pops up, tap the Install button" >}}
-{{< imgItem src="/images/posts/2024/02/ios-install-warning.png" alt="A Warning card will pop up, tap the Install button again" >}}
-{{< imgItem src="/images/posts/2024/02/ios-profile-installed.png" alt="You should see the Profile Installed and Verified, but not yet enabled as a trusted Root CA" >}}
-{{< imgItem src="/images/posts/2024/02/ios-general-about.png" alt="In the Settings app, navigate to General > About and at the bottom click on the 'Certificate Trust Settings' button" >}}
-{{< imgItem src="/images/posts/2024/02/ios-enable-root-warning.png" alt="Tap the toggle switch for the Root CA, click Continue in the pop up" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/ios-download-crt.png" alt="Download the crt file to your device somehow, such as hosting on GitHub" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/ios-download-prompt.png" alt="May also need to tap the Download prompt at the bottom of your browser" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/ios-open-in.png" alt="Following the Download prompt, there may be an Open in... prompt" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/ios-save-to-files.png" alt="Select the 'Save to Files' option when downloading/opening" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/ios-files-view.png" alt="Open the Files app and navigate to where you saved the Certificate on the iPhone - tap on it" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/ios-add-to-iphone.png" alt="Tap 'iPhone' when prompted which device to install the Certificate to" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/ios-profile-downloaded.png" alt="Close the Profile Downloaded pop up when prompted" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/ios-settings-view-profile-downloaded.png" alt="Open the Settings app - click on the Profile Downloaded button at the top" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/ios-profile-not-verified.png" alt="In the Install Profile card that pops up, tap the Install button" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/ios-install-warning.png" alt="A Warning card will pop up, tap the Install button again" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/ios-profile-installed.png" alt="You should see the Profile Installed and Verified, but not yet enabled as a trusted Root CA" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/ios-general-about.png" alt="In the Settings app, navigate to General > About and at the bottom click on the 'Certificate Trust Settings' button" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/ios-enable-root-warning.png" alt="Tap the toggle switch for the Root CA, click Continue in the pop up" >}}
 {{< /imgSet >}}
 
 Congratulations, now your services are able to be validated on your iPhone/iPad!
@@ -235,16 +235,16 @@ This is an instance where things can vary - since different handset manufacturer
 8. You can also **view the installed Certificate** by navigating back to *Biometrics and Security > Other security* and tapping *View security certificates*
 
 {{< imgSet cols="5" name="android" >}}
-{{< imgItem src="/images/posts/2024/02/android-download-crt.jpg" alt="Get the .crt file on your phone somehow - GitHub makes it easy" >}}
-{{< imgItem src="/images/posts/2024/02/android-download-location.jpg" alt="Make sure to store it on your phone's Internal Storage" >}}
-{{< imgItem src="/images/posts/2024/02/android-download-install-fail.jpg" alt="If downloading, you'll get this error - that's ok" >}}
-{{< imgItem src="/images/posts/2024/02/android-settings-biometrics-and-security-other-security-settings.jpg" alt="In the Settings app, navigate to Biometrics and Security, tap 'Other Security Settings' at the bottom" >}}
-{{< imgItem src="/images/posts/2024/02/android-other-security-settings.jpg" alt="Select the Install from device storage" >}}
-{{< imgItem src="/images/posts/2024/02/android-privacy-risk-install-anyway.jpg" alt="Blow past the prompt and click 'Install anyway'" >}}
-{{< imgItem src="/images/posts/2024/02/android-install-from-device-storage.jpg" alt="Select 'CA Certificate'" >}}
-{{< imgItem src="/images/posts/2024/02/android-select-certificate.jpg" alt="Navigate to and select the Certificate file in the browser" >}}
-{{< imgItem src="/images/posts/2024/02/android-ca-cert-installed.jpg" alt="You'll be told that the CA Certificate has been installed" >}}
-{{< imgItem src="/images/posts/2024/02/android-view-security-certificates.jpg" alt="You can view the Certificate via the Other Security Settings menu" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/android-download-crt.jpg" alt="Get the .crt file on your phone somehow - GitHub makes it easy" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/android-download-location.jpg" alt="Make sure to store it on your phone's Internal Storage" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/android-download-install-fail.jpg" alt="If downloading, you'll get this error - that's ok" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/android-settings-biometrics-and-security-other-security-settings.jpg" alt="In the Settings app, navigate to Biometrics and Security, tap 'Other Security Settings' at the bottom" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/android-other-security-settings.jpg" alt="Select the Install from device storage" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/android-privacy-risk-install-anyway.jpg" alt="Blow past the prompt and click 'Install anyway'" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/android-install-from-device-storage.jpg" alt="Select 'CA Certificate'" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/android-select-certificate.jpg" alt="Navigate to and select the Certificate file in the browser" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/android-ca-cert-installed.jpg" alt="You'll be told that the CA Certificate has been installed" >}}
+{{< imgItem src="/images/posts/2024/02/root-ca/android-view-security-certificates.jpg" alt="You can view the Certificate via the Other Security Settings menu" >}}
 {{< /imgSet >}}
 
 ---
