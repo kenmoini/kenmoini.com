@@ -63,7 +63,7 @@ jobs:
     - name: pass environment
       uses: appleboy/ssh-action@v1.0.3
       env:
-        KUBECONFIG: "~/.kube/config"
+        KUBECONFIG: "/home/cicd/.kube/config"
         GIT_SHA: ${{ github.sha }}
       with:
         host: ${{ secrets.SSH_HOST }}
@@ -76,7 +76,7 @@ jobs:
           git pull || true
           cp overlays/image-patch/kustomization.yml overlays/image-patch/kustomization.yml.bak
           TAG=$(echo $GIT_SHA | head -c7) && sed -i 's|PATCH_ME|:'${TAG}'|' overlays/image-patch/kustomization.yml
-          export KUBECONFIG="~/.kube/config"
+          export KUBECONFIG="/home/cicd/.kube/config"
           kubectl apply -k overlays/image-patch
           mv overlays/image-patch/kustomization.yml.bak overlays/image-patch/kustomization.yml
 
