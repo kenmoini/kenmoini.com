@@ -13,10 +13,19 @@ tags:
   - pki
   - tls
   - ssl
+  - certificate
+  - authority
+  - ca
+  - root
   - windows
   - mac
   - fedora
+  - ubuntu
+  - debian
+  - rhel
+  - centos
   - android
+  - galaxy
   - ios
   - iphone
   - ipad
