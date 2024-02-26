@@ -1,3 +1,4 @@
+// Adapted from https://www.w3schools.com/howto/howto_js_slideshow.asp
 function docReady(fn) {
     // see if DOM is already available
     if (document.readyState === "complete" || document.readyState === "interactive") {

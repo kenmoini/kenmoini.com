@@ -3,10 +3,8 @@
 {{ $imgText := .Get "alt" }}
 {{ with .Parent }}
 {{ $parent := . }}
-{{ $totalImages := .Get "totalImages" }}
 {{ $setName := .Get "name" }}
 <div class="mySlides fade">
-    <!-- <div class="numbertext">1 / {{ $totalImages }}</div> -->
     <a href="{{ $imgSrc }}" data-lightbox="imageSet-{{ $setName }}" data-title="{{ $imgText }}">
         <img src="{{ $imgSrc }}" style="width:100%">
     </a>
