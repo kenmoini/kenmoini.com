@@ -37,6 +37,8 @@ authors:
 
 > Not Another NUC Movie
 
+---
+
 Normally I'm a fan of big, beefy servers.  I really like my custom built AMD EPYC towers - watercooled 64C/128T with 512GB DDR4, handles pretty much anything I throw at them.
 
 However, I got kinda tired of having one running for some basic stuff  like DNS, FreeIPA/RH IDM, an OpenVPN server, etc services that glue my networks together.  *Plus I wanted to repurpose that big server to run OpenShift bare metal.*
@@ -52,6 +54,8 @@ In this article I'll be reviewing a few Small Form Factor (SFF) systems around s
 - Minisforum MS-01
 
 I won't be getting into the unboxing or in-depth spec list, there are plenty of videos on YouTube about that - I'll mostly be going over how I'm using these SFF systems for a more efficient and resilient homelab.
+
+---
 
 ## BeeLink SER5 MAX and Kubernetes
 
@@ -87,6 +91,8 @@ My one gripe would be that the tiny fan is pretty audible up close.  Not anythin
 
 Anywho, I'd highly recommend them for similar workloads - could even handle a few simple VMs really, but I wanted them dedicated to K8s without having to manage pets on specific nodes.
 
+---
+
 ## OnLogic CL250
 
 Next I needed something to run a couple things that don't work well on Kubernetes.  For this I tried another SFF system I had laying around - an OnLogic CL250.
@@ -103,11 +109,13 @@ Loaded RHEL on it which was easy of course, however when I started to migrate my
 
 So I ended up throwing it back into the bin from whence it lurked - pretty sad considering it's in the same 600-700 base price range of these other systems.  OnLogic of course has beefier systems but the price of those is a non-starter and I'd be skeptical of their quality and supply chain.
 
+---
+
 ## Minisforum MS-01
 
 So I still had the problem of running a few workloads on a tiny system.  Of course I could have gave in a gotten some sort of NUC but since Intel got rid of their NUC division I decided to stay away from that option.
 
-Another recommendation from the *#homelab homies* was a Minisforum MS-01 - a new box, slightly larger than the others, but with a list of dream-like specs.  2x10G SFP+ ports, bunch of cores, and up to 96GB of DDR5?!?!  After reading the [ServeTheHome article](https://www.servethehome.com/minisforum-ms-01-review-the-10gbe-with-pcie-slot-mini-pc-intel/) on the MS-01, I smashed that Order button like a cicada.
+Another recommendation from the *#homelab homies* was a Minisforum MS-01 - a new box, slightly larger than the others, but with a list of dream-like specs.  2x10G SFP+ ports, bunch of cores, and up to 96GB of DDR5?!?!  After reading the [ServeTheHome article](https://www.servethehome.com/minisforum-ms-01-review-the-10gbe-with-pcie-slot-mini-pc-intel/) on the MS-01, I smashed that Order button like a cicada going at my windshield.
 
 Supply chain sadness struck again - I ordered it in January and finally got it at the end of April...right when they started to become available on Amazon with week-out shipping :upside_down_face:
 
