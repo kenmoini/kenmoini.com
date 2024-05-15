@@ -116,7 +116,7 @@ The "Allowed WWNs list" corresponds to the ports available on the HBA(s) in the 
 
 With the WWNs listed, we'll "create" or enable those ports with the following:
 
-```
+```bash
 /> qla2xxx/ create naa.21000024ff8698b0
 Created target naa.21000024ff8698b0.
 /> qla2xxx/ create naa.21000024ff8698b1
