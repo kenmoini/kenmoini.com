@@ -294,7 +294,7 @@ dns_v4_first on
 forwarded_for on
 ```
 
-As an extension of the ACL configuration, we can set how Squid will operate SSL termination and re-encryption.  This is where you can exclude sites from being re-encrypted which helps in certain situations when some applications or clients don't accept proxy configuration, have client-side certificate pinning, or for mTLS connections *(many thanks to Sam Richman for that info!)*  This exclusion is also usually needed when running as a transparent proxy and you find connections randomly breaking due to certificate pinning and the like.
+As an extension of the ACL configuration, we can set how Squid will operate SSL termination and re-encryption.  This is where you can exclude sites from being re-encrypted which helps in certain situations when some applications or clients don't accept proxy configuration, have client-side certificate pinning, or for mTLS connections *(many thanks to [Sam Richman](https://www.linkedin.com/in/sam-richman/) for that info!)*  This exclusion is also usually needed when running as a transparent proxy and you find connections randomly breaking due to certificate pinning and the like.
 
 In the following example you can see some commented out lines where I previously excluded requests going to GitHub from being re-encrypted which was needed in older versions of Red Hat Advanced Cluster Management due to how the Application controller didn't work with proxies:
 
