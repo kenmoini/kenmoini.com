@@ -294,6 +294,32 @@ dns_v4_first on
 forwarded_for on
 ```
 
+As an extension of the ACL configuration, we can set how Squid will operate SSL termination and re-encryption.  This is where you can exclude sites from being re-encrypted which helps in certain situations when some applications or clients don't accept proxy configuration, have client-side certificate pinning, or for mTLS connections *(many thanks to Sam Richman for that info!)*  This exclusion is also usually needed when running as a transparent proxy and you find connections randomly breaking due to certificate pinning and the like.
+
+In the following example you can see some commented out lines where I previously excluded requests going to GitHub from being re-encrypted which was needed in older versions of Red Hat Advanced Cluster Management due to how the Application controller didn't work with proxies:
+
+
+```bash
+# /etc/squid/conf.d/20_ssl-mitm-acl.conf
+# https://www.squid-cache.org/Doc/config/acl/
+
+sslcrtd_program /usr/lib64/squid/security_file_certgen -s /etc/squid/certs/ssl_db -M 64MB
+sslproxy_cert_error allow all
+tls_outgoing_options flags=DONT_VERIFY_PEER
+always_direct allow all
+
+# Splicing Exclusions
+#acl noBumpSites dstdomain .github.com
+
+# SSL Inspection/Splicing/Bumping Steps
+acl step1 at_step SslBump1
+ssl_bump peek all
+ssl_bump bump all
+#ssl_bump splice noBumpSites
+ssl_bump splice all
+ssl_bump stare all
+```
+
 Squid can log connections, if they're terminated properly, their response codes, etc - you can also configure how the logs are formatted and rotated:
 
 ```bash
@@ -314,7 +340,7 @@ Another capability that Squid has is to act as a cache for files that are freque
 Anywho, since we're not worried about caching, this is some example configuration that disables the Squid cache - if you want to enable caching then you'll likely need to do so via adaption: https://wiki.squid-cache.org/ConfigExamples/DynamicContent/Coordinator
 
 ```bash
-# /etc/squid/conf.d/30_logging.conf
+# /etc/squid/conf.d/40_caching.conf
 # http://www.squid-cache.org/Doc/config/cache_dir/
 
 # Uncomment and adjust the following to add a disk cache directory.
