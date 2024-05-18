@@ -45,7 +45,7 @@ Most of the services will be fronted by an HAProxy reverse proxy for easy access
 
 To get started you'll need a few things such as:
 
-- A remote VM/VPS somewhere else to act as a OpenVPN Server - something like a VPS in OVH's Canadian data centers...
+- A remote VM/VPS somewhere else to act as a OpenVPN Server - *something like a VPS in OVH's Canadian data centers...*
 - 2 local VMs, one for the media stack and another for Deluge
 - Static IP Addresses for those local VMs - for me they're:
   - **Plex VM**: 192.168.42.20 at plex.kemo.labs
@@ -228,13 +228,17 @@ firewall-cmd --reload
 # Change 1.2.3.4 to the IP of your OpenVPN Server
 firewall-cmd --policy vpn-tunnel --add-rich-rule='rule family="ipv4" destination address="1.2.3.4" service name="openvpn" accept'
 
-# Allow connections from the local LAN as well
+# Allow connections to/from the local LAN as well
 # Make sure to change 192.168.0.0/16 to match the LAN your Deluge VM is on
+firewall-cmd --policy vpn-tunnel --add-rich-rule='rule family="ipv4" source address="192.168.0.0/16" accept'
 firewall-cmd --policy vpn-tunnel --add-rich-rule='rule family="ipv4" destination address="192.168.0.0/16" accept'
 
 # Set ingress and egress targets
 firewall-cmd --policy vpn-tunnel --add-ingress-zone HOST
 firewall-cmd --policy vpn-tunnel --add-egress-zone vpn
+
+# Set the default zone
+firewall-cmd --set-default-zone vpn
 
 # Make the policy configuration permanent
 firewall-cmd --runtime-to-permanent
@@ -570,6 +574,10 @@ frontend https
   acl host_tautulli hdr(host) -i tautulli.kemo.labs
   use_backend tautulli if host_tautulli
 
+  ## Deluge
+  acl host_deluge hdr(host) -i deluge-web.kemo.labs
+  use_backend deluge if host_deluge
+
 ##########################################################################
 # Backends
 ##########################################################################
@@ -600,6 +608,10 @@ backend sabnzbd
 # Tautulli
 backend tautulli
   server tautulli 192.168.42.20:8181
+
+# Deluge
+backend deluge
+  server deluge 192.168.42.24:8112
 ```
 
 That HAProxy configuration will bind to port 80 and 443, forwarding requests to the target services based on the requested URL.  It also uses the `crt-list` parameter on the HTTPS port binding, which allows the externalization of Certificate Lists and their matching domains to be used for.
@@ -668,7 +680,7 @@ Once all the serivces are started you should be able to access them either direc
 2. Setup Deluge for integration, labels, and remote access
 3. Configure Jackett
 4. Configure Radarr, Sonarr, Bazarr with *sources*
-5. Connect Overseerr to Plex
+5. Connect Overseerr to Plex and Radarr/Sonarr
 6. Connect Tautulli to Plex
 7. ??????
 8. PROFIT!!!!1
