@@ -29,6 +29,8 @@ authors:
 
 > PLEX GO NOM NOM NOM
 
+---
+
 So I recently got rid of the trash QNAP software on my NAS and replaced it with TrueNAS.  In the process, I had to offline my multimedia stack as well - but this has provided me an opportunity to retool my deployments and make it a little mo betta'.
 
 Today's exercise will be in getting Plex up and running with a few swashbucklin' pals - swabbing the deck will be Bazarr, Sonarr, Radarr, Sabnzbd, Overseerr, Tautulli, Jackett, and Deluge.
@@ -240,6 +242,8 @@ firewall-cmd --runtime-to-permanent
 
 With that you should be able to disable the VPN with `systemctl stop openvpn-client@client` and do a `ping 1.1.1.1` or `curl https://google.com` and see it fail - when you start the OpenVPN client again with `systemctl start openvpn-client@client` then you can also re-run those `ping` and `curl` commands to check that the tunnel is operating properly.
 
+---
+
 ## Plex VM and Media Stack
 
 Now that we have our VPN tunnel set up, we can bring online the media stack
@@ -263,6 +267,12 @@ firewall-cmd --permanent --add-port=8324/tcp
 firewall-cmd --permanent --add-port=32410/udp
 firewall-cmd --permanent --add-port=32412-32414/udp
 firewall-cmd --permanent --add-port=32469/tcp
+
+# Firewall rules for HAProxy
+firewall-cmd --permanent --add-service=http
+firewall-cmd --permanent --add-service=https
+
+# Reload firewall
 firewall-cmd --reload
 ```
 
@@ -292,6 +302,7 @@ With the services installed and running, we can now run some preliminary work to
 mkdir -p /opt/media-services/data/{jackett-config,jackett-blackhole,radarr-config,sonarr-config,bazarr-config,overseer-config,sabnzbd-config,tautulli-config,ingress-config,ingress-certs}
 
 # SELinux things
+setsebool -P container_read_certs 1
 semanage fcontext -a -t container_file_t '/opt/media-services/data/jackett-config'
 semanage fcontext -a -t container_file_t '/opt/media-services/data/jackett-blackhole'
 semanage fcontext -a -t container_file_t '/opt/media-services/data/radarr-config'
@@ -429,6 +440,7 @@ services:
     container_name: haproxy
     cap_add:
       - NET_BIND_SERVICE
+      - NET_RAW
     environment:
       - TZ=America/New_York
     volumes:
@@ -468,4 +480,197 @@ openssl x509 -req -days 365 -in server.csr.pem -signkey server.key.pem -out serv
 cat server.key.pem server.cert.pem > haproxy-bundle.pem
 ```
 
-Now that's not the best SSL chain, it's a wholely self-signed certificate - but it works unless you want to roll your own PKI (which I think is a good idea).  Make sure to download/`scp` over the `server.cert` file to your systems and add it to your trusted root store.
+Now that's not the best SSL chain, it's a wholely self-signed certificate - but it works unless you want to roll your own PKI (which I think is a good idea).  Make sure to download/`scp` over the `server.cert` file to your systems and [add it to your trusted root store](https://kenmoini.com/post/2024/02/adding-trusted-root-certificate-authority/).
+
+### HAProxy Configuration
+
+With the SSL Certificate in place, next we can configure HAProxy to act as a reverse proxy to all the various services.  Drop the following configuration at `/opt/media-services/ingress-config/haproxy.cfg` - make sure to swap out your DNS server and IPs below:
+
+```bash
+# /opt/media-services/ingress/config/haproxy.cfg
+##########################################################################
+# Global configuration
+##########################################################################
+global
+  log stdout format raw local0
+  daemon
+
+  # Default ciphers to use on SSL-enabled listening sockets.
+  # For more information, see ciphers(1SSL).
+  ssl-default-bind-ciphers kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL
+
+##########################################################################
+# DNS resolvers - Replace with your DNS Server:Port
+##########################################################################
+resolvers docker_resolver
+  nameserver dns 192.168.42.9:53
+
+##########################################################################
+# default options
+##########################################################################
+defaults
+  log     global
+  mode    http
+  option  httplog
+  option  dontlognull
+  timeout connect 36000s
+  timeout client 36000s
+  timeout server 36000s
+
+##########################################################################
+# HTTP Frontend
+##########################################################################
+frontend http
+  bind *:80
+  mode http
+	
+  # redirect the http traffic to https
+  redirect scheme https code 301 if !{ ssl_fc }
+
+##########################################################################
+# SSL frontend
+##########################################################################
+frontend https
+  bind *:443 ssl crt-list /usr/local/etc/haproxy/crt-list.cfg
+  option forwardfor
+
+  # Common headers for reverse proxy configs when using SSL
+  http-request add-header X-Forwarded-Proto https if { ssl_fc }
+  http-request add-header X-Forwarded-Port 443 if { ssl_fc }
+  http-request set-header X-Forwarded-Host %[req.hdr(Host)]
+  http-response set-header X-Frame-Options SAMEORIGIN
+  http-response set-header Strict-Transport-Security "max-age=16000000; includeSubDomains; preload;"
+
+  # ACLs
+  ## Jackett
+  acl host_jackett hdr(host) -i jackett.kemo.labs
+  use_backend jackett if host_jackett
+
+  ## Sonarr
+  acl host_sonarr hdr(host) -i sonarr.kemo.labs
+  use_backend sonarr if host_sonarr
+
+  ## Radarr
+  acl host_radarr hdr(host) -i radarr.kemo.labs
+  use_backend radarr if host_radarr
+
+  ## Bazarr
+  acl host_bazarr hdr(host) -i bazarr.kemo.labs
+  use_backend bazarr if host_bazarr
+
+  ## Overseerr
+  acl host_overseerr hdr(host) -i overseerr.kemo.labs
+  use_backend overseerr if host_overseerr
+
+  ## Sabnzbd
+  acl host_sabnzbd hdr(host) -i sabnzbd.kemo.labs
+  use_backend sabnzbd if host_sabnzbd
+
+  ## Tautulli
+  acl host_tautulli hdr(host) -i tautulli.kemo.labs
+  use_backend tautulli if host_tautulli
+
+##########################################################################
+# Backends
+##########################################################################
+# Jackett
+backend jackett
+  server jackett 192.168.42.20:9117
+
+# Sonarr
+backend sonarr
+  server sonarr 192.168.42.20:8989
+
+# Radarr
+backend radarr
+  server radarr 192.168.42.20:7878
+
+# Bazarr
+backend bazarr
+  server bazarr 192.168.42.20:6767
+
+# Overseerr
+backend overseerr
+  server overseerr 192.168.42.20:5055
+
+# Sabnzbd
+backend sabnzbd
+  server sabnzbd 192.168.42.20:8080
+
+# Tautulli
+backend tautulli
+  server tautulli 192.168.42.20:8181
+```
+
+That HAProxy configuration will bind to port 80 and 443, forwarding requests to the target services based on the requested URL.  It also uses the `crt-list` parameter on the HTTPS port binding, which allows the externalization of Certificate Lists and their matching domains to be used for.
+
+Create a file at `/opt/media-services/ingress-config/crt-list.cfg` and fill it with the following:
+
+```bash
+# /opt/media-services/ingress-config/crt-list.cfg
+# Default certificate to use
+/usr/local/etc/certs/haproxy-bundle.pem
+
+# Optional other domains and separate certificate listing
+# /usr/local/etc/certs/some-other-cert.pem [alpn h2 ssl-min-ver TLSv1.2] sub.example.com
+```
+
+---
+
+## Starting the Media Services
+
+With all the configuration in place you should now be able to start up the containerized media stack with the following command:
+
+```bash
+# Navigate to the direcetory with the `podman-compose.yml` file
+cd /opt/media-services
+
+# Start the services
+podman-compose up -d
+```
+
+However, that doesn't really survive reboots.  In order for things to come online as the VM does, you need to make a SystemD service.
+
+Podman Compose does have a SystemD function, but I've found it to not work well.  So manual service creation it is - create a file at `/etc/systemd/system/media-services.service` with the following:
+
+```
+# /etc/systemd/system/media-services.service
+
+[Unit]
+Description=Media Services via Podman Compose
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/podman-compose -f /opt/media-services/podman-compose.yml up
+ExecStop=/usr/bin/podman-compose -f /opt/media-services/podman-compose.yml down
+
+[Install]
+WantedBy=default.target
+```
+
+Once that file is created, run the following commands to enable the service:
+
+```bash
+# Reload systemD configuration
+systemctl daemon-reload
+
+# Enable and start the service
+systemctl enable --now media-services.service
+```
+
+---
+
+## Service Configuration
+
+Once all the serivces are available you should be able to access them either directly at their exposed ports, or ideally via the DNS records for each service - that is after all the whole point of using HAProxy, a reverse proxy that can be used for simple domains without remembering what app is on what port.  So to start configuring services and connecting them together I proceeded in the following order:
+
+1. Setup Sabnzbd with *news readers*
+2. Setup Deluge for integration, labels, and remote access
+3. Configure Jackett
+4. Configure Radarr, Sonarr, Bazarr with *sources*
+5. Connect Overseerr to Plex
+6. Connect Tautulli to Plex
+7. ??????
+8. PROFIT!!!!1
+
+> Have phun!
