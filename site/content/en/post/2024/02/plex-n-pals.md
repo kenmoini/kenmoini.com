@@ -1,7 +1,7 @@
 ---
 title: "Plex n Pals"
 date: 2024-02-17T04:20:47-05:00
-draft: true
+draft: false
 publiclisting: true
 toc: true
 hero: /images/posts/heroes/movie-night-done-right.png
@@ -662,7 +662,7 @@ systemctl enable --now media-services.service
 
 ## Service Configuration
 
-Once all the serivces are available you should be able to access them either directly at their exposed ports, or ideally via the DNS records for each service - that is after all the whole point of using HAProxy, a reverse proxy that can be used for simple domains without remembering what app is on what port.  So to start configuring services and connecting them together I proceeded in the following order:
+Once all the serivces are started you should be able to access them either directly at their exposed ports, or ideally via the DNS records for each service - that is after all the whole point of using HAProxy, a reverse proxy that can be used for simple domains without remembering what app is on what port.  So to start configuring services and connecting them together I proceeded in the following order:
 
 1. Setup Sabnzbd with *news readers*
 2. Setup Deluge for integration, labels, and remote access
@@ -672,5 +672,7 @@ Once all the serivces are available you should be able to access them either dir
 6. Connect Tautulli to Plex
 7. ??????
 8. PROFIT!!!!1
+
+Optionally you can also configure `dnf-automatic` on the system running Plex n Pals for automatic updates which is *pretty handy.*
 
 > Have phun!
