@@ -197,6 +197,12 @@ Executing the last `curl` command, you should see the IP of your OpenVPN Server 
 However, if the VPN connection goes down, outbound traffic can still traverse the LAN out to the public Internet.  Ideally it would only maintain a connection to the Internet through the VPN tunnel - this is where a "VPN Killswitch" comes into play:
 
 ```bash
+# Disable IPv6 to prevent leakage
+echo "net.ipv6.conf.all.disable_ipv6=1" > /etc/sysctl.d/99-disable-ipv6.conf
+echo "net.ipv6.conf.default.disable_ipv6=1" >> /etc/sysctl.d/99-disable-ipv6.conf
+echo "net.ipv6.conf.lo.disable_ipv6=1" >> /etc/sysctl.d/99-disable-ipv6.conf
+sysctl -p /etc/sysctl.d/99-disable-ipv6.conf
+
 # Enable FirewallD
 systemctl enable --now firewalld
 
