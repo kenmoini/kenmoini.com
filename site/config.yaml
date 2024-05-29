@@ -9,6 +9,18 @@ social:
 taxonomies:
   author: authors
 
+outputs:
+  home:
+  - html
+  - rss
+  section:
+  - html
+  - rss
+  taxonomy:
+  - html
+  term:
+  - html
+
 title: "Ken Moini"
 baseURL: "https://kenmoini.com"
 languageCode: "en-us"
