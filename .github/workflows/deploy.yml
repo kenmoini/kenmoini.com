@@ -68,7 +68,7 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
 
     - name: pass environment
-      uses: appleboy/ssh-action@v1.0.3
+      uses: appleboy/ssh-action@v1.2.1
       env:
         KUBECONFIG: "/home/cicd/.kube/config"
         GIT_SHA: ${{ github.sha }}
