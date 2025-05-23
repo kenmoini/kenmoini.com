@@ -35,16 +35,26 @@ Even better is that AT&T Fiber has the option of buying Static IP blocks!
 
 You can buy a single block - the [options](https://www.att.com/support/article/u-verse-high-speed-internet/KM1002300/) are:
 
-- **Block Size:** 8, **CIDR:** /29, **Netmask:** 255.255.255.248, **Usable:** 5 - ***$15***
-- **Block Size:** 16, **CIDR:** /28, **Netmask:** 255.255.255.240, **Usable:** 13 - ***$25***
-- **Block Size:** 32, **CIDR:** /27, **Netmask:** 255.255.255.224, **Usable:** 29 - ***$30***
-- **Block Size:** 64, **CIDR:** /26, **Netmask:** 255.255.255.192, **Usable:** 61 - ***$40***
+- **Block Size:** 8, **CIDR:** /29, **Netmask:** 255.255.255.248, **Usable:** 5 - ***$30***
+- **Block Size:** 16, **CIDR:** /28, **Netmask:** 255.255.255.240, **Usable:** 13 - ***$40***
+- **Block Size:** 32, **CIDR:** /27, **Netmask:** 255.255.255.224, **Usable:** 29 - ***$60***
+- **Block Size:** 64, **CIDR:** /26, **Netmask:** 255.255.255.192, **Usable:** 61 - ***$75***
 
 I just got the $15 option, I use one for L7 HTTP{S} services, and others as L4 Load Balancers for exposing things like Kubernetes/OpenShift clusters.
 
 Also, I believe Static IPs are only available on the 1Gbit+ connections, not sure why anyone would have a slower speed with a fiber connection...I want as many of those light beams as possible.
 
-**To order, just call *800-288-2020*** and ask for a technical sales representative, tell them that you want to buy a Static IP Block for your Fiber Internet connection - it will take a few hours to provision across the network but they can tell you the provisioned block when the order is initially completed.  They'll tell you it's something like the following:
+**To order, just call *800-288-2020*** and ask for a "UVerse Technical Support Representative", tell them that you want to buy a Static IP Block for your Fiber Internet connection.
+
+##### Update
+
+Not sure when, but the prices have increased significantly since I originally wrote this.  I've also had significant issues with getting a Public Subnet at my new home.  At first the AT&T rep online insisted a truck-roll was required - the field tech was 4 hours late with no communication so I canceled the order.
+
+This was evidently due to miscommunication - the first level reps you may get on the phone may be the sales team, which don't really understand the request for a Public Subnet.  Talking to 3 of them and one of their supervisors, they can only set an order for changing the **PRIMARY** WAN IP from dynamic to static which "requires a field tech truck roll".  If you get this, ask for an escalation, ask to be transferred to "UVerse Technical Support" which can provision you an **ADDITIONAL** Public Subnet - the tech support repo, Iris, was AMAZING and even configured the gateway for me remotely.
+
+##### /Update
+
+It will take a few hours to provision across the network but they can tell you the provisioned block when the order is initially completed.  They'll tell you it's something like the following:
 
 - **Provisioned Block:** 161.192.161.32/29
 - **Network Address:** 161.192.161.32
