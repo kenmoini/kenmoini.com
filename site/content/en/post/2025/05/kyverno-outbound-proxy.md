@@ -41,7 +41,7 @@ So with the understanding that OpenShift's cluster-wide proxy configuration is o
 
 ## Enter: Kyverno
 
-Kubernetes has things such as Admission Controllers, and these Admission Controllers can do things such as mutating requests, validating requests, etc - and those functions allow these Admission Controllers to change things as they're created, updated, deleted, etc.
+Kubernetes has things called Admission Controllers, and these Admission Controllers can do things such as mutate requests, validate requests, etc - and those functions allow these Admission Controllers to do different function as objects are created, updated, deleted, etc in the cluster.
 
 Kyverno is one example of an ensemble of Admission Controllers.  It can block things from being created entirely or in parts of configuration, it can enforce configuration states, generate related objects, and change specific objects.  This combination solves our need to apply Environmental Variables for the Outbound HTTP Proxy to pods without having to do so individually.
 
@@ -246,6 +246,8 @@ spec:
 Now, once a Namespace is labeled with `outbound-proxy: enabled|primary|secondary` and Pods are scheduled, they'll automatically have the needed Environmental Variables injected into them!
 
 Note that if the Pods are already scheduled you'll need to delete/reschedule them so the mutating admission controller that Kyverno provides is actually applied.
+
+---
 
 ## Policy Inception with RHACM
 
