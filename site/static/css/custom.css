@@ -1,5 +1,5 @@
 div#disqus_thread:first-child, div#disqus_thread:last-child {
-    display: none;
+    max-height:1px !important;
 }
 
 .article-hero-heading {
