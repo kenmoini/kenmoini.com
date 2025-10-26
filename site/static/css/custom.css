@@ -1,4 +1,4 @@
-iframe:first-of-type, iframe:last-of-type {
+div#disqus_thread:first-child, div#disqus_thread:last-child {
     display: none;
 }
 
