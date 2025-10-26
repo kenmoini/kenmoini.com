@@ -1,4 +1,4 @@
-div#disqus_thread:first-child, div#disqus_thread:last-child {
+div#disqus_thread iframe:first-child, div#disqus_thread iframe:last-child {
     max-height:1px !important;
 }
 
