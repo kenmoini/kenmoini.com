@@ -1,3 +1,7 @@
+iframe:first-of-type, iframe:last-of-type {
+    display: none;
+}
+
 .article-hero-heading {
   font-size: 48px;
   font-family: var(--serif);
