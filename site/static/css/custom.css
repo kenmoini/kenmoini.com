@@ -1,3 +1,7 @@
+div#disqus_thread iframe:first-child, div#disqus_thread iframe:last-child {
+    max-height:1px !important;
+}
+
 .article-hero-heading {
   font-size: 48px;
   font-family: var(--serif);
