@@ -97,7 +97,7 @@ Using ACM, ArgoCD, and a dynamic secret provisioner like External Secrets + Vaul
 
 The Validated Pattern is a good place to start, but it's still very ArgoCD-centric.  Personally I like using ArgoCD as an applied Unix philosophy of "one tool, one job" sort of thing which means that ArgoCD by and large is left as a simple syncing tool.  The advanced workflows otherwise are handled by ACM Governance Policies, and this pattern is something I've helped customers deploy successfully across private clouds, public clouds, and at the Edge.
 
-![Multi Cluster GitOps Architecture](static/images/posts/2025/12/mcm-arch.png)
+![Multi Cluster GitOps Architecture](/images/posts/2025/12/mcm-arch.png)
 
 The architecture can be summed up as such:
 
