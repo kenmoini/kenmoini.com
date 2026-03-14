@@ -6,7 +6,7 @@ publiclisting: true
 toc: true
 hero: /images/posts/heroes/workload-availability.png
 photo_credit:
-  title: Marin Tulard
+  title: Sebastian Sørensen
   source: Pexels
 tags:
   - openshift

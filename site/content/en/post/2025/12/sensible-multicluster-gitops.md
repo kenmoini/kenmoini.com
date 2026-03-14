@@ -1,12 +1,12 @@
 ---
 title: Sensible Multi-Cluster GitOps
-date: 2025-09-22T04:20:47-05:00
+date: 2025-12-22T04:20:47-05:00
 draft: false
 publiclisting: true
 toc: true
 hero: /images/posts/heroes/multicluster-gitops.png
 photo_credit:
-  title: Irina Iriser
+  title: Donald Tong
   source: Pexels
 tags:
   - openshift
