@@ -34,7 +34,7 @@ So in case you haven't heard...there are no DIMMs!  Well, there are if you want 
 
 And that's what's bringing us this next cursed episode of "Ken has to figure things out" - lift and shifting workloads into the cloud cause we can't have no old servers.
 
-I've got a migration to run - moving VMs from vSphere to Azure Red Hat OpenShift.  Should work, but of course I'm not exposing my vCenter and hosts to the Internet - so for this I need to make a VPN connection of sorts from Azure to/from my lab.
+I've got a migration to run - moving VMs from vSphere on-prem to Azure Red Hat OpenShift.  Should work, but of course I'm not exposing my vCenter and hosts to the Internet - so for this I need to make a VPN connection of sorts from Azure to/from my lab.
 
 I'm running a Unifi stack here which natively supports a few different VPN options, so this is the process I took to set up a VPN between Microsoft Azure and my garage to securely schlep VMs around.
 
@@ -42,12 +42,13 @@ I'm running a Unifi stack here which natively supports a few different VPN optio
 
 ## Architecture
 
-So before we begin, a little overview of what's going to be used in the cloud and on-prem in my lab:
+Before we begin, a little overview of what's going to be used in the cloud and on-prem in my lab:
 
 ### Lab Network
 
 - `192.168.42.0/23` - Lab Network, has vCenter
 - `192.168.60.0/23` - OpenShift Network
+- `192.168.42.11` - On-prem private DNS Server
 - `kemo.labs` - Private zone that runs my things
 
 ### Azure Network
@@ -64,19 +65,20 @@ So before we begin, a little overview of what's going to be used in the cloud an
 
 ## Azure VPN Setup
 
-1. If you haven't already, create a Virtual Network (VNet) in Azure.  If you're using Azure Red Hat OpenShift then you already have a VNet created.  Note that the default VNet Address Space probably only accounts for the node IP pools - I had to expand the Address Space to make room for the Virtual Gateway subnet that we'll create in a second.
-2. With the VNet and it's subnets in place, search for "Virtual Network Gateway" and create a new one.
-3. For my example I'm running a non-redundant VPN - mostly because I don't want to do BGP routing between my site and the cloud.  Below you can see the settings I used to create the VNet Gateway.
-4. After you click Create, go take a walk - a long one.  Took about an hour for my VNet Gateway to spin up.
-5. Next we'll create a **Local Network Gateway** in the Virtual Network Gateway.  The Local Network Gateway is defined in Azure that represents the public IP address of your on-prem network - doesn't have to be static, so long as it doesn't change too often.  If it does change or you use something like DynDNS then just give it the FQDN instead.  Map some of the local networks you'll tunnel into Azure by defining the subnets in the LNG.
-6. Now we go BACK to the Virtual Network Gateway, in the left pane navigate to "VPN Gateway > Connections" and make a new Connection.  This glues the VNG and LNG together and actually spins up the VPN.  You'll want to use the Site-to-Site IPSec type of VPN Connection.  What's important in the Settings page for the VPN Connection is to set the IPSec/IKE Policy to "Custom" - then set the two phases' Encryption to "AES256", Integrity to "SHA256", and Groups to "2" like shown in the screenshots below.  Generate a long PSK and store it in a secure password vault of some sort.
-7. Wait for the VPN Connection to be created - once it is, grab the IP Address of the Virtual Network Gateway, we'll need that to configure the Unifi side of things
+1. If you haven't already, **create a Virtual Network** (VNet) in Azure.  If you're using Azure Red Hat OpenShift (ARO) then you already have a VNet created.  Note that the default ARO VNet Address Space only accounts for the node IP pools in a `/22` - I had to expand the Address Space to a `/20` to make room for the Virtual Gateway subnet and DNS endpoint subnets that we'll create in a second.
+2. With the VNet and it's subnets in place, search for **"Virtual Network Gateway"** and create a new one.
+3. For my example I'm running a non-redundant VPN - mostly because I don't want to do BGP routing between my site and the cloud.  Below you can see the settings I used to create the VNet Gateway.  The VNet Gateway will need its own Subnet, a `/26` will do.
+4. After you click Create, go take a walk - *a long one*.  Took about an hour for my VNet Gateway to spin up.
+5. Next we'll create a **Local Network Gateway** in the Virtual Network Gateway.  The Local Network Gateway is defined in Azure and represents the public IP address of your on-prem network - doesn't have to be static, so long as it doesn't change too often.  If it does change or you use something like DynDNS then just give it the FQDN instead.  I'm not using BGP so I just needed to add some of the local networks that will be tunneled into Azure by defining the subnets in the LNG.
+6. Now we go *BACK* to the Virtual Network Gateway, in the left pane navigate to "**VPN Gateway > Connections**" and make a new Connection.  This glues the VNG and LNG together and actually spins up the VPN.  You'll want to use the Site-to-Site IPSec type of VPN Connection.
+7. What's important in the Settings page for the VPN Connection is to set the IPSec/IKE Policy to "Custom" - then set the two phases' Encryption to "AES256", Integrity to "SHA256", and Groups to "2" like shown in the screenshots below.  Generate a long PSK and store it in a secure password vault of some sort.
+8. Wait for the VPN Connection to be created - once it is, grab the Public IP Address of the Virtual Network Gateway, we'll need that to configure the Unifi side of things
 
 ---
 
 ## Unifi Setup
 
-1. In the Unifi Network dashboard, navigate to Settings > VPN then click the tab for "Site-to-Site VPN" and create a new one.
+1. In the Unifi Network dashboard, navigate to **Settings > VPN** then click the tab for "Site-to-Site VPN" and create a new one.
 2. VPN type will be IPSec, give it a name and that Pre-Shared Key from earlier that we configured in Azure's VPN Connection.
 3. Set the Local IP for the WAN IP you configured in Azure's Local Network Gateway.
 4. The Remote IP / Hostname will be the Public IP Address from the Virtual Network Gateway in Azure.
@@ -85,7 +87,7 @@ So before we begin, a little overview of what's going to be used in the cloud an
 7. Configure the Encryption/Hash/Group as you did on the Azure side, so AES0256, SHA256, and 2.
 8. Leave the rest as the default settings and click Add.  It might take a moment for the tunnel to be established but eventually you should see "Online".  Azure seems to be a bit slow with updating things so give it a little time and you should also see "Connected" in the VPN Connection.
 
-The VPN tunnel is now established!  But it's still barely usable.  Next up we'll need to create some Routes so that things can get between the two infrastructure providers.
+The VPN tunnel is now established!  But it's still barely usable - we'll need to create some Routes so that things can get between the two infrastructure providers.
 
 ---
 
@@ -93,13 +95,13 @@ The VPN tunnel is now established!  But it's still barely usable.  Next up we'll
 
 Next we need to create a few things in Azure so that it can route to the on-premise environment.  Namely a Route Table.
 
-1. In Azure, search for "Route Table" and create a new one.
-2. With the Route Table created, access the resource and navigate to Settings > Routes.  Create a new Route.
+1. In Azure, search for **"Route Table"** and create a new one.
+2. With the Route Table created, access the resource and navigate to Settings > Routes.  **Create a new Route**.
 3. Give it a name, Destination Type should be "IP Addresses" and give it the CIDR range that's on the other side of the tunnel - in my case I have 2 so I'll need to make Routes for each subnet.
 4. Set the Next Hop Type to "Virtual Appliance" and set it to the WAN IP of the on-prem network that was configured in the Local Network Gateway.
 5. Rinse/repeat for as many subnets as you have to route.
 
-Now to test this, you can go into a Virtual Machine that's in the VNet that we configured all this stuff for and do a quick `ping/ssh on-prem-address-here` - for my environment I just used a debug terminal on one of the Azure Red Hat OpenShift nodes.
+Now to test this, you can go into an Azure Virtual Machine that's in the VNet that we configured all this stuff for and do a quick `ping/ssh on-prem-address-here` - for my environment I just used a debug terminal on one of the Azure Red Hat OpenShift nodes.
 
 > Note: If the ping fails, it is likely due to needing to open some Firewall rules in Unifi, source being VPN and the instance configured, and the destination being the routed network.
 
@@ -107,10 +109,10 @@ Now to test this, you can go into a Virtual Machine that's in the VNet that we c
 
 ## Unifi Routing Setup
 
-Now if you just need to get to assets on-prem FROM Azure, you can skip this next step, but I like bi-directional communication when possible - helps make sure things are working right on both ends.
+Now if you just need to get *TO* assets on-prem *FROM* inside of Azure, you can skip this next step, but I like bi-directional communication when possible - helps make sure things are working right on both ends.
 
-1. In the Unifi Network dashboard, navigate to Settings > Policy Engine > Policy Table.
-2. Create a new Static Route - should be a Gateway type, Distance of 1, and give the Next Hop Address the Public IP Address from the Virtual Network Gateway in Azure.
+1. In the Unifi Network dashboard, navigate to **Settings > Policy Engine > Policy Table**.
+2. Create a new **Static Route** - should be a Gateway type, Distance of 1, and give the Next Hop Address the Public IP Address from the Virtual Network Gateway in Azure.
 3. Set a destination network, in this case it's the Azure VNet being `10.0.0.0/20`
 
 With that configured you should now be able to connect to Azure resources from the on-premise environment!  I tested by doing an SSH connection test to one of the ARO nodes, didn't have the SSH key but still good to test the connection/firewall/security groups are acting right.
@@ -123,7 +125,7 @@ While we're here in the Unifi dashboard, if the previous `ping`/`ssh` test from 
 
 Now that the Site-to-Site tunnel is setup, IP connectivity is looking good, last thing we need is to resolve DNS things - no good connecting things if you have to remember octets.
 
-1. In Azure, search for "DNS Private Resolvers" and create a new one.
+1. In Azure, search for **"DNS Private Resolvers"** and create a new one.
 2. Set it in the intended RG/VNet.
 3. Skip creating an Inbound/Outbound Endpoints and Rulesets, we'll do that once the Resolver is created.
 
@@ -133,7 +135,7 @@ Once the DNS Private Resolver is created, let's work on the Endpoints.
 
 The Inbound Endpoint is simply a little DNS resolver that runs in Azure and takes queries for for Private Zones defined in Azure.  With this you can point your on-prem DNS stack to send queries for zones in Azure to the Inbound Endpoint to resolve.
 
-1. With the DNS Private Resolver resource loaded, navigate to Settings > Inbound Endpoints and create a new one.
+1. With the DNS Private Resolver resource loaded, navigate to **Settings > Inbound Endpoints** and create a new one.
 2. Give it a name, and create a new Subnet, default /28 should work fine.  You don't want to give it an existing subnet (unless you know that's the architecture you want) because each subnet can only have ONE Endpoint type.
 3. IP address assignment can be Dynamic, Azure will keep up with the updates - unless you have a specific static IP you'd rather use.
 
@@ -147,3 +149,16 @@ The Outbound Endpoint is a DNS resolver that runs in Azure that forwards queries
 2. Give it a name, and create a new Subnet, default /28 should work fine.  You don't want to give it an existing subnet (unless you know that's the architecture you want) because each subnet can only have ONE Endpoint type.
 3. Click Create - super boring, the real fun is with the Rulesets.
 
+### DNS Forwarding Rulesets
+
+With the Endpoints created, next we need to make a few Rulesets so that Azure can forward specific requests for specific zones to my on-prem DNS servers.
+
+1. In Azure search for **"DNS Forwarding Rulesets"** and create a new one
+2. Give it a name and a place to live in a Resource Group.
+3. Select the DNS Private Resolver and Outbound Endpoint previously created.
+4. **Skip creating a Rule or Virtual Network Link** - there seems to be a bug with how the Azure GUI validates things.
+5. Finish creating the Ruleset and once it's created let's go back to it's Settings page to create a Rule/Link.
+6. **Create a Rule** - the Domain Name in my instance is `kemo.labs.` (note the dot at the end) and set the Destination IP as the on-prem DNS server, in my case being `192.168.42.11`.
+7. **Create the Virtual Network Link** - at the time of writing there seems to be a little bug with the Azure GUI where the pre-selected Resource Group fails validation, so toggle back/forth to the RG that the VNet Link should live in.  Select the VNet as well, the default generated name should be fine (probably isn't if you have standards).
+
+And now with all that in the mix, you should be able to resolve queries for Zones that are hosted on-prem, from Azure!  I tested this with a quick `dig vcenter.kemo.labs` from one of the debug terminals on an ARO node and it worked great - post that, I just added my vCenter Provider in the Migration Toolkit for Virtualization, ran a quick migration test, and before I knew it had a Windows VM migrated from my on-prem lab into Azure Red Hat OpenShift...*pretty neat!*
