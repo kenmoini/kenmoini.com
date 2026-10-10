@@ -16,14 +16,18 @@ tags:
   - runner
   - docker
   - dind
+  - fedora
   - cloud
   - containers
   - kubernetes
   - userns
   - user namespace
+  - secure
+  - builds
   - openshift
   - multi-arch
   - multi-architecture
+  - arm
   - arm64
   - amd64
   - s390x
@@ -936,3 +940,5 @@ With that Workflow in some file under a repo's `.github/workflows/` path, you ca
 {{< imgSet cols="1" name="gha-workflow" >}}
 {{< imgItem src="/images/posts/2026/10/completed-gha-workflow.jpg" alt="A completed GitHub Actions Workflow building multi-arch images that was executed on OpenShift!" >}}
 {{< /imgSet >}}
+
+*Special thanks to Charro Gruver, Chris Peters, and Chris Keller - they walked so I could stumble.*
