@@ -5,3 +5,4 @@ site/resources/**
 .@__thumb
 .vscode
 .vscode/**
+.DS_Store

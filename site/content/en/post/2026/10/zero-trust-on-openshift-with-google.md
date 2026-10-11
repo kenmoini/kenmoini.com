@@ -673,7 +673,7 @@ It looks a little something like this:
 {{< /imgSet >}}
 
 {{< imgSet cols="1" name="aint-much" >}}
-{{< imgItem src="/images/posts/2026/10/famer-aint-much.jpg" alt="Simple, yet effective" >}}
+{{< imgItem src="/images/posts/2026/10/farmer-aint-much.jpg" alt="Simple, yet effective" >}}
 {{< /imgSet >}}
 
 ---
@@ -847,3 +847,4 @@ A few other thoughs as I worked through this exercise:
 - If you want to make it more seamless like on GKE, where all you do is add an annotation or two to the ServiceAccount - this could be done with things like Kyverno/OPA/etc Mutating Webhooks, including the newly GA'd and built into Kuberenetes, [Mutating Admission Policies](https://kubernetes.io/docs/reference/access-authn-authz/mutating-admission-policy/).
 - Your application needs to [define the default application scope](https://github.com/kenmoini/gcp-dash/commit/bb8ca58c85a8ddc541fd388aca91919e77604225) - common to have, *unless you're building some quick vibe coded example*...
 - For sure check out the other two cloud examples of this ZTWIM application, there are some interesting differences, like how I actually like the EntraID implementation...much easier on the config bootstrapping side of things.
+- The GCP Dash application container image has some handy things in there like `gcloud` and set of scripts `decode-jwt.py` and `get-spiffe-token.py` that can be used for debugging or learning more about the exchange process and identities.
