@@ -1,7 +1,7 @@
 ---
 title: Zero Trust on OpenShift with Google Cloud
-date: 2026-03-20T04:20:47-05:00
-draft: true
+date: 2026-10-01T04:20:47-05:00
+draft: false
 publiclisting: true
 toc: true
 hero: /images/posts/heroes/zero-trust-gcp.png
@@ -710,3 +710,134 @@ So to recap...
 
 Now we just need to deploy the application - same application that can be deployed on GKE, but we'll need to inject an initContainer that sets up the exchanged SVID for a JWT and keeps it rotated.
 
+In order for our Workload Identity to work against Google Cloud we need to provide it not only the exchanged JWT, but also a JSON file that constructs the identity type.  Google Cloud has a few ways to authenticate and the JSON is different for each - in this case we're doing something called Service Account Impersonation and the JSON looks like the credential file we made earlier.
+
+In the repo I have the JSON file being constructed with a [Bash script in a ConfigMap](https://github.com/kenmoini/gcp-dash/blob/main/deploy/ztwim/gcp-spiffe-helper.configmap.yaml) from Environment Variables that are mounted from a Secret - then we progress to the SPIFFE Helper container to maintain the JWT.
+
+This works for quick demonstrations and references, however it'd probably be better to have that data in an ExternalSecret that could be mounted directly and skipping the Bash Script part:
+
+```yaml
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: my-gcp-creds
+spec:
+  refreshInterval: 240s
+  secretStoreRef:
+    name: my-secret-store
+    kind: SecretStore
+  target:
+    name: target-k8s-secret
+    template:
+      engineVersion: v2
+      data:
+        key.json: |
+          {
+            "universe_domain": "googleapis.com",
+            "type": "external_account",
+            "audience": "//iam.googleapis.com/projects/{{ .project_number }}/locations/{{ .workload_identity_pool_location }}/workloadIdentityPools/{{ .workload_identity_pool }}/providers/{{ .ztwim_provider_name }}",
+            "subject_token_type": "urn:ietf:params:oauth:token-type:jwt",
+            "token_url": "https://sts.googleapis.com/v1/token",
+            "credential_source": {
+              "file": "/var/run/secrets/gcp/token",
+              "format": {
+                "type": "text"
+              }
+            },
+            "service_account_impersonation_url": "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/{{ .google_service_account }}:generateAccessToken"
+          }
+  data:
+    - secretKey: google_service_account
+      remoteRef:
+        key: my/remote/secret
+        property: google_service_account
+
+    - secretKey: project_number
+      remoteRef:
+        key: my/remote/secret
+        property: google_project_number
+
+    - secretKey: workload_identity_pool_location
+      remoteRef:
+        key: my/remote/secret
+        property: google_workload_identity_pool_location
+
+    - secretKey: workload_identity_pool
+      remoteRef:
+        key: my/remote/secret
+        property: google_workload_identity_pool
+
+    - secretKey: ztwim_provider_name
+      remoteRef:
+        key: my/remote/secret
+        property: ztwim_provider_name
+```
+
+Then you'd mount that generated Secret to `/var/run/secrets/gcp/` in the Pod - or wherever your application expects it's credentials.  You can pass an override via the `GOOGLE_APPLICATION_CREDENTIALS` environment variable.
+
+The SPIFFE Helper configuration also needs the `audience` data, so since this also needs the same sorta Secret data used for the GCP key.json file you could rinse/repeat the ExternalSecret with a similar templated format:
+
+```yaml
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: my-gcp-spiffe-helper-conf
+spec:
+  refreshInterval: 240s
+  secretStoreRef:
+    name: my-secret-store
+    kind: SecretStore
+  target:
+    name: target-k8s-secret
+    template:
+      engineVersion: v2
+      data:
+        helper.conf: |
+          agent_address = "/run/spire/sockets/spire-agent.sock"
+          jwt_svids = [{jwt_audience="https://iam.googleapis.com/projects/{{ .project_number }}/locations/{{ .workload_identity_pool_location }}/workloadIdentityPools/{{ .workload_identity_pool }}/providers/{{ .ztwim_provider_name }}", jwt_svid_file_name="/var/run/secrets/gcp/token"}]
+          jwt_svid_file_mode = 0644
+  data:
+    - secretKey: project_number
+      remoteRef:
+        key: my/remote/secret
+        property: google_project_number
+
+    - secretKey: workload_identity_pool_location
+      remoteRef:
+        key: my/remote/secret
+        property: google_workload_identity_pool_location
+
+    - secretKey: workload_identity_pool
+      remoteRef:
+        key: my/remote/secret
+        property: google_workload_identity_pool
+
+    - secretKey: ztwim_provider_name
+      remoteRef:
+        key: my/remote/secret
+        property: ztwim_provider_name
+```
+
+Then you'd mount that generated Secret to wherever really, `/tmp` or maybe `/etc/spiffe-helper`, passing along the path to the SPIFFE Helper `-config` argument.
+
+And before I forget - **SPIFFE Helper** is a tool that can manage SVIDs and their JWTs/Certificates for a workload, from initial exchange to keeping it rotated.  This is the initContainer sidecar we add to ZTWIM enabled workloads.
+
+Anywho - if you just want it fast and dirty...
+
+1. Deploy the Kustomized patch overlay: https://github.com/kenmoini/gcp-dash/tree/main/deploy/ztwim
+2. Create a Secret like found here: https://github.com/kenmoini/gcp-dash/blob/main/deploy/ztwim/gcp-secret.example.yaml
+3. Navigate to the Route and check the application
+4. ???????
+5. *PROFIT!!!!1*
+
+And you should see the exact same thing you see on the application running in GKE!  Much excite.
+
+## Final Notes
+
+A few other thoughs as I worked through this exercise:
+
+- If you want to make it simple like on GKE, where all you do is add an annotation or two to the ServiceAccount - this could be done with things like Kyverno/OPA/etc Mutating Webhooks, including the newly GA'd and built into Kuberenetes, [Mutating Admission Policies](https://kubernetes.io/docs/reference/access-authn-authz/mutating-admission-policy/).
+- Your application needs to [define the default application scope](https://github.com/kenmoini/gcp-dash/commit/bb8ca58c85a8ddc541fd388aca91919e77604225) - common to have, *unless you're building some quick vibe coded example*...
+- For sure check out the other two cloud examples of this ZTWIM application, there are some interesting differences, like how I actually like the EntraID implementation...much easier on the config bootstrapping side of things.
