@@ -42,7 +42,7 @@ Really though I needed to demonstrate a workload using the Google Cloud SDK, run
 
 So I had Claude Fable 5.1 whip me up a quick little Python application that provides an API and Web UI...see, I do actually do some AI.  You can find it here:
 
-[kenmoini/gcp-dash on GitHub](https://github.com/kenmoini/gcp-dash)
+> [kenmoini/gcp-dash on GitHub](https://github.com/kenmoini/gcp-dash)
 
 You can deploy it in a few different ways:
 
@@ -52,7 +52,7 @@ You can deploy it in a few different ways:
 
 There are examples for all those deployment targets in the repo - this article is more so to go over the OpenShift, ZTWIM, and Google Cloud side of things.
 
-> Claude also created versions for [Azure](https://github.com/kenmoini/azure-dash) and [AWS](https://github.com/kenmoini/aws-dash) not covered here.
+> Claude also created versions for [Azure](https://github.com/kenmoini/azure-dash) and [AWS](https://github.com/kenmoini/aws-dash)
 
 ---
 
@@ -839,6 +839,8 @@ Anywho - if you just want it fast and dirty...
 5. *PROFIT!!!!1*
 
 And you should see the exact same thing you see on the application running in GKE!  Much excite.
+
+---
 
 ## Final Notes
 
