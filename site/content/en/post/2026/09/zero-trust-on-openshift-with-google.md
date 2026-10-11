@@ -6,7 +6,7 @@ publiclisting: true
 toc: true
 hero: /images/posts/heroes/zero-trust-gcp.png
 photo_credit:
-  title: Pixabay
+  title: Bastian Riccardi
   source: Pexels
 tags:
   - zero trust
@@ -708,4 +708,5 @@ So to recap...
 - We have a Google Cloud environment set up with a Service Account
 - Trust has been established between ZTWIM on OpenShift and the Google Cloud OIDC Endpoints
 
-Now we just need to deploy the application - same application that can be deployed on GKE, but we'll need to inject an initContainer and Sidecar. 
+Now we just need to deploy the application - same application that can be deployed on GKE, but we'll need to inject an initContainer that sets up the exchanged SVID for a JWT and keeps it rotated.
+
