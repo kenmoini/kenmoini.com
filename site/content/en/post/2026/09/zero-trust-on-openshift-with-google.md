@@ -28,6 +28,8 @@ tags:
   - spiffe
   - spire
   - openshift
+  - security
+  - jwt
 authors:
   - Ken Moini
 ---
@@ -666,6 +668,8 @@ It looks a little something like this:
 {{< imgItem src="/images/posts/2026/09/famer-aint-much.jpg" alt="Simple, yet effective" >}}
 {{< /imgSet >}}
 
+---
+
 There are multiple options for deploying it - if you have a GKE cluster with Workload Identity enabled you can find the deployment manifests composed with Kustomize in the `deploy/gke` folder of the repo.
 
 To make it work on GKE, the steps include:
@@ -688,3 +692,20 @@ metadata:
 
 This annotation is already stubbed in the Kustomization file as an hint, be sure to change it.
 
+But that's about it for getting Workload Identity running on GKE, just the annotation on the ServiceAccount.
+
+This is because GKE's infrastructure is running on GCP, which makes it easy to confidently attest and trust the stack - the GKE cluster is running in a known GCP Project so that doesn't have to be defined, and they have Admission Controller that injects the needed mounts in a Pod definition in order to use a dynamic rotating identity and credentials.
+
+It kinda seems like magic - but it's just managed Kubernetes using the same sort of technology we're putting together.
+
+---
+
+> Now to run it on OpenShift...
+
+So to recap...
+
+- We have an OpenShift cluster running with ZTWIM installed and configured
+- We have a Google Cloud environment set up with a Service Account
+- Trust has been established between ZTWIM on OpenShift and the Google Cloud OIDC Endpoints
+
+Now we just need to deploy the application - same application that can be deployed on GKE, but we'll need to inject an initContainer and Sidecar. 
