@@ -30,5 +30,5 @@ KubeCon last year had a lot of exhibits, talks, and vendors addressing GitOps - 
 
 In one of [my previous articles](https://kenmoini.com/post/2025/12/sensible-multicluster-gitops/), I mentioned some tactics to make ArgoCD scalable in a multi-cluster environment - however since then the ArgoCD community has done a lot of work to address some of the issues folks would face when running dozens if not hundreds of ArgoCD instances across their fleet, in addition to just some really excellent new capabilities:
 
+- [ArgoCD Rollouts](https://github.com/argoproj/argo-rollouts) use is becoming more common as it has matured
 - 
-
