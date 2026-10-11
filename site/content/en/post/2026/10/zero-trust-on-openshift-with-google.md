@@ -107,6 +107,14 @@ You also have the node-level **SPIRE Agents** exposing endpoints/sockets that ca
 
 There are some really nice diagrams and much more information in the [SPIFFE documentation](https://spiffe.io/docs/latest/spire-about/spire-concepts/).
 
+### SPIFFE Helper
+
+Not really a key part of the SPIFFE/SPIRE architecture, but certainly something that's needed to make things work - SPIFFE Helper.
+
+When you perform an SVID <> JWT/x509 exchange, if you inspect it you'll see a pretty short validity period - by default on ZTWIM JWTs last 5 minutes and Certificates are valid for an hour.  So you need something performing that exchange regularly before they expire.
+
+That's where [SPIFFE Helper](https://github.com/spiffe/spiffe-helper) comes in - it can manage the SVID exchange for your workload, either once or regularly (called daemon mode).  We'll run this as an initContainer sidecar so the exchange happens before a workload starts and so that it's easily injected into existing workloads.
+
 ---
 
 ## Prerequisites
@@ -822,8 +830,6 @@ spec:
 
 Then you'd mount that generated Secret to wherever really, `/tmp` or maybe `/etc/spiffe-helper`, passing along the path to the SPIFFE Helper `-config` argument.
 
-And before I forget - **SPIFFE Helper** is a tool that can manage SVIDs and their JWTs/Certificates for a workload, from initial exchange to keeping it rotated.  This is the initContainer sidecar we add to ZTWIM enabled workloads.
-
 Anywho - if you just want it fast and dirty...
 
 1. Deploy the Kustomized patch overlay: https://github.com/kenmoini/gcp-dash/tree/main/deploy/ztwim
@@ -838,6 +844,6 @@ And you should see the exact same thing you see on the application running in GK
 
 A few other thoughs as I worked through this exercise:
 
-- If you want to make it simple like on GKE, where all you do is add an annotation or two to the ServiceAccount - this could be done with things like Kyverno/OPA/etc Mutating Webhooks, including the newly GA'd and built into Kuberenetes, [Mutating Admission Policies](https://kubernetes.io/docs/reference/access-authn-authz/mutating-admission-policy/).
+- If you want to make it more seamless like on GKE, where all you do is add an annotation or two to the ServiceAccount - this could be done with things like Kyverno/OPA/etc Mutating Webhooks, including the newly GA'd and built into Kuberenetes, [Mutating Admission Policies](https://kubernetes.io/docs/reference/access-authn-authz/mutating-admission-policy/).
 - Your application needs to [define the default application scope](https://github.com/kenmoini/gcp-dash/commit/bb8ca58c85a8ddc541fd388aca91919e77604225) - common to have, *unless you're building some quick vibe coded example*...
 - For sure check out the other two cloud examples of this ZTWIM application, there are some interesting differences, like how I actually like the EntraID implementation...much easier on the config bootstrapping side of things.
