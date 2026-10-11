@@ -42,7 +42,7 @@ Really though I needed to demonstrate a workload using the Google Cloud SDK, run
 
 So I had Claude Fable 5.1 whip me up a quick little Python application that provides an API and Web UI...see, I do actually do some AI.  You can find it here:
 
-[kenmoini/gcp-dash on GitHub](https://github.com/kenmoini/gcp-dash)
+> [kenmoini/gcp-dash on GitHub](https://github.com/kenmoini/gcp-dash)
 
 You can deploy it in a few different ways:
 
@@ -52,7 +52,7 @@ You can deploy it in a few different ways:
 
 There are examples for all those deployment targets in the repo - this article is more so to go over the OpenShift, ZTWIM, and Google Cloud side of things.
 
-> Claude also created versions for [Azure](https://github.com/kenmoini/azure-dash) and [AWS](https://github.com/kenmoini/aws-dash) not covered here.
+> Claude also created versions for [Azure](https://github.com/kenmoini/azure-dash) and [AWS](https://github.com/kenmoini/aws-dash)
 
 ---
 
@@ -106,6 +106,14 @@ SPIRE provides a **SPIRE Server** which runs an OIDC Provider and acts as the ce
 You also have the node-level **SPIRE Agents** exposing endpoints/sockets that can be used by your SPIFFE-enabled workloads.  This allows for node-level attestation and interfaces for attesting the Workload Identities, providing domain scoped SVIDs.
 
 There are some really nice diagrams and much more information in the [SPIFFE documentation](https://spiffe.io/docs/latest/spire-about/spire-concepts/).
+
+### SPIFFE Helper
+
+Not really a key part of the SPIFFE/SPIRE architecture, but certainly something that's needed to make things work - SPIFFE Helper.
+
+When you perform an SVID <> JWT/x509 exchange, if you inspect it you'll see a pretty short validity period - by default on ZTWIM JWTs last 5 minutes and Certificates are valid for an hour.  So you need something performing that exchange regularly before they expire.
+
+That's where [SPIFFE Helper](https://github.com/spiffe/spiffe-helper) comes in - it can manage the SVID exchange for your workload, either once or regularly (called daemon mode).  We'll run this as an initContainer sidecar so the exchange happens before a workload starts and so that it's easily injected into existing workloads.
 
 ---
 
@@ -665,7 +673,7 @@ It looks a little something like this:
 {{< /imgSet >}}
 
 {{< imgSet cols="1" name="aint-much" >}}
-{{< imgItem src="/images/posts/2026/10/famer-aint-much.jpg" alt="Simple, yet effective" >}}
+{{< imgItem src="/images/posts/2026/10/farmer-aint-much.jpg" alt="Simple, yet effective" >}}
 {{< /imgSet >}}
 
 ---
@@ -822,8 +830,6 @@ spec:
 
 Then you'd mount that generated Secret to wherever really, `/tmp` or maybe `/etc/spiffe-helper`, passing along the path to the SPIFFE Helper `-config` argument.
 
-And before I forget - **SPIFFE Helper** is a tool that can manage SVIDs and their JWTs/Certificates for a workload, from initial exchange to keeping it rotated.  This is the initContainer sidecar we add to ZTWIM enabled workloads.
-
 Anywho - if you just want it fast and dirty...
 
 1. Deploy the Kustomized patch overlay: https://github.com/kenmoini/gcp-dash/tree/main/deploy/ztwim
@@ -834,10 +840,13 @@ Anywho - if you just want it fast and dirty...
 
 And you should see the exact same thing you see on the application running in GKE!  Much excite.
 
+---
+
 ## Final Notes
 
 A few other thoughs as I worked through this exercise:
 
-- If you want to make it simple like on GKE, where all you do is add an annotation or two to the ServiceAccount - this could be done with things like Kyverno/OPA/etc Mutating Webhooks, including the newly GA'd and built into Kuberenetes, [Mutating Admission Policies](https://kubernetes.io/docs/reference/access-authn-authz/mutating-admission-policy/).
+- If you want to make it more seamless like on GKE, where all you do is add an annotation or two to the ServiceAccount - this could be done with things like Kyverno/OPA/etc Mutating Webhooks, including the newly GA'd and built into Kuberenetes, [Mutating Admission Policies](https://kubernetes.io/docs/reference/access-authn-authz/mutating-admission-policy/).
 - Your application needs to [define the default application scope](https://github.com/kenmoini/gcp-dash/commit/bb8ca58c85a8ddc541fd388aca91919e77604225) - common to have, *unless you're building some quick vibe coded example*...
 - For sure check out the other two cloud examples of this ZTWIM application, there are some interesting differences, like how I actually like the EntraID implementation...much easier on the config bootstrapping side of things.
+- The GCP Dash application container image has some handy things in there like `gcloud` and set of scripts `decode-jwt.py` and `get-spiffe-token.py` that can be used for debugging or learning more about the exchange process and identities.
