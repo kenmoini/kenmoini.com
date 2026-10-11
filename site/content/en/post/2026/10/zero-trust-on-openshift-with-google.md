@@ -660,12 +660,12 @@ The repo for this application was linked above, but here it is again:
 It looks a little something like this:
 
 {{< imgSet cols="1" name="gcp-dash" >}}
-{{< imgItem src="/images/posts/2026/09/gcp-dash-runtime.jpg" alt="The application exposes some info about the environment and controls to mutate the workload" >}}
-{{< imgItem src="/images/posts/2026/09/gcp-dash-list.jpg" alt="In the GCP tab you can see it listing resources in Google Cloud" >}}
+{{< imgItem src="/images/posts/2026/10/gcp-dash-runtime.jpg" alt="The application exposes some info about the environment and controls to mutate the workload" >}}
+{{< imgItem src="/images/posts/2026/10/gcp-dash-list.jpg" alt="In the GCP tab you can see it listing resources in Google Cloud" >}}
 {{< /imgSet >}}
 
 {{< imgSet cols="1" name="aint-much" >}}
-{{< imgItem src="/images/posts/2026/09/famer-aint-much.jpg" alt="Simple, yet effective" >}}
+{{< imgItem src="/images/posts/2026/10/famer-aint-much.jpg" alt="Simple, yet effective" >}}
 {{< /imgSet >}}
 
 ---
