@@ -55,3 +55,10 @@ In a Distributed architecture, you have an ArgoCD instance installed on every cl
 {{< imgSet cols="1" name="argo-distributed" >}}
 {{< imgItem src="/images/posts/2026/09/argocd-distributed.jpg" alt="Many Argos" >}}
 {{< /imgSet >}}
+
+I've historically done a bit of both - a Hub cluster with a central Argo managing ApplicationSets across labeled clusters synced in from Advanced Cluster Management, primarily for cluster-level things ACM Policies can't do (think Helm stuff).  Then each managed cluster gets its own Argo to sync down its own things like Applications...for applications.
+
+For multi-tenant instances, each cluster tenant would get their own Argo because that's often easier than dealing with the RBAC and reduces the effects of noisy neighbors borking the Argo repo/server Pod.
+
+The problem with a distributed architecture, or even my hybrid implementation, is that there's not really a centralized management or observability endpoint.  ArgoCD Agent mode fixes that.
+
