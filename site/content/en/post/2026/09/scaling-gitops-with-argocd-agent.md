@@ -60,5 +60,34 @@ I've historically done a bit of both - a Hub cluster with a central Argo managin
 
 For multi-tenant instances, each cluster tenant would get their own Argo because that's often easier than dealing with the RBAC and reduces the effects of noisy neighbors borking the Argo repo/server Pod.
 
+The problem with a centralized architecture is that you have a single point of failure - and it's very difficult to scale.
+
 The problem with a distributed architecture, or even my hybrid implementation, is that there's not really a centralized management or observability endpoint.  ArgoCD Agent mode fixes that.
 
+ArgoCD Agent mode (?) gives you a centralized interface to manage and observe, and distributes components across the managed clusters for better resiliency.  The primary components that are offloaded to the managed clusters are the Application{Set} Controllers, Redis, and Repo Pods, though the Hub/Principal still runs its own set of those components.
+
+The main components of Agent mode outside of those usual suspects is a workload run on the **central Hub cluster called the Principal**.  Then every managed cluster gets their own new Agent Pod.  A few things to note:
+
+- Communication always goes from the Agents to the Principal so the central/hub cluster must be accessible from those managed Agent clusters.
+- gRPC is used for a common interface, and everything is wrapped in mTLS - which means you'll need to get good with managing x509 certificates.
+- Agent clusters are able to withstand network faults between the Principal and repo sources.
+- Depending on what mode you use Agent mode, you have some overrides and autonomy on Agent clusters
+
+Oh yeah - Agent Modes.  Currently there are two, Managed and Autonomous.  There are some considerable differences but the tl;dr comes to where the operative controls, Argo manifests, and RBAC live.
+
+In Managed mode, the configuration state is applied on the Principal cluster, then the Agents report in and are provided their assets.
+
+In Autonomous mode, the configuration is applied on each Agent cluster, and then they simply report their status and provide controls to the Principal - this has some implications on asset distribution and RBAC.
+
+Some other implications rise when we look at "what happens when the Great American Fibre Seeking Backhoe takes out our WAN?"
+
+| | Managed | Autonomous |
+|---------|------------|------------|
+| Agents continue reconciling local Applications? | Yes | Yes |
+| Can Create/Edit/Delete Applications? | No | Yes |
+| Can Create/Edit/Delete ApplicationSets? | No | Yes |
+| Existing ApplicationSets continue processing generators? | No | Yes |
+
+I personally prefer Autonomous mode by and large - I like being able to hit the "oops" button when Application syncs go off the reservation.
+
+You now may be wondering - wait, what about during upgrades, longer Principal cluster outages, etc because we now have a Single Point of Failure with the centralized-ish-ness of the Principal.  Well, [HA and Replication are currently in beta](https://argocd-agent.readthedocs.io/latest/concepts/ha/) and should be expected sometime in 2027 *(allegedly)*.
